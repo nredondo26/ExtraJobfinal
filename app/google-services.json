@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "789809656010",
+    "firebase_url": "https://xtrajob-9e3c1.firebaseio.com",
+    "project_id": "xtrajob-9e3c1",
+    "storage_bucket": "xtrajob-9e3c1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:789809656010:android:a5a6d19fa4a30f29",
+        "android_client_info": {
+          "package_name": "nredondo26.com.extrajob"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "789809656010-mete59htlfl55cneejuo058eim1u909q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtrlSjgZLno-ae4LkSqERmBWGWCcuE_Gg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "789809656010-mete59htlfl55cneejuo058eim1u909q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
