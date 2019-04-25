@@ -2,7 +2,6 @@ package nredondo26.com.extrajob;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -55,12 +54,11 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
         car = findViewById(R.id.car);
     }
 
-
     private void dialogo(){
         progressDoalog = new ProgressDialog(this);
         progressDoalog.setMax(100);
-        progressDoalog.setMessage("Validando datos");
-        progressDoalog.setTitle("validando");
+        progressDoalog.setMessage("Enviando datos");
+        progressDoalog.setTitle("Registando...");
         progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDoalog.show();
     }
@@ -210,6 +208,7 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
              //   .setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
                 .build();
 
+        assert user != null;
         user.updateProfile(profileUpdates)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

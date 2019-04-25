@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
+
     </style>
 
 
@@ -24,6 +25,8 @@
     <style name="AppThemesin.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppThemesin.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
 
 
 </resources>

@@ -15,12 +15,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Login extends AppCompatActivity implements View.OnClickListener{
 
     EditText vemail,vpassword;
     private FirebaseAuth mAuth;
     ProgressDialog progressDoalog;
+    FirebaseFirestore BDraiz;
+    String tipo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +37,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         mAuth = FirebaseAuth.getInstance();
         findViewById(R.id.blogin).setOnClickListener(this);
         findViewById(R.id.bregistro).setOnClickListener(this);
+        BDraiz = FirebaseFirestore.getInstance();
     }
 
     private void signIn(String email, String password) {
@@ -48,18 +54,83 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d("mensaje", "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            // enviar datos a activi nueva despues del login
+                            final FirebaseUser user = mAuth.getCurrentUser();
 
-                            Intent intent = new Intent(getApplicationContext(),MenuActivity.class);
-                            intent.putExtra("email", user.getEmail());
-                            intent.putExtra("user", user.getDisplayName());
-                            startActivity(intent);
-                            finish();
+                            assert user != null;
+                            DocumentReference docRef = BDraiz.collection("usuarios").document(user.getUid());
+
+                            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                        assert document != null;
+                                        if (document.exists()) {
+                                            tipo = document.getString("tipo");
+                                            if(tipo.equals("empleado")){
+
+                                                Intent intent = new Intent(getApplicationContext(),MenueActivity.class);
+                                                intent.putExtra("email", user.getEmail());
+                                                intent.putExtra("user", user.getDisplayName());
+                                                progressDoalog.dismiss();
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                            if(tipo.equals("empresa")){
+
+                                                Intent intent = new Intent(getApplicationContext(),MenuActivity.class);
+                                                intent.putExtra("email", user.getEmail());
+                                                intent.putExtra("user", user.getDisplayName());
+                                                progressDoalog.dismiss();
+                                                startActivity(intent);
+                                                finish();
+                                            }
+
+                                        } else {
+
+                                            DocumentReference docRef = BDraiz.collection("empresa").document(user.getUid());
+                                            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                    if (task.isSuccessful()) {
+                                                        DocumentSnapshot document = task.getResult();
+                                                        assert document != null;
+                                                        if (document.exists()) {
+                                                            tipo = document.getString("tipo");
+                                                            if(tipo.equals("empleado")){
+                                                                Intent intent = new Intent(getApplicationContext(),MenueActivity.class);
+                                                                intent.putExtra("email", user.getEmail());
+                                                                intent.putExtra("user", user.getDisplayName());
+                                                                progressDoalog.dismiss();
+                                                                startActivity(intent);
+                                                                finish();
+                                                            }
+                                                            if(tipo.equals("empresa")){
+                                                                Intent intent = new Intent(getApplicationContext(),MenuActivity.class);
+                                                                intent.putExtra("email", user.getEmail());
+                                                                intent.putExtra("user", user.getDisplayName());
+                                                                progressDoalog.dismiss();
+                                                                startActivity(intent);
+                                                                finish();
+                                                            }
+                                                        } else {
+                                                            Log.d("TAG", "No such document");
+                                                        }
+                                                    } else {
+                                                        Log.e("TAG", "get failed with ", task.getException());
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    } else {
+                                        Log.e("TAG", "get failed with ", task.getException());
+                                    }
+                                }
+                            });
 
                         } else {
                             Log.w("mesaje", "signInWithEmail:failure", task.getException());
-                            Toast.makeText(Login.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Login.this, "Authenticacion fallida.", Toast.LENGTH_SHORT).show();
                         }
 
                         if (!task.isSuccessful()) {

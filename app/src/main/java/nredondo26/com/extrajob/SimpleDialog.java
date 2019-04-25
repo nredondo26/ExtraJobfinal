@@ -1,9 +1,10 @@
 package nredondo26.com.extrajob;
 
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
+import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -11,6 +12,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 
 class SimpleDialog  {
+
+    public String  resultado;
 
     void createSimpleDialog(final Context context) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -28,34 +31,39 @@ class SimpleDialog  {
 
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
 
-
                 builder.setTitle("Ocupaciones").setMultiChoiceItems(zona, null,
                         new DialogInterface.OnMultiChoiceClickListener() {
                             public void onClick(DialogInterface dialog, int item, boolean isChecked) {
-                                Log.e("Dialog", "Op: " +zona[item]);
+
+                                resultado+="-"+zona[item];
+                                Log.e("Dialog", "Op: " +resultado);
+
                             }
                         })
 
-                        .setNegativeButton("Aceptar",  new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-
-                        .setPositiveButton("Cancelar", new DialogInterface.OnClickListener() {
+                        .setNegativeButton("Cancelar",  new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if (dialog != null) {
                                     dialog.cancel();
                                 }
                             }
+                        })
+
+                        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(resultado == null){
+                                    Toast.makeText(context,"Debe selecionar almenos una ocupación",Toast.LENGTH_LONG).show();
+                                }
+                            }
                         });
 
                 android.app.AlertDialog dialogIcon = builder.create();
                 dialogIcon.show();
-
             }
         });
+
     }
 
 }

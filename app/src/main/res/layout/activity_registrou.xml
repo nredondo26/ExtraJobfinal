@@ -141,7 +141,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editnombre" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/imgperfil"
         android:layout_width="35dp"
         android:layout_height="52dp"
         android:layout_marginStart="8dp"
@@ -161,7 +161,7 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imgperfil"
         app:srcCompat="@drawable/extrajob" />
 
     <EditText
@@ -225,7 +225,7 @@
 
     <Button
         android:id="@+id/ocupacion"
-        android:layout_width="160dp"
+        android:layout_width="110dp"
         android:layout_height="35dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
@@ -239,6 +239,9 @@
         android:layout_width="208dp"
         android:layout_height="35dp"
         android:layout_marginEnd="16dp"
+        android:textColor="#FDFDFD"
+        android:textColorHint="#FDFDFD"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/ocupacion"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/ocupacion" />

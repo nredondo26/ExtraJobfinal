@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="nredondo26.com.extrajob">
 
     <application
-        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppThemesin">
+        android:theme="@style/AppThemesin"
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
             android:name=".MenueActivity"
             android:label="@string/title_activity_menue"
-            android:theme="@style/AppThemesin.NoActionBar"></activity>
+            android:theme="@style/AppThemesin.NoActionBar" />
+
         <activity
             android:name=".MenuActivity"
             android:label="@string/title_activity_menu"
             android:theme="@style/AppThemesin.NoActionBar" />
+
         <activity android:name=".MainActivity" />
         <activity android:name=".Registroe" />
         <activity android:name=".Registrou" />
