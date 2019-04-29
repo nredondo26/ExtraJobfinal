@@ -139,7 +139,7 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
         return valid;
     }
 
-    private void createAccount(String email, String password, String DisplayName) {
+    private void createAccount(String email, String password) {
         Log.d("mensaje", "createAccount:" + email);
         if (!validateForm()) {
             return;
@@ -168,6 +168,7 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
 
                             dialogo();
 
+                            assert user != null;
                             BDraiz.collection("empresa").document(user.getUid()).set(usuario).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -223,7 +224,7 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         if(v==bregistroe){
-            createAccount(emai.getText().toString(),pass.getText().toString(),rs.getText().toString());
+            createAccount(emai.getText().toString(),pass.getText().toString());
         }
     }
 

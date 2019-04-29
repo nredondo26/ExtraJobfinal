@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">ExtraJob</string>
     <string name="dialog_title">Fecha de Nacimiento</string>
 
@@ -10,4 +10,46 @@
     <string name="action_settings">Perfil</string>
     <string name="title_activity_menue">Menu de Usuario</string>
     <string name="title_activity_menu">Menu de Empresa</string>
+    <string name="publicar_oferta">Publicar Oferta</string>
+    <string name="titulo">Titulo</string>
+    <string name="descripcion">Descripcion</string>
+    <string name="fecha_26_04_2019">Fecha 26/04/2019</string>
+    <string name="horario">Horario</string>
+    <string name="direccion">Direccion</string>
+    <string name="remuneracion">Remuneracion</string>
+    <string name="registar">Registar</string>
+    <string name="empresa">Empresa</string>
+    <string name="usuario">Usuario</string>
+    <string name="todo">iconoj</string>
+    <string name="icono_extrajob">icono extrajob</string>
+    <string name="icono_empresa">icono empresa</string>
+    <string name="icono_empleado">icono empleado</string>
+    <string name="reg_strate">Regístrate</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="no_est_s_registrado">¿No estás Registrado?</string>
+    <string name="iconoj">iconoj</string>
+    <string name="fecha_nacimiento">Fecha Nacimiento</string>
+    <string name="_16_04_2019" tools:ignore="TypographyDashes">16-04-2019</string>
+    <string name="correo_electr_nico">Correo Electrónico</string>
+    <string name="nombre">Nombre</string>
+    <string name="documento_de_identidad">Documento de Identidad</string>
+    <string name="ciudad">Ciudad</string>
+    <string name="icoj">icoj</string>
+    <string name="iconofech">iconofech</string>
+    <string name="ocupaciones">ocupaciones</string>
+    <string name="ocupacion_o_cargo">Ocupacion o Cargo</string>
+    <string name="raz_n_social">Razón Social</string>
+    <string name="persona_de_contacto">Persona de Contacto</string>
+    <string name="nit">NIT</string>
+    <string name="direcci_n_principal">Dirección Principal</string>
+    <string name="ij">ij</string>
+    <string name="actividad_econ_mica">Actividad Económica</string>
+    <string name="direcci_n_electr_nica">Dirección Electrónica</string>
+    <string name="iexra">iexra</string>
+    <string name="telefono">Telefono</string>
+    <string name="clave">Contraseña</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

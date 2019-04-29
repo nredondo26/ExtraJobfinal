@@ -13,7 +13,7 @@
         android:layout_height="24dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:text="Fecha Nacimiento"
+        android:text="@string/fecha_nacimiento"
         android:textColor="@android:color/background_light"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +24,7 @@
         android:layout_width="0dp"
         android:layout_height="24dp"
         android:layout_marginStart="20dp"
-        android:text="16-04-2019"
+        android:text="@string/_16_04_2019"
         android:textColor="@android:color/background_light"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/emailm"
@@ -40,9 +40,8 @@
         android:layout_marginEnd="16dp"
         android:background="@drawable/backwithborder"
         android:ems="10"
-        android:hint="Ciudad"
+        android:hint="@string/ciudad"
         android:inputType="textPersonName"
-        android:paddingLeft="7dp"
         android:textColor="@android:color/background_light"
         android:textColorHighlight="@android:color/background_light"
         android:textColorHint="@android:color/background_light"
@@ -51,7 +50,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editemail" />
+        app:layout_constraintTop_toBottomOf="@+id/editemail"
+        android:importantForAutofill="no" tools:targetApi="o" />
 
     <EditText
         android:id="@+id/editpassword"
@@ -60,11 +60,11 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
+        android:autofillHints=""
         android:background="@drawable/backwithborder"
         android:ems="10"
-        android:hint="Contraseña"
+        android:hint="@string/clave"
         android:inputType="textPassword"
-        android:paddingLeft="7dp"
         android:textColor="@android:color/background_light"
         android:textColorHighlight="@android:color/background_light"
         android:textColorHint="@android:color/background_light"
@@ -73,7 +73,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editciudad" />
+        app:layout_constraintTop_toBottomOf="@+id/editciudad"
+        tools:targetApi="o" />
 
     <EditText
         android:id="@+id/editemail"
@@ -84,9 +85,8 @@
         android:layout_marginEnd="16dp"
         android:background="@drawable/backwithborder"
         android:ems="10"
-        android:hint="Correo Electrónico"
-        android:inputType="textPersonName"
-        android:paddingLeft="7dp"
+        android:hint="@string/correo_electr_nico"
+        android:inputType="textEmailAddress"
         android:textColor="@android:color/background_light"
         android:textColorHighlight="@android:color/background_light"
         android:textColorHint="@android:color/background_light"
@@ -95,7 +95,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edittelefono" />
+        app:layout_constraintTop_toBottomOf="@+id/edittelefono"
+        android:autofillHints="" tools:targetApi="o" />
 
     <EditText
         android:id="@+id/edittelefono"
@@ -104,11 +105,11 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
+        android:autofillHints=""
         android:background="@drawable/backwithborder"
         android:ems="10"
-        android:hint="Teléfono"
+        android:hint="@string/telefono"
         android:inputType="textPersonName"
-        android:paddingLeft="7dp"
         android:textColor="@android:color/background_light"
         android:textColorHighlight="@android:color/background_light"
         android:textColorHint="@android:color/background_light"
@@ -117,7 +118,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ocupacion" />
+        app:layout_constraintTop_toBottomOf="@+id/ocupacion"
+        tools:targetApi="o" />
 
     <EditText
         android:id="@+id/editdocumento"
@@ -128,9 +130,8 @@
         android:layout_marginEnd="16dp"
         android:background="@drawable/backwithborder"
         android:ems="10"
-        android:hint="Documento de Identidad"
+        android:hint="@string/documento_de_identidad"
         android:inputType="textPersonName"
-        android:paddingLeft="7dp"
         android:textColor="@android:color/background_light"
         android:textColorHighlight="@android:color/background_light"
         android:textColorHint="@android:color/background_light"
@@ -138,7 +139,8 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editnombre" />
+        app:layout_constraintTop_toBottomOf="@+id/editnombre"
+        android:autofillHints="" tools:targetApi="o" />
 
     <ImageView
         android:id="@+id/imgperfil"
@@ -147,6 +149,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
+        android:contentDescription="@string/icoj"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -159,6 +162,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
+        android:contentDescription="@string/icono_extrajob"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgperfil"
@@ -173,9 +177,8 @@
         android:layout_marginEnd="16dp"
         android:background="@drawable/backwithborder"
         android:ems="10"
-        android:hint="Nombre"
+        android:hint="@string/nombre"
         android:inputType="textPersonName"
-        android:paddingLeft="7dp"
         android:textColor="@android:color/background_light"
         android:textColorHighlight="@android:color/background_light"
         android:textColorHint="@android:color/background_light"
@@ -183,7 +186,8 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        android:autofillHints="" tools:targetApi="o" />
 
     <android.support.constraint.Barrier
         android:id="@+id/barrier"
@@ -200,7 +204,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@color/colorPrimary"
-        android:text="Regístrate"
+        android:text="@string/reg_strate"
         android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -216,6 +220,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="8dp"
         android:background="@null"
+        android:contentDescription="@string/iconofech"
         app:layout_constraintBottom_toBottomOf="@+id/txtfecha"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -230,7 +235,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
         android:background="@color/colorPrimary"
-        android:text="ocupaciones"
+        android:text="@string/ocupaciones"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtfecha" />
 

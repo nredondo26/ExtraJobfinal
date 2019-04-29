@@ -176,7 +176,7 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Toast.makeText(getApplicationContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(),MenuActivity.class);
+                                    Intent intent = new Intent(getApplicationContext(),MenueActivity.class);
                                     intent.putExtra("email", user.getEmail());
                                     intent.putExtra("user", user.getDisplayName());
                                     startActivity(intent);

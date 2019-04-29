@@ -93,15 +93,18 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_publicar) {
+            Intent intent = new Intent(this,Publicar_Ofertas_Activity.class);
+            //intent.putExtra("mAuth", String.valueOf(mAuth));
+            startActivity(intent);
 
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_vigentes) {
+            Intent intent = new Intent(this,Ofertas_Vigentes_Activity.class);
+            startActivity(intent);
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_postulados) {
+            Intent intent = new Intent(this,Usuarios_Postulados_Activity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_cerrar) {
             mAuth.signOut();
