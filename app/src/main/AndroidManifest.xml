@@ -10,16 +10,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppThemesin"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        <activity android:name=".Ofertas_Activas_Activity"></activity>
+        <activity android:name=".Usuarios_Postulados_Activity" />
+        <activity android:name=".Ofertas_Vigentes_Activity" />
+        <activity
+            android:name=".Publicar_Ofertas_Activity"
+            android:theme="@style/Appmenu" />
         <activity
             android:name=".MenueActivity"
             android:label="@string/title_activity_menue"
             android:theme="@style/AppThemesin.NoActionBar" />
-
         <activity
             android:name=".MenuActivity"
             android:label="@string/title_activity_menu"
             android:theme="@style/AppThemesin.NoActionBar" />
-
         <activity android:name=".MainActivity" />
         <activity android:name=".Registroe" />
         <activity android:name=".Registrou" />

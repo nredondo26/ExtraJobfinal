@@ -15,7 +15,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
         android:background="@color/colorblanco"
-        android:text="Regístrate"
+        android:text="@string/reg_strate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +62,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:background="@color/colorPrimary"
-        android:text="Login"
+        android:text="@string/login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editpass1" />
@@ -75,6 +75,7 @@
         android:layout_marginTop="50dp"
         android:layout_marginEnd="8dp"
         android:background="@null"
+        android:contentDescription="@string/iconoj"
         android:scaleType="centerInside"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -90,9 +91,8 @@
         android:layout_marginEnd="20dp"
         android:background="@drawable/backwithborder"
         android:ems="10"
-        android:hint="Email"
+        android:hint="@string/email"
         android:inputType="textEmailAddress"
-        android:paddingLeft="7dp"
         android:textColor="@android:color/background_light"
         android:textColorHighlight="@android:color/background_light"
         android:textColorHint="@android:color/background_light"
@@ -101,7 +101,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView6"
+        android:autofillHints="" tools:targetApi="o" />
 
     <ImageView
         android:id="@+id/imageView6"
@@ -110,6 +111,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:contentDescription="@string/icono_extrajob"
         android:scaleType="centerInside"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -124,7 +126,7 @@
         android:layout_marginTop="25dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="¿No estás Registrado?"
+        android:text="@string/no_est_s_registrado"
         android:textColor="@color/colorblanco"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
