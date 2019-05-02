@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Publicar_Ofertas_Activity">
+
+    <!-- Toolbar -->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorAccent"
+        app:popupTheme="@style/AppTheme"
+        app:theme="@style/Appmenu"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/publicar_oferta"
+        android:textColor="#673AB7"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <EditText
+        android:id="@+id/edittitulo"
+        android:layout_width="0dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:focusable="auto"
+        android:focusableInTouchMode="true"
+        android:hint="@string/titulo"
+        android:inputType="textPersonName"
+        android:selectAllOnFocus="true"
+        android:textColorHint="#673AB6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        android:autofillHints="" />
+
+    <EditText
+        android:id="@+id/editdescripcion"
+        android:layout_width="0dp"
+        android:layout_height="99dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:focusable="auto"
+        android:hint="@string/descripcion"
+        android:inputType="textMultiLine"
+        android:textColorHint="#673AB6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.562"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edittitulo"
+        android:autofillHints="" />
+
+    <EditText
+        android:id="@+id/editfecha"
+        android:layout_width="160dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:focusable="auto"
+        android:hint="@string/fecha_26_04_2019"
+        android:inputType="date"
+        android:textColorHint="#673AB6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editdescripcion"
+        android:autofillHints="" />
+
+    <EditText
+        android:id="@+id/edithorario"
+        android:layout_width="160dp"
+        android:layout_height="42dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:focusable="auto"
+        android:hint="@string/horario"
+        android:inputType="textPersonName"
+        android:textColorHint="#673AB6"
+        app:layout_constraintBottom_toBottomOf="@+id/editfecha"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/editfecha"
+        app:layout_constraintTop_toTopOf="@+id/editfecha"
+        app:layout_constraintVertical_bias="0.0"
+        android:autofillHints="" />
+
+    <EditText
+        android:id="@+id/editdireccion"
+        android:layout_width="0dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:focusable="auto"
+        android:hint="@string/direccion"
+        android:inputType="textPersonName"
+        android:textColorHint="#673AB6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editfecha"
+        android:autofillHints="" />
+
+    <EditText
+        android:id="@+id/editremuneracion"
+        android:layout_width="125dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:focusable="auto"
+        android:hint="@string/remuneracion"
+        android:inputType="number"
+        android:textColorHint="#673AB6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editdireccion"
+        android:autofillHints="" />
+
+    <Button
+        android:id="@+id/bregistrar_oferta"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="#009688"
+        android:text="@string/registar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editremuneracion"
+        app:layout_constraintVertical_bias="0.167" />
+
+</android.support.constraint.ConstraintLayout>
