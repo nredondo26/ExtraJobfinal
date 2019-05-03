@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/carV_usuarios_postu"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:layout_marginLeft="2dp"
+    android:layout_marginRight="2dp"
+    android:layout_marginTop="8dp">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/txtnombre"
+            android:layout_width="256dp"
+            android:layout_height="22dp"
+            android:layout_marginStart="15dp"
+            android:text="nombre"
+            android:textColor="#030303"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.396"
+            app:layout_constraintStart_toEndOf="@+id/fotoperfil"
+            app:layout_constraintTop_toTopOf="@+id/fotoperfil" />
+
+        <TextView
+            android:id="@+id/textocupacion"
+            android:layout_width="256dp"
+            android:layout_height="22dp"
+            android:layout_marginTop="2dp"
+            android:text="ocupacion"
+            android:textColor="#1C3F83"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/txtnombre"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/txtnombre"
+            app:layout_constraintTop_toBottomOf="@+id/txtnombre" />
+
+        <ImageView
+            android:id="@+id/fotoperfil"
+            android:layout_width="68dp"
+            android:layout_height="81dp"
+            android:layout_marginBottom="4dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            tools:srcCompat="@tools:sample/avatars[4]" />
+
+        <Button
+            android:id="@+id/binfo"
+            android:layout_width="105dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp"
+            android:background="#00BCD4"
+            android:text="Informacion"
+            android:textColor="#F7EEEE"
+            app:layout_constraintBottom_toBottomOf="@+id/fotoperfil"
+            app:layout_constraintStart_toStartOf="@+id/textocupacion"
+            app:layout_constraintTop_toBottomOf="@+id/textocupacion"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/bseleccionar"
+            android:layout_width="105dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="8dp"
+            android:background="#673AB7"
+            android:text="Seleccionar"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="@+id/binfo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.647"
+            app:layout_constraintStart_toEndOf="@+id/binfo"
+            app:layout_constraintTop_toTopOf="@+id/binfo"
+            app:layout_constraintVertical_bias="0.0" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+
+</android.support.design.card.MaterialCardView>

@@ -103,7 +103,7 @@
         android:layout_width="0dp"
         android:layout_height="36dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:autofillHints=""
         android:background="@drawable/backwithborder"
@@ -116,9 +116,9 @@
         android:textColorLink="@android:color/background_light"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ocupacion"
+        app:layout_constraintTop_toBottomOf="@+id/textocupacion"
         tools:targetApi="o" />
 
     <EditText
@@ -143,29 +143,18 @@
         android:autofillHints="" tools:targetApi="o" />
 
     <ImageView
-        android:id="@+id/imgperfil"
-        android:layout_width="35dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:contentDescription="@string/icoj"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/icono" />
-
-    <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="161dp"
-        android:layout_height="48dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:contentDescription="@string/icono_extrajob"
+        android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgperfil"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/extrajob" />
 
     <EditText
@@ -173,8 +162,9 @@
         android:layout_width="0dp"
         android:layout_height="36dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
+        android:autofillHints=""
         android:background="@drawable/backwithborder"
         android:ems="10"
         android:hint="@string/nombre"
@@ -187,7 +177,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        android:autofillHints="" tools:targetApi="o" />
+        tools:targetApi="o" />
 
     <android.support.constraint.Barrier
         android:id="@+id/barrier"
@@ -200,18 +190,17 @@
         android:layout_width="160dp"
         android:layout_height="35dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="88dp"
         android:background="@color/colorPrimary"
         android:text="@string/reg_strate"
         android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintHorizontal_bias="0.961"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editpassword"
-        app:layout_constraintVertical_bias="0.172" />
+        app:layout_constraintTop_toBottomOf="@+id/bsubirfoto" />
 
     <ImageButton
         android:id="@+id/bcalendario"
@@ -229,7 +218,7 @@
         app:srcCompat="@drawable/ic_calendario" />
 
     <Button
-        android:id="@+id/ocupacion"
+        android:id="@+id/bocupacion"
         android:layout_width="110dp"
         android:layout_height="35dp"
         android:layout_marginStart="16dp"
@@ -240,15 +229,27 @@
         app:layout_constraintTop_toBottomOf="@+id/txtfecha" />
 
     <TextView
-        android:id="@+id/txtocupacion"
+        android:id="@+id/textocupacion"
         android:layout_width="208dp"
         android:layout_height="35dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="60dp"
         android:textColor="#FDFDFD"
         android:textColorHint="#FDFDFD"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/ocupacion"
+        app:layout_constraintStart_toEndOf="@+id/bocupacion"
+        app:layout_constraintTop_toTopOf="@+id/bocupacion" />
+
+    <Button
+        android:id="@+id/bsubirfoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Subir Foto"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/ocupacion" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editpassword" />
 
 </android.support.constraint.ConstraintLayout>

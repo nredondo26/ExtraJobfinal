@@ -6,6 +6,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +19,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,6 +34,13 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,13 +50,19 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
 
     EditText editnombre, editdocumento, edittelefono, editemail, editciudad, editpassword;
     TextView txtfecha, txtocupacion;
-    Button bregistrou, ocupacion;
+    Button bregistrou, ocupacion,sfoto;
     ImageButton calendario;
     private FirebaseAuth mAuth;
     FirebaseFirestore BDraiz;
     FirebaseStorage storage;
     ProgressDialog progressDoalog;
     String  resultado="";
+    boolean IMAGE_STATUS = false;
+    String rutaimagen;
+    private static final int PICK_IMAGE = 100;
+    Uri imageUri;
+    ImageView imagenv;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,22 +70,26 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
         setContentView(R.layout.activity_registrou);
 
         mAuth = FirebaseAuth.getInstance();
+        BDraiz = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance("gs://extrajobapp-65826.appspot.com");
         txtfecha = findViewById(R.id.txtfecha);
         calendario = findViewById(R.id.bcalendario);
         editemail = findViewById(R.id.editemail);
         editpassword = findViewById(R.id.editpassword);
-        txtocupacion = findViewById(R.id.txtocupacion);
+        txtocupacion = findViewById(R.id.textocupacion);
         editnombre = findViewById(R.id.editnombre);
         editdocumento = findViewById(R.id.editdocumento);
-        ocupacion = findViewById(R.id.ocupacion);
+        ocupacion = findViewById(R.id.bocupacion);
+        sfoto = findViewById(R.id.bsubirfoto);
         edittelefono = findViewById(R.id.edittelefono);
         editciudad = findViewById(R.id.editciudad);
-        BDraiz = FirebaseFirestore.getInstance();
-        storage = FirebaseStorage.getInstance();
-        calendario.setOnClickListener(this);
         bregistrou = findViewById(R.id.bregistrou);
+        imagenv = findViewById(R.id.imageView2);
+
+        calendario.setOnClickListener(this);
         bregistrou.setOnClickListener(this);
         ocupacion.setOnClickListener(this);
+        sfoto.setOnClickListener(this);
 
     }
 
@@ -161,12 +182,13 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                             actulizar_perfil(editnombre.getText().toString());
 
                             Map<String, Object> usuario = new HashMap<>();
-                            // usuario.put("Nombre", editnombre.getText().toString());
+                            usuario.put("nombre", editnombre.getText().toString());
                             usuario.put("Documento", editdocumento.getText().toString());
                             usuario.put("Ocupacion", txtocupacion.getText().toString());
                             usuario.put("Telefono", edittelefono.getText().toString());
                             usuario.put("Ciudad", editciudad.getText().toString());
                             usuario.put("fnacimiento", txtfecha.getText().toString());
+                            //usuario.put("foto", );
                             usuario.put("tipo", "empleado");
 
                             dialogo();
@@ -223,6 +245,68 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                 });
     }
 
+    public void subir_foto() throws FileNotFoundException {
+
+        StorageReference storageRef = storage.getReference();
+        StorageReference mountainImagesRef = storageRef.child("images/");
+        InputStream stream = new FileInputStream(new File(rutaimagen));
+        UploadTask uploadTask = mountainImagesRef.putStream(stream);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(getApplicationContext(),"Mala la cosa",Toast.LENGTH_LONG).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(getApplicationContext(),"correcto",Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+    private void openGallery(){
+        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(gallery, PICK_IMAGE);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(resultCode == RESULT_OK && requestCode == PICK_IMAGE){
+            imageUri = data.getData();
+            imagenv.setImageURI(imageUri);
+            IMAGE_STATUS=true;
+
+            try {
+                rutaimagen=getPath(this,imageUri);
+                Log.e("Ruta de la imagen",rutaimagen);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static String getPath(Context context, Uri uri) throws URISyntaxException {
+        if ("content".equalsIgnoreCase(uri.getScheme())) {
+            String[] projection = { "_data" };
+            Cursor cursor = null;
+            try {
+                cursor = context.getContentResolver().query(uri, projection, null, null, null);
+                int column_index = cursor.getColumnIndexOrThrow("_data");
+                if (cursor.moveToFirst()) {
+                    return cursor.getString(column_index);
+                }
+            } catch (Exception e) {
+            }
+        }
+        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+        return null;
+    }
+
+
     @Override
     public void onClick(View v) {
 
@@ -248,12 +332,26 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
         }
 
         if (v == bregistrou) {
-            createAccount(editemail.getText().toString(), editpassword.getText().toString());
+            if (IMAGE_STATUS){
+                try {
+                    subir_foto();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                createAccount(editemail.getText().toString(), editpassword.getText().toString());
+            }else{
+                Toast.makeText(getApplicationContext(),"Por favor cargue una foto",Toast.LENGTH_LONG).show();
+            }
+
         }
 
         if (v == ocupacion) {
             resultado="";
             createSimpleDialog(this);
+        }
+
+        if (v == sfoto) {
+            openGallery();
         }
 
     }

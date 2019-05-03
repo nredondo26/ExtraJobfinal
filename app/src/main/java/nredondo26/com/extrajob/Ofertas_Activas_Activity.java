@@ -29,21 +29,20 @@ import static android.support.constraint.Constraints.TAG;
 
 public class Ofertas_Activas_Activity extends AppCompatActivity {
 
-    private RecyclerView rv;
     public List<Atributos_publicaciones_ofertas> atributosList;
     public Adapter_ofertas_activas adapter;
     FirebaseFirestore db;
-    private FirebaseAuth mAuth;
-    String ocupacion;
+    String  ocupacion,cupacion1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ofertas__activas_);
 
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         atributosList = new ArrayList<>();
-        rv = findViewById(R.id.recyclerView2);
+        RecyclerView rv = findViewById(R.id.recyclerView2);
         LinearLayoutManager lm = new LinearLayoutManager(this);
         rv.setLayoutManager(lm);
         adapter = new Adapter_ofertas_activas(atributosList,this);
@@ -63,12 +62,15 @@ public class Ofertas_Activas_Activity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
+                    assert document != null;
                     if (document.exists()) {
 
-                        ocupacion = String.valueOf(document.getData().get("Ocupacion"));
+                          ocupacion = String.valueOf(Objects.requireNonNull(document.getData()).get("Ocupacion"));
+                         // cupacion1 = String.valueOf(Objects.requireNonNull(document.getData()).get("Ocupacion1"));
 
                         db.collection("ofertas")
-                                .whereEqualTo("categoria",ocupacion )
+                                .whereEqualTo("categoria",ocupacion)
+                                .whereEqualTo("estado",0)
                                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                                     @Override
                                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
@@ -102,11 +104,6 @@ public class Ofertas_Activas_Activity extends AppCompatActivity {
                 }
             }
         });
-
-    }
-
-    public void Leerdocumentos(){
-
 
     }
 

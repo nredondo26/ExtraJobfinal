@@ -30,7 +30,7 @@ public class Adapter_ofertas_activas extends RecyclerView.Adapter<Adapter_oferta
     @NonNull
     @Override
     public Adapter_ofertas_activas.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View vista = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_ofertas_public, viewGroup, false);
+        View vista = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_ofertas_activas, viewGroup, false);
         return new Adapter_ofertas_activas.ViewHolder(vista);
     }
 
@@ -44,16 +44,17 @@ public class Adapter_ofertas_activas extends RecyclerView.Adapter<Adapter_oferta
         viewHolder.txt_horario.setText(atributosList.get(i).getHorario());
         viewHolder.txt_remuneracion.setText(atributosList.get(i).getRemuneracion());
 
-        viewHolder.bcancelar.setOnClickListener(new View.OnClickListener() {
+        viewHolder.bpostularse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 new AlertDialog.Builder(context)
                         .setTitle("Confirmacion de Ofertas")
-                        .setMessage("Estas seguro que deseas cancelar la oferta ?")
+                        .setMessage("Estas seguro que deseas postularse a esta oferta? ?")
                         .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(context,"Postulacion correcta ..",Toast.LENGTH_LONG).show();
                                /* Ofertas_Activas_Activity.canselar_oferta(atributosList.get(i).getId(),"ofertas");
                                 Intent refresh = new Intent(context, Ofertas_Vigentes_Activity.class);
                                 context.startActivity(refresh);
@@ -91,8 +92,8 @@ public class Adapter_ofertas_activas extends RecyclerView.Adapter<Adapter_oferta
         TextView txt_fecha;
         TextView txt_horario;
         TextView txt_remuneracion;
-        Button bcancelar;
-        CardView carV_publicacion_ofertas;
+        Button bpostularse;
+        CardView carV_ofertas_activas;
 
         ViewHolder(View item){
             super(item);
@@ -102,8 +103,8 @@ public class Adapter_ofertas_activas extends RecyclerView.Adapter<Adapter_oferta
             txt_fecha = item.findViewById(R.id.fechacm);
             txt_horario = item.findViewById(R.id.horariocm);
             txt_remuneracion = item.findViewById(R.id.remuneracioncm);
-            bcancelar = item.findViewById(R.id.bcanselar);
-            carV_publicacion_ofertas = item.findViewById(R.id.carV_publicacion_ofertas);
+            bpostularse = item.findViewById(R.id.bpostularse);
+            carV_ofertas_activas = item.findViewById(R.id.carV_ofertas_activas);
         }
     }
 

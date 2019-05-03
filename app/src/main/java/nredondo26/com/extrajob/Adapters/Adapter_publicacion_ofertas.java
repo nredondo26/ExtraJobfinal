@@ -18,6 +18,7 @@ import android.widget.Toast;
 import java.util.List;
 import nredondo26.com.extrajob.Ofertas_Vigentes_Activity;
 import nredondo26.com.extrajob.R;
+import nredondo26.com.extrajob.Usuarios_Postulados_Activity;
 import nredondo26.com.extrajob.modelos.Atributos_publicaciones_ofertas;
 
 
@@ -74,13 +75,16 @@ public class Adapter_publicacion_ofertas extends RecyclerView.Adapter<Adapter_pu
             }
         });
 
-        /*viewHolder.carV_publicacion_ofertas.setOnClickListener(new View.OnClickListener() {
+        viewHolder.carV_publicacion_ofertas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Marcarruta(atributosList.get(i).getLatitud(),atributosList.get(i).getLongitud());
+
+                Intent intent = new Intent(context, Usuarios_Postulados_Activity.class);
+                intent.putExtra("llave",atributosList.get(i).getId());
+                context.startActivity(intent);
 
             }
-        });*/
+        });
     }
 
     @Override
