@@ -107,9 +107,9 @@ public class Usuarios_Postulados_Activity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     assert document != null;
                     if (document.exists()) {
-                        String nombre= (String) document.getData().get("nombre");
+                        String nombre= (String) document.getData().get("Nombre");
                         String documento= (String) document.getData().get("Ocupacion");
-                        String foto= (String) document.getData().get("foto");
+                        String foto= (String) document.getData().get("Foto");
                         Log.e(TAG, "DocumentSnapshot data: " + foto);
 
                         Llenar(nombre, documento,foto);

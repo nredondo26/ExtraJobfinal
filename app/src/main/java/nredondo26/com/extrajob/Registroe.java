@@ -2,6 +2,7 @@ package nredondo26.com.extrajob;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -19,9 +22,15 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class Registroe extends AppCompatActivity implements View.OnClickListener{
@@ -30,7 +39,11 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
     private FirebaseAuth mAuth;
     FirebaseFirestore BDraiz;
     ProgressDialog progressDoalog;
-    Button bregistroe;
+    Button bregistroe,bdocumentos;
+    int PICK_ARCHIVO_REQUEST = 110;
+    Uri archivoUri;
+    boolean ARCHIVO_STATUS = false;
+    FirebaseStorage storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +52,13 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
 
         mAuth = FirebaseAuth.getInstance();
         BDraiz= FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance("gs://extrajobapp-65826.appspot.com");
 
         bregistroe = findViewById(R.id.bregistroe);
         bregistroe.setOnClickListener(this);
+
+        bdocumentos = findViewById(R.id.bdocumentos);
+        bdocumentos.setOnClickListener(this);
 
         rs = findViewById(R.id.rs);
         nit = findViewById(R.id.nit);
@@ -153,40 +170,7 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
 
-                            final FirebaseUser user = mAuth.getCurrentUser();
-
                             actulizar_perfil(rs.getText().toString());
-
-                            Map<String, Object> usuario= new HashMap<>();
-                            usuario.put("Nit", nit.getText().toString());
-                            usuario.put("Persona_contacto", pc.getText().toString());
-                            usuario.put("Actividad_economica", ae.getText().toString());
-                            usuario.put("Direccion", dir.getText().toString());
-                            usuario.put("Telefono", tele.getText().toString());
-                            usuario.put("Cargo_ocupacion", car.getText().toString());
-                            usuario.put("tipo", "empresa");
-
-                            dialogo();
-
-                            assert user != null;
-                            BDraiz.collection("empresa").document(user.getUid()).set(usuario).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Toast.makeText(getApplicationContext(),"Registro Exitoso",Toast.LENGTH_SHORT).show();
-
-                                    Intent intent = new Intent(getApplicationContext(),MenuActivity.class);
-                                    intent.putExtra("email", user.getEmail());
-                                    intent.putExtra("user", user.getDisplayName());
-                                    startActivity(intent);
-                                    progressDoalog.dismiss();
-                                    finish();
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(getApplicationContext(),"Problemas con el Registro",Toast.LENGTH_SHORT).show();
-                                }
-                            });
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -215,7 +199,68 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Log.d("TAG", "User profile updated.");
+
+                            final FirebaseUser user = mAuth.getCurrentUser();
+
+                            final StorageReference storageRef = storage.getReference();
+                            assert user != null;
+                            final StorageReference childRef = storageRef.child(user.getUid() + ".pdf");
+                            final UploadTask uploadTask = childRef.putFile(archivoUri);
+
+                            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                                @Override
+                                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                    if (!task.isSuccessful()) {
+                                        throw Objects.requireNonNull(task.getException());
+                                    }
+                                    return childRef.getDownloadUrl();
+                                }
+                            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    if (task.isSuccessful()) {
+
+                                        Uri downloadUri = task.getResult();
+
+                                        Log.e("url del archivo",""+downloadUri);
+
+                                        Map<String, Object> usuario= new HashMap<>();
+                                        usuario.put("Nit", nit.getText().toString());
+                                        usuario.put("Persona_contacto", pc.getText().toString());
+                                        usuario.put("Actividad_economica", ae.getText().toString());
+                                        usuario.put("Direccion", dir.getText().toString());
+                                        usuario.put("Telefono", tele.getText().toString());
+                                        usuario.put("Cargo_ocupacion", car.getText().toString());
+                                        usuario.put("Fecharegistro", FieldValue.serverTimestamp());
+                                        usuario.put("Tipo", "empresa");
+                                        usuario.put("Email", Objects.requireNonNull(user.getEmail()));
+                                        assert downloadUri != null;
+                                        usuario.put("Documento",downloadUri.toString());
+
+                                        BDraiz.collection("empresa").document(user.getUid()).set(usuario).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(getApplicationContext(),"Registro Exitoso",Toast.LENGTH_SHORT).show();
+
+                                                Intent intent = new Intent(getApplicationContext(),MenuActivity.class);
+                                                intent.putExtra("email", user.getEmail());
+                                                intent.putExtra("user", user.getDisplayName());
+                                                startActivity(intent);
+                                                progressDoalog.dismiss();
+                                                finish();
+
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(getApplicationContext(),"Problemas con el Registro",Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+
+                                    }
+                                }
+                            });
+
                         }
                     }
                 });
@@ -226,6 +271,28 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
         if(v==bregistroe){
             createAccount(emai.getText().toString(),pass.getText().toString());
         }
+
+        if(v==bdocumentos){
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("*/*");
+            startActivityForResult(Intent.createChooser(intent, "Seleccionar un word o pdf"), PICK_ARCHIVO_REQUEST);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_ARCHIVO_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            archivoUri = data.getData();
+            Log.e("archivourl:",""+archivoUri);
+            try {
+                ARCHIVO_STATUS=true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
 }

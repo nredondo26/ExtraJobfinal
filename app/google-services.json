@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "532590352094-0g7i6kth4ndrttso4lu0o5obuveph92a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "nredondo26.com.extrajob",
+            "certificate_hash": "547514aad44914f5b7660c00f13f7eac6c829615"
+          }
+        },
+        {
           "client_id": "532590352094-oh2oog2smbqjhuoffpmppaeqlr37elvu.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -13,13 +13,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MenueActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseAuth mAuth;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,9 @@ public class MenueActivity extends AppCompatActivity implements NavigationView.O
         setContentView(R.layout.activity_menue);
         Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        assert user != null;
 
         String email = getIntent().getStringExtra("email");
         String usuario = getIntent().getStringExtra("user");
@@ -44,9 +51,11 @@ public class MenueActivity extends AppCompatActivity implements NavigationView.O
 
         View hView = navigationView.getHeaderView(0);
 
+        ImageView imageView = hView.findViewById(R.id.imgperfil);
         TextView nombre =  hView.findViewById(R.id.nombrem);
         TextView correo =  hView.findViewById(R.id.emailm);
 
+        Glide.with(this).load(user.getPhotoUrl()).into(imageView);
         nombre.setText(usuario);
         correo.setText(email);
 

@@ -190,17 +190,15 @@
         android:layout_width="160dp"
         android:layout_height="35dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="88dp"
         android:background="@color/colorPrimary"
         android:text="@string/reg_strate"
         android:textColor="@android:color/background_light"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.961"
+        app:layout_constraintHorizontal_bias="0.519"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bsubirfoto" />
+        app:layout_constraintTop_toBottomOf="@+id/bsubirhojadevida" />
 
     <ImageButton
         android:id="@+id/bcalendario"
@@ -245,11 +243,19 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:text="Subir Foto"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editpassword" />
+
+    <Button
+        android:id="@+id/bsubirhojadevida"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:text="Subir Hoja de vida"
+        app:layout_constraintStart_toEndOf="@+id/bsubirfoto"
+        app:layout_constraintTop_toBottomOf="@+id/editpassword"
+        tools:ignore="HardcodedText" />
 
 </android.support.constraint.ConstraintLayout>

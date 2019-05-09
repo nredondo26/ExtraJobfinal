@@ -189,8 +189,9 @@
         android:layout_width="0dp"
         android:layout_height="36dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="16dp"
+        android:autofillHints=""
         android:background="@drawable/backwithborder"
         android:ems="10"
         android:hint="@string/raz_n_social"
@@ -204,32 +205,32 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView4"
-        android:autofillHints="" tools:targetApi="o" />
+        tools:targetApi="o" />
 
     <Button
         android:id="@+id/bregistroe"
         android:layout_width="160dp"
         android:layout_height="35dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="72dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/colorPrimary"
         android:text="@string/reg_strate"
         android:textColor="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.425"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pass"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/bdocumentos"
+        app:layout_constraintVertical_bias="0.102" />
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="35dp"
-        android:layout_height="52dp"
+        android:layout_width="30dp"
+        android:layout_height="37dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:contentDescription="@string/ij"
         app:layout_constraintEnd_toEndOf="parent"
@@ -239,8 +240,8 @@
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="161dp"
-        android:layout_height="48dp"
+        android:layout_width="152dp"
+        android:layout_height="34dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
@@ -250,5 +251,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3"
         app:srcCompat="@drawable/extrajob" />
+
+    <Button
+        android:id="@+id/bdocumentos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/cargar_documentos"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pass" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="171dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/camara_de_comercio_y_reprentante_legal_en_un_pdf"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/bdocumentos"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/bdocumentos"
+        app:layout_constraintTop_toTopOf="@+id/bdocumentos"
+        app:layout_constraintVertical_bias="1.0" />
 
 </android.support.constraint.ConstraintLayout>

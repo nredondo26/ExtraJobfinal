@@ -16,11 +16,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseAuth mAuth;
-    ImageView imgperfil;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         TextView nombre =  hView.findViewById(R.id.nombrem);
         TextView correo =  hView.findViewById(R.id.emailm);
 
-        Glide.with(this).load("https://firebasestorage.googleapis.com/v0/b/xtrajob-9e3c1.appspot.com/o/30601611.jpg?alt=media&token=06d2dab6-d71e-4805-90d4-8a2df5784c5c").into(imageView);
+        Glide.with(this).load("https://firebasestorage.googleapis.com/v0/b/extrajobapp-65826.appspot.com/o/iconoempresam.png?alt=media&token=490ffb05-c24f-44a1-b86b-56aefa7f1db9").into(imageView);
         nombre.setText(usuario);
         correo.setText(email);
 

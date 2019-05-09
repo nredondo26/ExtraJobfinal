@@ -66,7 +66,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                                         DocumentSnapshot document = task.getResult();
                                         assert document != null;
                                         if (document.exists()) {
-                                            tipo = document.getString("tipo");
+                                            tipo = document.getString("Tipo");
+                                            assert tipo != null;
                                             if(tipo.equals("empleado")){
 
                                                 Intent intent = new Intent(getApplicationContext(),MenueActivity.class);
@@ -96,7 +97,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                                                         DocumentSnapshot document = task.getResult();
                                                         assert document != null;
                                                         if (document.exists()) {
-                                                            tipo = document.getString("tipo");
+                                                            tipo = document.getString("Tipo");
+                                                            assert tipo != null;
                                                             if(tipo.equals("empleado")){
                                                                 Intent intent = new Intent(getApplicationContext(),MenueActivity.class);
                                                                 intent.putExtra("email", user.getEmail());

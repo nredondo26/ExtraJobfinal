@@ -6,7 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,38 +32,36 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class Registrou extends AppCompatActivity  implements View.OnClickListener {
 
     EditText editnombre, editdocumento, edittelefono, editemail, editciudad, editpassword;
     TextView txtfecha, txtocupacion;
-    Button bregistrou, ocupacion,sfoto;
+    Button bregistrou, ocupacion, sfoto,shvida;
     ImageButton calendario;
     private FirebaseAuth mAuth;
     FirebaseFirestore BDraiz;
     FirebaseStorage storage;
     ProgressDialog progressDoalog;
-    String  resultado="";
-    boolean IMAGE_STATUS = false;
-    String rutaimagen;
-    private static final int PICK_IMAGE = 100;
-    Uri imageUri;
+    String resultado = "";
+    boolean IMAGE_STATUS,ARCHIVO_STATUS = false;
+    int PICK_IMAGE_REQUEST = 111;
+    int PICK_ARCHIVO_REQUEST = 110;
+    Uri imageUri,archivoUri;
     ImageView imagenv;
-
+    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +84,9 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
         editciudad = findViewById(R.id.editciudad);
         bregistrou = findViewById(R.id.bregistrou);
         imagenv = findViewById(R.id.imageView2);
+        shvida = findViewById(R.id.bsubirhojadevida);
 
+        shvida.setOnClickListener(this);
         calendario.setOnClickListener(this);
         bregistrou.setOnClickListener(this);
         ocupacion.setOnClickListener(this);
@@ -152,7 +153,7 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
         }
 
         String fecha = txtfecha.getText().toString();
-        if ("16-04-2019".equals(fecha)) {
+        if ("16-04-2019" .equals(fecha)) {
             txtfecha.setError("Requerido");
             valid = false;
         } else {
@@ -163,12 +164,12 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
     }
 
     private void createAccount(String email, String password) {
-        Log.d("mensaje", "createAccount:" + email);
+
+        dialogo();
+
         if (!validateForm()) {
             return;
         }
-
-        dialogo();
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -178,39 +179,11 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("MENSAJE", "createUserWithEmail:success");
                             final FirebaseUser user = mAuth.getCurrentUser();
-
-                            actulizar_perfil(editnombre.getText().toString());
-
-                            Map<String, Object> usuario = new HashMap<>();
-                            usuario.put("nombre", editnombre.getText().toString());
-                            usuario.put("Documento", editdocumento.getText().toString());
-                            usuario.put("Ocupacion", txtocupacion.getText().toString());
-                            usuario.put("Telefono", edittelefono.getText().toString());
-                            usuario.put("Ciudad", editciudad.getText().toString());
-                            usuario.put("fnacimiento", txtfecha.getText().toString());
-                            //usuario.put("foto", );
-                            usuario.put("tipo", "empleado");
-
-                            dialogo();
-
                             assert user != null;
-                            BDraiz.collection("usuarios").document(user.getUid()).set(usuario).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Toast.makeText(getApplicationContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(),MenueActivity.class);
-                                    intent.putExtra("email", user.getEmail());
-                                    intent.putExtra("user", user.getDisplayName());
-                                    startActivity(intent);
-                                    progressDoalog.dismiss();
-                                    finish();
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(getApplicationContext(), "Problemas con el Registro", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+
+                            progressDoalog.dismiss();
+
+                            subir_archivo(user.getUid());
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -221,89 +194,149 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                         progressDoalog.dismiss();
                     }
                 });
-        // [END create_user_with_email]
     }
 
-    public void actulizar_perfil(String name){
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    public void subir_archivo(final String nombre_foto) {
 
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName(name)
-                //   .setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
-                .build();
+        dialogo();
 
-        assert user != null;
-        user.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("TAG", "User profile updated.");
+        if (imageUri != null &&  archivoUri !=null) {
+
+            for (int i = 0; i<=1; i++) {
+
+                if (i == 0) {
+
+                    final StorageReference storageRef = storage.getReference();
+                    final StorageReference childRef = storageRef.child(nombre_foto + ".jpg");
+                    final UploadTask uploadTask = childRef.putFile(imageUri);
+
+                    Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                        @Override
+                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                            if (!task.isSuccessful()) {
+                                throw Objects.requireNonNull(task.getException());
+                            }
+                            return childRef.getDownloadUrl();
                         }
-                    }
-                });
-    }
+                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if (task.isSuccessful()) {
 
-    public void subir_foto() throws FileNotFoundException {
+                                Uri downloadUri = task.getResult();
 
-        StorageReference storageRef = storage.getReference();
-        StorageReference mountainImagesRef = storageRef.child("images/");
-        InputStream stream = new FileInputStream(new File(rutaimagen));
-        UploadTask uploadTask = mountainImagesRef.putStream(stream);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getApplicationContext(),"Mala la cosa",Toast.LENGTH_LONG).show();
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(getApplicationContext(),"correcto",Toast.LENGTH_LONG).show();
-            }
-        });
+                                Log.e("url de la imagen",""+downloadUri);
 
-    }
+                                user = FirebaseAuth.getInstance().getCurrentUser();
+                                assert user != null;
 
-    private void openGallery(){
-        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-        startActivityForResult(gallery, PICK_IMAGE);
+                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                        .setDisplayName(editnombre.getText().toString())
+                                        .setPhotoUri(downloadUri)
+                                        .build();
 
-    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        if(resultCode == RESULT_OK && requestCode == PICK_IMAGE){
-            imageUri = data.getData();
-            imagenv.setImageURI(imageUri);
-            IMAGE_STATUS=true;
+                                user.updateProfile(profileUpdates)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Log.d("TAG", "User profile updated.");
 
-            try {
-                rutaimagen=getPath(this,imageUri);
-                Log.e("Ruta de la imagen",rutaimagen);
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+                                                }
+                                            }
+                                        });
 
-    public static String getPath(Context context, Uri uri) throws URISyntaxException {
-        if ("content".equalsIgnoreCase(uri.getScheme())) {
-            String[] projection = { "_data" };
-            Cursor cursor = null;
-            try {
-                cursor = context.getContentResolver().query(uri, projection, null, null, null);
-                int column_index = cursor.getColumnIndexOrThrow("_data");
-                if (cursor.moveToFirst()) {
-                    return cursor.getString(column_index);
+                                Map<String, Object> usuario = new HashMap<>();
+                                usuario.put("Nombre",editnombre.getText().toString());
+                                usuario.put("Documento",editdocumento.getText().toString() );
+                                usuario.put("Ocupacion", txtocupacion.getText().toString());
+                                usuario.put("Telefono", edittelefono.getText().toString());
+                                usuario.put("Ciudad", editciudad.getText().toString());
+                                usuario.put("Fnacimiento", txtfecha.getText().toString());
+                                usuario.put("Estado", 0);
+                                usuario.put("Fecharegistro", FieldValue.serverTimestamp());
+                                assert downloadUri != null;
+                                usuario.put("Foto", downloadUri.toString());
+                                usuario.put("Hoja_vida","");
+                                usuario.put("Tipo", "empleado");
+                                usuario.put("Email", Objects.requireNonNull(user.getEmail()));
+
+                                BDraiz.collection("usuarios").document(user.getUid()).set(usuario).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(getApplicationContext(), "Problemas con el Registro", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                            }
+                        }
+                    });
+
                 }
-            } catch (Exception e) {
+
+                if(i==1){
+
+                    final StorageReference storageRef = storage.getReference();
+                    final StorageReference childRef = storageRef.child(nombre_foto + ".pdf");
+                    final UploadTask uploadTask = childRef.putFile(archivoUri);
+
+                    Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                        @Override
+                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                            if (!task.isSuccessful()) {
+                                throw Objects.requireNonNull(task.getException());
+                            }
+                            return childRef.getDownloadUrl();
+
+                        }
+                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if (task.isSuccessful()) {
+
+                                Uri downloadUri = task.getResult();
+                                user = FirebaseAuth.getInstance().getCurrentUser();
+                                DocumentReference washingtonRef =  BDraiz.collection("usuarios").document(user.getUid());
+                                assert downloadUri != null;
+                                washingtonRef
+                                        .update("Hoja_vida", downloadUri.toString() )
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(getApplicationContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
+                                                Intent intent = new Intent(getApplicationContext(), MenueActivity.class);
+                                                intent.putExtra("email", user.getEmail());
+                                                intent.putExtra("user", user.getDisplayName());
+                                                startActivity(intent);
+                                                progressDoalog.dismiss();
+                                                finish();
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.w("TAG", "Error updating document", e);
+                                            }
+                                        });
+                            }
+                        }
+                    });
+
+                }
+
+                progressDoalog.dismiss();
             }
+
+        } else {
+            Toast.makeText(Registrou.this, "Debe seleccionar una foto y un archivo respectivamente", Toast.LENGTH_SHORT).show();
         }
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
-        }
-        return null;
     }
 
 
@@ -332,12 +365,7 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
         }
 
         if (v == bregistrou) {
-            if (IMAGE_STATUS){
-                try {
-                    subir_foto();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+            if (IMAGE_STATUS && ARCHIVO_STATUS){
                 createAccount(editemail.getText().toString(), editpassword.getText().toString());
             }else{
                 Toast.makeText(getApplicationContext(),"Por favor cargue una foto",Toast.LENGTH_LONG).show();
@@ -351,12 +379,53 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
         }
 
         if (v == sfoto) {
-            openGallery();
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            startActivityForResult(Intent.createChooser(intent, "Seleccionar Imagen"), PICK_IMAGE_REQUEST);
+        }
+
+        if(v == shvida){
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("*/*");
+            startActivityForResult(Intent.createChooser(intent, "Seleccionar un word o pdf"), PICK_ARCHIVO_REQUEST);
+        }
+
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            Log.e("imagenuri:",""+imageUri);
+
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+                imagenv.setImageBitmap(bitmap);
+                IMAGE_STATUS=true;
+            } catch (Exception e) {
+                e.printStackTrace();
+             }
+        }
+
+        if (requestCode == PICK_ARCHIVO_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            archivoUri = data.getData();
+            Log.e("archivourl:",""+archivoUri);
+            try {
+                ARCHIVO_STATUS=true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }
 
     void createSimpleDialog(final Context context) {
+
+        dialogo();
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         CollectionReference docRef = db.collection("categoriao");
@@ -390,6 +459,7 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
 
                 android.app.AlertDialog dialogIcon = builder.create();
                 dialogIcon.show();
+                progressDoalog.dismiss();
             }
         });
 
