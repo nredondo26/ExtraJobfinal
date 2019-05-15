@@ -1,5 +1,6 @@
 package nredondo26.com.extrajob.servicios;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -98,6 +99,7 @@ public class MyService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
+    @SuppressLint("HandlerLeak")
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {

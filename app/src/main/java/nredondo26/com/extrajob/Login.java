@@ -42,6 +42,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         if (!validateForm()) {
             return;
         }
+        dialogo();
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -123,13 +124,14 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                         } else {
                             Log.w("mesaje", "signInWithEmail:failure", task.getException());
                             Toast.makeText(Login.this, "Authenticacion fallida.", Toast.LENGTH_SHORT).show();
+                            progressDoalog.dismiss();
                         }
                         if (!task.isSuccessful()) {
                             Toast.makeText(Login.this, "Contraseña o email errado", Toast.LENGTH_SHORT).show();
+                            progressDoalog.dismiss();
                         }
                     }
                 });
-
     }
 
     private void dialogo(){
@@ -164,8 +166,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     public void onClick(View v) {
         int i = v.getId();
          if (i == R.id.blogin) {
-             dialogo();
-            signIn(vemail.getText().toString(), vpassword.getText().toString());
+             signIn(vemail.getText().toString(), vpassword.getText().toString());
          }
          if (i == R.id.bregistro) {
                Intent intent = new Intent(this,MainActivity.class);

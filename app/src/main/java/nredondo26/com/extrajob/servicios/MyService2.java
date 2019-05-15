@@ -60,7 +60,6 @@ public class MyService2 extends Service {
         ocup = userDetails.getString("categoria", "");
         tipo = userDetails.getInt("tipousuario",0);
         Log.e("proceso_servicio","Servicio creado");
-
         notificacion(0);
 
     }
@@ -69,13 +68,9 @@ public class MyService2 extends Service {
         if (Build.VERSION.SDK_INT >= 26) {
             String CHANNEL_ID = "my_channel_01";
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Channel human readable title", NotificationManager.IMPORTANCE_DEFAULT);
-
             ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
-
             Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID).setContentTitle("").setContentText("").build();
-
             startForeground(id, notification);
-
         }
     }
 
@@ -102,19 +97,13 @@ public class MyService2 extends Service {
                             for (DocumentChange dc : snapshots.getDocumentChanges()) {
                                 switch (dc.getType()) {
                                     case ADDED:
-
                                         notificacion(1);
-
                                         break;
                                     case MODIFIED:
-
                                         notificacion(2);
-
                                         break;
                                     case REMOVED:
-
                                         notificacion(3);
-
                                         break;
                                 }
                             }
@@ -122,7 +111,5 @@ public class MyService2 extends Service {
                     });
         }
         return START_STICKY;
-
-        //return super.onStartCommand(intent, flags, startId);
     }
 }

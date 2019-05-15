@@ -61,4 +61,13 @@
     <string name="categoria">Categoria</string>
     <string name="_26_04_2019">26-04-2019</string>
     <string name="contrase_a">Contraseña</string>
+    <string name="email1">Email:</string>
+    <string name="nombre1">Nombre:</string>
+    <string name="ocupaciones1">ocupaciones:</string>
+    <string name="ciudad1">Ciudad:</string>
+    <string name="fecha_de_nacimiento1">Fecha de Nacimiento:</string>
+    <string name="telefono1">Telefono:</string>
+    <string name="documento1">Documento:</string>
+    <string name="informacion_general_de_su_perfil1">Informacion general de su perfil</string>
+
 </resources>

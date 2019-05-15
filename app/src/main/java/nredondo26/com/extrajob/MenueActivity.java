@@ -78,8 +78,14 @@ public class MenueActivity extends AppCompatActivity implements NavigationView.O
                         String ema = (String) document.getData().get("Email");
                         String nom = (String)document.getData().get("Nombre");
                         String ocup = (String) document.getData().get("Ocupacion");
+                        String ciud = (String) document.getData().get("Ciudad");
+                        String fnac = (String)document.getData().get("Fnacimiento");
+                        String docum = (String) document.getData().get("Documento");
+                        String tele = (String) document.getData().get("Telefono");
                         preferencias = new preferencias();
                         preferencias.guardar_preferenica(ema,nom,ocup,1,getApplicationContext());
+                        preferencias.guardar_preferenica_usuarios(getApplicationContext(),ema,nom,ocup,ciud,fnac,docum,tele);
+
                     } else {
                         Log.d(TAG, "No such document");
                     }
@@ -110,6 +116,8 @@ public class MenueActivity extends AppCompatActivity implements NavigationView.O
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(MenueActivity.this, PerfilActivity.class);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);

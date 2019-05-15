@@ -24,4 +24,20 @@ public class preferencias {
         Log.e("preferencias","guardadas");
     }
 
+    void guardar_preferenica_usuarios(Context context, String Email ,String Nombre,String Ocupacion,String Ciudad,String Fnacimiento,String Documento,String Telefono){
+        SharedPreferences userDetails = context.getSharedPreferences("todousuario", MODE_PRIVATE);
+        SharedPreferences.Editor editor = userDetails.edit();
+
+        editor.putString("Email",Email);
+        editor.putString("Nombre",Nombre);
+        editor.putString("Ocupacion",Ocupacion);
+        editor.putString("Ciudad",Ciudad);
+        editor.putString("Fnacimiento",Fnacimiento);
+        editor.putString("Documento",Documento);
+        editor.putString("Telefono",Telefono);
+
+        editor.apply();
+        Log.e("preferencia del usuario","guardada");
+    }
+
 }

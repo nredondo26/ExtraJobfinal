@@ -1,5 +1,6 @@
 package nredondo26.com.extrajob;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -61,7 +62,8 @@ public class Ofertas_Vigentes_Activity  extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            return true;
+            Intent intent = new Intent(this, PerfilActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

@@ -13,14 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppThemesin"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        <activity android:name=".PerfilActivity"></activity>
 
         <service
             android:name=".servicios.MyService2"
             android:enabled="true"
             android:exported="true"
-            tools:ignore="ExportedService">
-        </service>
-
+            tools:ignore="ExportedService"></service>
         <service android:name=".servicios.MyService" />
 
         <receiver android:name=".AutoArranque">
@@ -31,9 +30,10 @@
 
         <activity android:name=".Ofertas_Activas_Activity" />
         <activity android:name=".Usuarios_Postulados_Activity" />
-        <activity android:name=".Ofertas_Vigentes_Activity" android:label="Ofertas Viegentes" />
         <activity
-            android:name=".Publicar_Ofertas_Activity"/>
+            android:name=".Ofertas_Vigentes_Activity"
+            android:label="Ofertas Viegentes" />
+        <activity android:name=".Publicar_Ofertas_Activity" />
         <activity
             android:name=".MenueActivity"
             android:label="@string/title_activity_menue"
