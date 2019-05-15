@@ -21,9 +21,7 @@ import nredondo26.com.extrajob.R;
 import nredondo26.com.extrajob.Usuarios_Postulados_Activity;
 import nredondo26.com.extrajob.modelos.Atributos_publicaciones_ofertas;
 
-
 public class Adapter_publicacion_ofertas extends RecyclerView.Adapter<Adapter_publicacion_ofertas.ViewHolder> {
-
     private List<Atributos_publicaciones_ofertas> atributosList;
     private Context context;
 
@@ -42,14 +40,12 @@ public class Adapter_publicacion_ofertas extends RecyclerView.Adapter<Adapter_pu
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, @SuppressLint("RecyclerView") final int i) {
-
         viewHolder.txt_titulo.setText(atributosList.get(i).getTitulo());
         viewHolder.txt_descipcion.setText(atributosList.get(i).getDescipcion());
         viewHolder.txt_direccion.setText(atributosList.get(i).getDireccion());
         viewHolder.txt_fecha.setText(atributosList.get(i).getFecha());
         viewHolder.txt_horario.setText(atributosList.get(i).getHorario());
         viewHolder.txt_remuneracion.setText(atributosList.get(i).getRemuneracion());
-
         viewHolder.bcancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,11 +74,9 @@ public class Adapter_publicacion_ofertas extends RecyclerView.Adapter<Adapter_pu
         viewHolder.carV_publicacion_ofertas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(context, Usuarios_Postulados_Activity.class);
                 intent.putExtra("llave",atributosList.get(i).getId());
                 context.startActivity(intent);
-
             }
         });
     }
@@ -115,6 +109,5 @@ public class Adapter_publicacion_ofertas extends RecyclerView.Adapter<Adapter_pu
             carV_publicacion_ofertas = item.findViewById(R.id.carV_publicacion_ofertas);
         }
     }
-
 
 }

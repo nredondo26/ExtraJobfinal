@@ -9,6 +9,11 @@
 
     </style>
 
+    <!--Etiqueta flotante-->
+    <style name="AppTheme.FloatingLabel" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/colorblanco</item>
+        <item name="android:textColorHighlight">@color/colorblanco</item>
+    </style>
 
     <style name="AppThemesin" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->

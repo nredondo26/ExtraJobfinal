@@ -7,17 +7,13 @@ import android.view.View;
 import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity {
-
     ImageButton re,ru;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         ru=findViewById(R.id.registrou);
         re=findViewById(R.id.registroem);
-
         ru.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -25,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
         re.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -33,6 +28,5 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intentdos);
             }
         });
-
     }
 }

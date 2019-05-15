@@ -13,50 +13,35 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import nredondo26.com.extrajob.servicios.MyService;
 
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
     private FirebaseAuth mAuth;
-    FirebaseUser user;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         String email = getIntent().getStringExtra("email");
         String usuario = getIntent().getStringExtra("user");
-
-
         mAuth = FirebaseAuth.getInstance();
-
         DrawerLayout drawer =  findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
         NavigationView navigationView =  findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
         View hView = navigationView.getHeaderView(0);
-
         ImageView imageView = hView.findViewById(R.id.imgperfil);
         TextView nombre =  hView.findViewById(R.id.nombrem);
         TextView correo =  hView.findViewById(R.id.emailm);
-
         Glide.with(this).load("https://firebasestorage.googleapis.com/v0/b/extrajobapp-65826.appspot.com/o/iconoempresam.png?alt=media&token=490ffb05-c24f-44a1-b86b-56aefa7f1db9").into(imageView);
         nombre.setText(usuario);
         correo.setText(email);
-
         navigationView.setNavigationItemSelectedListener(this);
-      //  navigationView.setBackgroundColor(getResources().getColor(R.color.colorMenu));
-
     }
 
     @Override
@@ -71,49 +56,34 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
-
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
-
         if (id == R.id.nav_publicar) {
             Intent intent = new Intent(this,Publicar_Ofertas_Activity.class);
-            //intent.putExtra("mAuth", String.valueOf(mAuth));
             startActivity(intent);
-
         } else if (id == R.id.nav_vigentes) {
             Intent intent = new Intent(this,Ofertas_Vigentes_Activity.class);
             startActivity(intent);
-
-        } else if (id == R.id.nav_postulados) {
-            Intent intent = new Intent(this,Usuarios_Postulados_Activity.class);
-            startActivity(intent);
-
         } else if (id == R.id.nav_cerrar) {
             mAuth.signOut();
             Intent intent = new Intent(this,Login.class);
             startActivity(intent);
             finish();
         }
-
         DrawerLayout drawer =  findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

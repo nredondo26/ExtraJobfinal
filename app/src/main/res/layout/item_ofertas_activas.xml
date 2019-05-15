@@ -93,7 +93,7 @@
         <TextView
             android:id="@+id/remuneracioncm"
             android:layout_width="260dp"
-            android:layout_height="19dp"
+            android:layout_height="22dp"
             android:layout_marginStart="4dp"
             android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"

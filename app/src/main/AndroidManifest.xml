@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="nredondo26.com.extrajob">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -10,12 +13,27 @@
         android:supportsRtl="true"
         android:theme="@style/AppThemesin"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".Ofertas_Activas_Activity"></activity>
+
+        <service
+            android:name=".servicios.MyService2"
+            android:enabled="true"
+            android:exported="true"
+            tools:ignore="ExportedService">
+        </service>
+
+        <service android:name=".servicios.MyService" />
+
+        <receiver android:name=".AutoArranque">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".Ofertas_Activas_Activity" />
         <activity android:name=".Usuarios_Postulados_Activity" />
-        <activity android:name=".Ofertas_Vigentes_Activity" />
+        <activity android:name=".Ofertas_Vigentes_Activity" android:label="Ofertas Viegentes" />
         <activity
-            android:name=".Publicar_Ofertas_Activity"
-            android:theme="@style/Appmenu" />
+            android:name=".Publicar_Ofertas_Activity"/>
         <activity
             android:name=".MenueActivity"
             android:label="@string/title_activity_menue"

@@ -1,6 +1,7 @@
 package nredondo26.com.extrajob;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -67,7 +68,6 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrou);
-
         mAuth = FirebaseAuth.getInstance();
         BDraiz = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance("gs://extrajobapp-65826.appspot.com");
@@ -85,13 +85,11 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
         bregistrou = findViewById(R.id.bregistrou);
         imagenv = findViewById(R.id.imageView2);
         shvida = findViewById(R.id.bsubirhojadevida);
-
         shvida.setOnClickListener(this);
         calendario.setOnClickListener(this);
         bregistrou.setOnClickListener(this);
         ocupacion.setOnClickListener(this);
         sfoto.setOnClickListener(this);
-
     }
 
     private void dialogo() {
@@ -120,7 +118,6 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
         } else {
             editpassword.setError(null);
         }
-
         String nombre = editnombre.getText().toString();
         if (TextUtils.isEmpty(nombre)) {
             editnombre.setError("Requerido");
@@ -135,7 +132,6 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
         } else {
             editdocumento.setError(null);
         }
-
         String telefono = edittelefono.getText().toString();
         if (TextUtils.isEmpty(telefono)) {
             edittelefono.setError("Requerido");
@@ -143,7 +139,6 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
         } else {
             edittelefono.setError(null);
         }
-
         String ciudad = editciudad.getText().toString();
         if (TextUtils.isEmpty(ciudad)) {
             editciudad.setError("Requerido");
@@ -151,7 +146,6 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
         } else {
             editciudad.setError(null);
         }
-
         String fecha = txtfecha.getText().toString();
         if ("16-04-2019" .equals(fecha)) {
             txtfecha.setError("Requerido");
@@ -159,38 +153,28 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
         } else {
             txtfecha.setError(null);
         }
-
         return valid;
     }
 
     private void createAccount(String email, String password) {
 
-        dialogo();
-
         if (!validateForm()) {
             return;
         }
-
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        dialogo();
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
                             Log.d("MENSAJE", "createUserWithEmail:success");
                             final FirebaseUser user = mAuth.getCurrentUser();
                             assert user != null;
 
-                            progressDoalog.dismiss();
-
                             subir_archivo(user.getUid());
-
                         } else {
-                            // If sign in fails, display a message to the user.
                             Log.w("MENSAJE", "createUserWithEmail:failure", task.getException());
                             Toast.makeText(Registrou.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
-
                         progressDoalog.dismiss();
                     }
                 });
@@ -198,19 +182,13 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
 
 
     public void subir_archivo(final String nombre_foto) {
-
         dialogo();
-
         if (imageUri != null &&  archivoUri !=null) {
-
             for (int i = 0; i<=1; i++) {
-
                 if (i == 0) {
-
                     final StorageReference storageRef = storage.getReference();
                     final StorageReference childRef = storageRef.child(nombre_foto + ".jpg");
                     final UploadTask uploadTask = childRef.putFile(imageUri);
-
                     Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                         @Override
                         public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
@@ -223,31 +201,22 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                         @Override
                         public void onComplete(@NonNull Task<Uri> task) {
                             if (task.isSuccessful()) {
-
                                 Uri downloadUri = task.getResult();
-
-                                Log.e("url de la imagen",""+downloadUri);
-
                                 user = FirebaseAuth.getInstance().getCurrentUser();
                                 assert user != null;
-
                                 UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                         .setDisplayName(editnombre.getText().toString())
                                         .setPhotoUri(downloadUri)
                                         .build();
-
-
                                 user.updateProfile(profileUpdates)
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
                                                     Log.d("TAG", "User profile updated.");
-
                                                 }
                                             }
                                         });
-
                                 Map<String, Object> usuario = new HashMap<>();
                                 usuario.put("Nombre",editnombre.getText().toString());
                                 usuario.put("Documento",editdocumento.getText().toString() );
@@ -262,31 +231,25 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                                 usuario.put("Hoja_vida","");
                                 usuario.put("Tipo", "empleado");
                                 usuario.put("Email", Objects.requireNonNull(user.getEmail()));
-
                                 BDraiz.collection("usuarios").document(user.getUid()).set(usuario).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(getApplicationContext(), "Problemas con el Registro", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), "Problemas con el Registro", Toast.LENGTH_SHORT).
+                                                show();
                                     }
                                 });
-
                             }
                         }
                     });
-
                 }
-
                 if(i==1){
-
                     final StorageReference storageRef = storage.getReference();
                     final StorageReference childRef = storageRef.child(nombre_foto + ".pdf");
                     final UploadTask uploadTask = childRef.putFile(archivoUri);
-
                     Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                         @Override
                         public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
@@ -294,13 +257,11 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                                 throw Objects.requireNonNull(task.getException());
                             }
                             return childRef.getDownloadUrl();
-
                         }
                     }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                         @Override
                         public void onComplete(@NonNull Task<Uri> task) {
                             if (task.isSuccessful()) {
-
                                 Uri downloadUri = task.getResult();
                                 user = FirebaseAuth.getInstance().getCurrentUser();
                                 DocumentReference washingtonRef =  BDraiz.collection("usuarios").document(user.getUid());
@@ -311,11 +272,11 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Toast.makeText(getApplicationContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
+                                                progressDoalog.dismiss();
                                                 Intent intent = new Intent(getApplicationContext(), MenueActivity.class);
                                                 intent.putExtra("email", user.getEmail());
                                                 intent.putExtra("user", user.getDisplayName());
                                                 startActivity(intent);
-                                                progressDoalog.dismiss();
                                                 finish();
                                             }
                                         })
@@ -328,36 +289,27 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                             }
                         }
                     });
-
                 }
-
                 progressDoalog.dismiss();
             }
-
         } else {
             Toast.makeText(Registrou.this, "Debe seleccionar una foto y un archivo respectivamente", Toast.LENGTH_SHORT).show();
         }
     }
 
-
     @Override
     public void onClick(View v) {
-
         if (v == calendario) {
-
             final Calendar c = Calendar.getInstance();
-
             int mYear = c.get(Calendar.YEAR);
             int mMonth = c.get(Calendar.MONDAY);
             int mDay = c.get(Calendar.MONDAY);
-
             DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                     new DatePickerDialog.OnDateSetListener() {
                         @SuppressLint("SetTextI18n")
                         @Override
                         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                             int mes = (monthOfYear + 1);
-
                             txtfecha.setText(dayOfMonth + "-" + mes + "-" + year);
                         }
                     }, mYear, mMonth, mDay);
@@ -368,39 +320,48 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
             if (IMAGE_STATUS && ARCHIVO_STATUS){
                 createAccount(editemail.getText().toString(), editpassword.getText().toString());
             }else{
-                Toast.makeText(getApplicationContext(),"Por favor cargue una foto",Toast.LENGTH_LONG).show();
+               if(IMAGE_STATUS && !ARCHIVO_STATUS){
+                   Toast.makeText(getApplicationContext(),"Por favor cargue su hoja de vida",Toast.LENGTH_LONG).show();
+               }else{
+                   if(!IMAGE_STATUS && ARCHIVO_STATUS){
+                       Toast.makeText(getApplicationContext(),"Por favor una imagen",Toast.LENGTH_LONG).show();
+                   }else{
+                       Toast.makeText(getApplicationContext(),"deber cargar una foto y su hoja de vida",Toast.LENGTH_LONG).show();
+                   }
+               }
             }
-
         }
-
         if (v == ocupacion) {
             resultado="";
-            createSimpleDialog(this);
+            Octener_ocupacion(this);
         }
-
         if (v == sfoto) {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
             startActivityForResult(Intent.createChooser(intent, "Seleccionar Imagen"), PICK_IMAGE_REQUEST);
         }
-
         if(v == shvida){
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("*/*");
             startActivityForResult(Intent.createChooser(intent, "Seleccionar un word o pdf"), PICK_ARCHIVO_REQUEST);
         }
+    }
 
+    private void dialogodos() {
+        progressDoalog = new ProgressDialog(this);
+        progressDoalog.setMax(100);
+        progressDoalog.setMessage("Octeniendo Datos");
+        progressDoalog.setTitle("Ocupaciones Disponibles....");
+        progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDoalog.show();
     }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
-            Log.e("imagenuri:",""+imageUri);
-
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
                 imagenv.setImageBitmap(bitmap);
@@ -409,7 +370,6 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                 e.printStackTrace();
              }
         }
-
         if (requestCode == PICK_ARCHIVO_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             archivoUri = data.getData();
             Log.e("archivourl:",""+archivoUri);
@@ -419,35 +379,29 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                 e.printStackTrace();
             }
         }
-
     }
 
-    void createSimpleDialog(final Context context) {
-
-        dialogo();
-
+    void Octener_ocupacion(final Context context) {
+        dialogodos();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
         CollectionReference docRef = db.collection("categoriao");
         docRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
                 final String[] zona = new String[queryDocumentSnapshots.getDocuments().size()];
-
                 for(int i=0; i<queryDocumentSnapshots.getDocuments().size(); i++){
                     zona[i]=queryDocumentSnapshots.getDocuments().get(i).getString("Nombre");
                 }
-
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
 
-                builder.setTitle("Ocupaciones").setMultiChoiceItems(zona, null,
-                        new DialogInterface.OnMultiChoiceClickListener() {
-                            public void onClick(DialogInterface dialog, int item, boolean isChecked) {
-                                resultado+=zona[item]+"-";
+
+                int itemSelected = 0;
+                builder.setTitle("Ocupaciones").setSingleChoiceItems(zona, itemSelected, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int selectedIndex) {
+                                resultado+=zona[selectedIndex]+"-";
                             }
                         })
-
                         .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -456,14 +410,11 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                                 txtocupacion.setText(cadena);
                             }
                         });
-
                 android.app.AlertDialog dialogIcon = builder.create();
                 dialogIcon.show();
                 progressDoalog.dismiss();
             }
         });
-
     }
-
 
 }

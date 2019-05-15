@@ -20,7 +20,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Login extends AppCompatActivity implements View.OnClickListener{
-
     EditText vemail,vpassword;
     private FirebaseAuth mAuth;
     ProgressDialog progressDoalog;
@@ -31,7 +30,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         vemail=findViewById(R.id.editemail);
         vpassword=findViewById(R.id.editpass);
         mAuth = FirebaseAuth.getInstance();
@@ -41,24 +39,19 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     }
 
     private void signIn(String email, String password) {
-        Log.d("mensaje", "signIn:" + email);
         if (!validateForm()) {
             return;
         }
-
-        dialogo();
-
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+
                             Log.d("mensaje", "signInWithEmail:success");
                             final FirebaseUser user = mAuth.getCurrentUser();
-
                             assert user != null;
                             DocumentReference docRef = BDraiz.collection("usuarios").document(user.getUid());
-
                             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -73,22 +66,19 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                                                 Intent intent = new Intent(getApplicationContext(),MenueActivity.class);
                                                 intent.putExtra("email", user.getEmail());
                                                 intent.putExtra("user", user.getDisplayName());
-                                                progressDoalog.dismiss();
                                                 startActivity(intent);
+                                                progressDoalog.dismiss();
                                                 finish();
                                             }
                                             if(tipo.equals("empresa")){
-
                                                 Intent intent = new Intent(getApplicationContext(),MenuActivity.class);
                                                 intent.putExtra("email", user.getEmail());
                                                 intent.putExtra("user", user.getDisplayName());
-                                                progressDoalog.dismiss();
                                                 startActivity(intent);
+                                                progressDoalog.dismiss();
                                                 finish();
                                             }
-
                                         } else {
-
                                             DocumentReference docRef = BDraiz.collection("empresa").document(user.getUid());
                                             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                                 @Override
@@ -103,16 +93,16 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                                                                 Intent intent = new Intent(getApplicationContext(),MenueActivity.class);
                                                                 intent.putExtra("email", user.getEmail());
                                                                 intent.putExtra("user", user.getDisplayName());
-                                                                progressDoalog.dismiss();
                                                                 startActivity(intent);
+                                                                progressDoalog.dismiss();
                                                                 finish();
                                                             }
                                                             if(tipo.equals("empresa")){
                                                                 Intent intent = new Intent(getApplicationContext(),MenuActivity.class);
                                                                 intent.putExtra("email", user.getEmail());
                                                                 intent.putExtra("user", user.getDisplayName());
-                                                                progressDoalog.dismiss();
                                                                 startActivity(intent);
+                                                                progressDoalog.dismiss();
                                                                 finish();
                                                             }
                                                         } else {
@@ -124,23 +114,22 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                                                 }
                                             });
                                         }
+                                        progressDoalog.dismiss();
                                     } else {
                                         Log.e("TAG", "get failed with ", task.getException());
                                     }
                                 }
                             });
-
                         } else {
                             Log.w("mesaje", "signInWithEmail:failure", task.getException());
                             Toast.makeText(Login.this, "Authenticacion fallida.", Toast.LENGTH_SHORT).show();
                         }
-
                         if (!task.isSuccessful()) {
                             Toast.makeText(Login.this, "Contraseña o email errado", Toast.LENGTH_SHORT).show();
                         }
-                        progressDoalog.dismiss();
                     }
                 });
+
     }
 
     private void dialogo(){
@@ -154,7 +143,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
 
     private boolean validateForm() {
         boolean valid = true;
-
         String email = vemail.getText().toString();
         if (TextUtils.isEmpty(email)) {
             vemail.setError("Requerido");
@@ -162,7 +150,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         } else {
             vemail.setError(null);
         }
-
         String password = vpassword.getText().toString();
         if (TextUtils.isEmpty(password)) {
             vpassword.setError("Requerido");
@@ -177,16 +164,14 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     public void onClick(View v) {
         int i = v.getId();
          if (i == R.id.blogin) {
+             dialogo();
             signIn(vemail.getText().toString(), vpassword.getText().toString());
          }
-
          if (i == R.id.bregistro) {
                Intent intent = new Intent(this,MainActivity.class);
                startActivity(intent);
          }
-
     }
-
 
 }
 

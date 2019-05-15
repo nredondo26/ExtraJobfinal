@@ -12,10 +12,10 @@
             android:id="@+id/nav_vigentes"
             android:icon="@drawable/ic_vigentes"
             android:title="Ofertas Vigentes" />
-        <item
+        <!--<item
             android:id="@+id/nav_postulados"
             android:icon="@drawable/ic_postulados"
-            android:title="Usuarios Postulados" />
+            android:title="Usuarios Postulados" />-->
 
         <item
             android:id="@+id/nav_cerrar"

@@ -6,14 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".Ofertas_Vigentes_Activity">
 
-    <android.support.v7.widget.RecyclerView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <!-- Toolbar -->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar4"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colormorado"
+        app:popupTheme="@style/AppThemesin.PopupOverlay"
+        tools:ignore="MissingConstraints" />
+
+    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/recyclerView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
         android:clipToPadding="false"
-        android:scrollbars="vertical"
         android:padding="4dp"
-        tools:ignore="MissingConstraints" />
+        android:scrollbars="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar4"
+        tools:ignore="MissingConstraints,RedundantNamespace"
+        tools:layout_editor_absoluteX="0dp" />
 
 </android.support.constraint.ConstraintLayout>

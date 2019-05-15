@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -27,14 +26,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 
 public class Registroe extends AppCompatActivity implements View.OnClickListener{
-
     EditText rs,nit,pc,ae,dir,emai,tele,pass,car;
     private FirebaseAuth mAuth;
     FirebaseFirestore BDraiz;
@@ -49,17 +46,13 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registroe);
-
         mAuth = FirebaseAuth.getInstance();
         BDraiz= FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance("gs://extrajobapp-65826.appspot.com");
-
         bregistroe = findViewById(R.id.bregistroe);
         bregistroe.setOnClickListener(this);
-
         bdocumentos = findViewById(R.id.bdocumentos);
         bdocumentos.setOnClickListener(this);
-
         rs = findViewById(R.id.rs);
         nit = findViewById(R.id.nit);
         pc = findViewById(R.id.pc);
@@ -82,7 +75,6 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
 
     private boolean validateForm() {
         boolean valid = true;
-
         String email = emai.getText().toString();
         if (TextUtils.isEmpty(email)) {
             emai.setError("Requerido");
@@ -97,7 +89,6 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
         } else {
             pass.setError(null);
         }
-
         String razonsocial = rs.getText().toString();
         if (TextUtils.isEmpty(razonsocial)) {
             rs.setError("Requerido");
@@ -112,7 +103,6 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
         } else {
             nit.setError(null);
         }
-
         String persona_contacto = pc.getText().toString();
         if (TextUtils.isEmpty(persona_contacto)) {
             pc.setError("Requerido");
@@ -120,7 +110,6 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
         } else {
             pc.setError(null);
         }
-
         String ocuapacion_cargo = car.getText().toString();
         if (TextUtils.isEmpty(ocuapacion_cargo)) {
             car.setError("Requerido");
@@ -128,7 +117,6 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
         } else {
             car.setError(null);
         }
-
         String actividad_economica = ae.getText().toString();
         if (TextUtils.isEmpty(actividad_economica)) {
             ae.setError("Requerido");
@@ -136,7 +124,6 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
         } else {
             ae.setError(null);
         }
-
         String direccion = dir.getText().toString();
         if (TextUtils.isEmpty(direccion)) {
             dir.setError("Requerido");
@@ -144,7 +131,6 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
         } else {
             dir.setError(null);
         }
-
         String telefono = tele.getText().toString();
         if (TextUtils.isEmpty(telefono)) {
             tele.setError("Requerido");
@@ -152,7 +138,6 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
         } else {
             tele.setError(null);
         }
-
         return valid;
     }
 
@@ -161,37 +146,27 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
         if (!validateForm()) {
             return;
         }
-
         dialogo();
-
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+
                         if (task.isSuccessful()) {
-
                             actulizar_perfil(rs.getText().toString());
-
                         } else {
-                            // If sign in fails, display a message to the user.
                             Log.w("MENSAJE", "createUserWithEmail:failure", task.getException());
                             Toast.makeText(getApplicationContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
 
-                        progressDoalog.dismiss();
                     }
                 });
-        // [END create_user_with_email]
     }
 
     public void actulizar_perfil(String name){
-
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName(name)
-             //   .setPhotoUri(Uri.parse("https://example.com/jane-q-user/profile.jpg"))
-                .build();
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
 
         assert user != null;
         user.updateProfile(profileUpdates)
@@ -199,14 +174,11 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-
                             final FirebaseUser user = mAuth.getCurrentUser();
-
                             final StorageReference storageRef = storage.getReference();
                             assert user != null;
                             final StorageReference childRef = storageRef.child(user.getUid() + ".pdf");
                             final UploadTask uploadTask = childRef.putFile(archivoUri);
-
                             Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                                 @Override
                                 public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
@@ -219,11 +191,8 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
                                 @Override
                                 public void onComplete(@NonNull Task<Uri> task) {
                                     if (task.isSuccessful()) {
-
                                         Uri downloadUri = task.getResult();
-
                                         Log.e("url del archivo",""+downloadUri);
-
                                         Map<String, Object> usuario= new HashMap<>();
                                         usuario.put("Nit", nit.getText().toString());
                                         usuario.put("Persona_contacto", pc.getText().toString());
@@ -236,19 +205,16 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
                                         usuario.put("Email", Objects.requireNonNull(user.getEmail()));
                                         assert downloadUri != null;
                                         usuario.put("Documento",downloadUri.toString());
-
                                         BDraiz.collection("empresa").document(user.getUid()).set(usuario).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Toast.makeText(getApplicationContext(),"Registro Exitoso",Toast.LENGTH_SHORT).show();
-
+                                                progressDoalog.dismiss();
                                                 Intent intent = new Intent(getApplicationContext(),MenuActivity.class);
                                                 intent.putExtra("email", user.getEmail());
                                                 intent.putExtra("user", user.getDisplayName());
                                                 startActivity(intent);
-                                                progressDoalog.dismiss();
                                                 finish();
-
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                             @Override
@@ -256,12 +222,11 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
                                                 Toast.makeText(getApplicationContext(),"Problemas con el Registro",Toast.LENGTH_SHORT).show();
                                             }
                                         });
-
                                     }
                                 }
                             });
-
                         }
+
                     }
                 });
     }
@@ -269,9 +234,12 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         if(v==bregistroe){
-            createAccount(emai.getText().toString(),pass.getText().toString());
+            if(ARCHIVO_STATUS){
+                createAccount(emai.getText().toString(),pass.getText().toString());
+            }else {
+                Toast.makeText(this,"Debe cargar camara de comercio y cedula del reprentante legal en un PDF",Toast.LENGTH_LONG).show();
+            }
         }
-
         if(v==bdocumentos){
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("*/*");
@@ -282,7 +250,6 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == PICK_ARCHIVO_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             archivoUri = data.getData();
             Log.e("archivourl:",""+archivoUri);
@@ -292,7 +259,6 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
                 e.printStackTrace();
             }
         }
-
     }
 
 }
