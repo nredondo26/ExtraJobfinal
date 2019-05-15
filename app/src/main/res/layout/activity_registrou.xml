@@ -34,15 +34,16 @@
     <EditText
         android:id="@+id/editciudad"
         android:layout_width="0dp"
-        android:layout_height="30dp"
+        android:layout_height="36dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/backwithborder"
         android:ems="10"
         android:hint="@string/ciudad"
-        android:paddingStart="5dp"
+        android:importantForAutofill="no"
         android:inputType="textPersonName"
+        android:paddingStart="5dp"
         android:textColor="@android:color/background_light"
         android:textColorHighlight="@android:color/background_light"
         android:textColorHint="@android:color/background_light"
@@ -52,7 +53,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editemail"
-        android:importantForAutofill="no" tools:targetApi="o" />
+        tools:targetApi="o"
+        tools:ignore="RtlSymmetry" />
 
     <EditText
         android:id="@+id/editpassword"
@@ -76,7 +78,8 @@
         app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editciudad"
-        tools:targetApi="o" />
+        tools:targetApi="o"
+        tools:ignore="RtlSymmetry" />
 
     <EditText
         android:id="@+id/editemail"
@@ -99,7 +102,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edittelefono"
-        android:autofillHints="" tools:targetApi="o" />
+        android:autofillHints="" tools:targetApi="o"
+        tools:ignore="RtlSymmetry" />
 
     <EditText
         android:id="@+id/edittelefono"
@@ -123,7 +127,8 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textocupacion"
-        tools:targetApi="o" />
+        tools:targetApi="o"
+        tools:ignore="RtlSymmetry" />
 
     <EditText
         android:id="@+id/editdocumento"
@@ -145,12 +150,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editnombre"
-        android:autofillHints="" tools:targetApi="o" />
+        android:autofillHints="" tools:targetApi="o"
+        tools:ignore="RtlSymmetry" />
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="118dp"
+        android:layout_height="72dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -183,7 +189,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        tools:targetApi="o" />
+        tools:targetApi="o"
+        tools:ignore="RtlSymmetry" />
 
     <android.support.constraint.Barrier
         android:id="@+id/barrier"
@@ -251,7 +258,8 @@
         android:layout_marginTop="8dp"
         android:text="Subir Foto"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editpassword" />
+        app:layout_constraintTop_toBottomOf="@+id/editpassword"
+        tools:ignore="HardcodedText" />
 
     <Button
         android:id="@+id/bsubirhojadevida"

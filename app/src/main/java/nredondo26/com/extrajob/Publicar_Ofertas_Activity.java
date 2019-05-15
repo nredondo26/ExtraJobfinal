@@ -1,6 +1,7 @@
 package nredondo26.com.extrajob;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,7 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -25,16 +28,19 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Publicar_Ofertas_Activity extends AppCompatActivity {
 
-    EditText edittitulo,editdescripcion,editfecha,edithorario,editdireccion,editremuneracion;
-    TextView editcategoria;
+    EditText edittitulo,editdescripcion,edithorario,editdireccion,editremuneracion;
+    TextView editcategoria,editfecha;
     private FirebaseAuth mAuth;
     FirebaseFirestore BDraiz;
     Button bregistrar_oferta,bcategoria;
+    ImageButton bcalendario;
     ProgressDialog progressDoalog;
 
     @SuppressLint("ResourceAsColor")
@@ -55,6 +61,28 @@ public class Publicar_Ofertas_Activity extends AppCompatActivity {
         editdireccion = findViewById(R.id.editdireccion);
         editremuneracion = findViewById(R.id.editremuneracion);
         editcategoria = findViewById(R.id.txtcategoria);
+
+        bcalendario = findViewById(R.id.bcalendario2);
+        bcalendario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();
+                int mYear = c.get(Calendar.YEAR);
+                int mMonth = c.get(Calendar.MONDAY);
+                int mDay = c.get(Calendar.MONDAY);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(Publicar_Ofertas_Activity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @SuppressLint("SetTextI18n")
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                int mes = (monthOfYear + 1);
+                                editfecha.setText(dayOfMonth + "-" + mes + "-" + year);
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+            }
+        });
+
         bcategoria = findViewById(R.id.bbcategoria);
         bcategoria.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,13 +90,19 @@ public class Publicar_Ofertas_Activity extends AppCompatActivity {
                 createSimpleDialog(Publicar_Ofertas_Activity.this);
             }
         });
+
         bregistrar_oferta = findViewById(R.id.bregistrar_oferta);
         bregistrar_oferta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createAccount();
+                if(editcategoria.getText().equals("Seleccione Categoria")){
+                    Toast.makeText(Publicar_Ofertas_Activity.this,"Debe selecionar una categoria",Toast.LENGTH_LONG).show();
+                }else{
+                    createAccount();
+                }
             }
         });
+
     }
 
     private boolean validateForm() {
@@ -196,7 +230,17 @@ public class Publicar_Ofertas_Activity extends AppCompatActivity {
         progressDoalog.show();
     }
 
+    private void dialogodos() {
+        progressDoalog = new ProgressDialog(this);
+        progressDoalog.setMax(100);
+        progressDoalog.setMessage("Octeniendo Datos");
+        progressDoalog.setTitle("Categoria Disponibles....");
+        progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDoalog.show();
+    }
+
     void createSimpleDialog(final Context context) {
+        dialogodos();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference docRef = db.collection("categoriao");
         docRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -216,6 +260,7 @@ public class Publicar_Ofertas_Activity extends AppCompatActivity {
                 });
                 android.app.AlertDialog dialogIcon = builder.create();
                 dialogIcon.show();
+                progressDoalog.dismiss();
             }
         });
     }

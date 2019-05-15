@@ -27,7 +27,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pc"
-        android:autofillHints="" tools:targetApi="o" />
+        android:autofillHints="" tools:targetApi="o"
+        tools:ignore="RtlSymmetry" />
 
     <EditText
         android:id="@+id/pass"
@@ -51,7 +52,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tele"
-        tools:targetApi="o" />
+        tools:targetApi="o"
+        tools:ignore="RtlSymmetry" />
 
     <EditText
         android:id="@+id/tele"
@@ -75,7 +77,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email"
-        tools:targetApi="o" />
+        tools:targetApi="o"
+        tools:ignore="RtlSymmetry" />
 
     <EditText
         android:id="@+id/ae"
@@ -98,7 +101,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/car"
-        android:autofillHints="" tools:targetApi="o" />
+        android:autofillHints="" tools:targetApi="o"
+        tools:ignore="RtlSymmetry" />
 
     <EditText
         android:id="@+id/email"
@@ -121,7 +125,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dir"
-        android:autofillHints="" tools:targetApi="o" />
+        android:autofillHints="" tools:targetApi="o"
+        tools:ignore="RtlSymmetry" />
 
     <EditText
         android:id="@+id/dir"
@@ -144,7 +149,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ae"
-        android:autofillHints="" tools:targetApi="o" />
+        android:autofillHints="" tools:targetApi="o"
+        tools:ignore="RtlSymmetry" />
 
     <EditText
         android:id="@+id/pc"
@@ -167,7 +173,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nit"
-        android:autofillHints="" tools:targetApi="o" />
+        android:autofillHints="" tools:targetApi="o"
+        tools:ignore="RtlSymmetry" />
 
     <EditText
         android:id="@+id/nit"
@@ -190,7 +197,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rs"
-        android:autofillHints="" tools:targetApi="o" />
+        android:autofillHints="" tools:targetApi="o"
+        tools:ignore="RtlSymmetry" />
 
     <EditText
         android:id="@+id/rs"
@@ -214,7 +222,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView4"
-        tools:targetApi="o" />
+        tools:targetApi="o"
+        tools:ignore="RtlSymmetry" />
 
     <Button
         android:id="@+id/bregistroe"

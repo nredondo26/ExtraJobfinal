@@ -29,7 +29,7 @@
         android:layout_marginEnd="20dp"
         android:imeOptions="actionDone"
         android:paddingTop="10dp"
-        android:hint="Contraseña"
+        android:hint="@string/contrase_a"
         android:textColor="@color/colorblanco"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
