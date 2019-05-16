@@ -65,8 +65,7 @@ public class MenueActivity extends AppCompatActivity implements NavigationView.O
     }
 
     public void Leerdocumentos(){
-        final FirebaseUser user = mAuth.getCurrentUser();
-        assert user != null;
+
         DocumentReference docRef = db.collection("usuarios").document(user.getUid());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override

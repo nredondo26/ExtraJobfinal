@@ -13,13 +13,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppThemesin"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".PerfilActivity"></activity>
+        <activity android:name=".PerfilempresaActivity"></activity>
+        <activity android:name=".PerfilActivity" />
 
         <service
             android:name=".servicios.MyService2"
             android:enabled="true"
             android:exported="true"
-            tools:ignore="ExportedService"></service>
+            tools:ignore="ExportedService" />
         <service android:name=".servicios.MyService" />
 
         <receiver android:name=".AutoArranque">

@@ -2,6 +2,8 @@ package nredondo26.com.extrajob;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,11 +16,23 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import nredondo26.com.extrajob.servicios.MyService;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import static android.support.constraint.Constraints.TAG;
 
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
     private FirebaseAuth mAuth;
+    FirebaseUser user;
+    FirebaseFirestore db;
+    preferencias preferencias;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +41,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
         String email = getIntent().getStringExtra("email");
         String usuario = getIntent().getStringExtra("user");
+        db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         DrawerLayout drawer =  findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -42,6 +58,40 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         nombre.setText(usuario);
         correo.setText(email);
         navigationView.setNavigationItemSelectedListener(this);
+
+        Leerdocumentos();
+    }
+
+    public void Leerdocumentos(){
+
+       DocumentReference docRef = db.collection("empresa").document(user.getUid());
+        Log.e("",docRef.toString());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    assert document != null;
+                    if (document.exists()) {
+                        String Persona_contacto = (String)document.getData().get("Persona_contacto");
+                        String Email = (String) document.getData().get("Email");
+                        String Telefono = (String) document.getData().get("Telefono");
+                        String Nit = (String) document.getData().get("Nit");
+                        String Actividad_economica = (String)document.getData().get("Actividad_economica");
+                        String Cargo_ocupacion = (String) document.getData().get("Cargo_ocupacion");
+                        String Direccion = (String) document.getData().get("Direccion");
+                        preferencias = new preferencias();
+                        preferencias.guardar_preferenica(Email,Persona_contacto,null,2,getApplicationContext());
+                        preferencias.guardar_preferenica_empresa(getApplicationContext(),Persona_contacto,Email,Telefono,Nit,Actividad_economica,Cargo_ocupacion,Direccion);
+
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
     }
 
     @Override
@@ -64,7 +114,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(MenuActivity.this, PerfilActivity.class);
+            Intent intent = new Intent(MenuActivity.this, PerfilempresaActivity.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);

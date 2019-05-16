@@ -40,4 +40,20 @@ public class preferencias {
         Log.e("preferencia del usuario","guardada");
     }
 
+    void guardar_preferenica_empresa(Context context, String Persona_contacto ,String Email,String Telefono,String Nit,String Actividad_economica,String Cargo_ocupacion,String Direccion){
+        SharedPreferences userDetails = context.getSharedPreferences("todoempresa", MODE_PRIVATE);
+        SharedPreferences.Editor editor = userDetails.edit();
+
+        editor.putString("Persona_contacto",Persona_contacto);
+        editor.putString("Email",Email);
+        editor.putString("Telefono",Telefono);
+        editor.putString("Nit",Nit);
+        editor.putString("Actividad_economica",Actividad_economica);
+        editor.putString("Cargo_ocupacion",Cargo_ocupacion);
+        editor.putString("Direccion",Direccion);
+
+        editor.apply();
+        Log.e("preferencia_empresa","guardada");
+    }
+
 }
