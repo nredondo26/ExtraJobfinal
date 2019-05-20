@@ -13,15 +13,29 @@
         android:supportsRtl="true"
         android:theme="@style/AppThemesin"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+
+        <service android:name=".MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="firebase_messaging_auto_init_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_icono_noti" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+
         <activity android:name=".PerfilempresaActivity"></activity>
         <activity android:name=".PerfilActivity" />
 
-        <service
-            android:name=".servicios.MyService2"
-            android:enabled="true"
-            android:exported="true"
-            tools:ignore="ExportedService" />
-        <service android:name=".servicios.MyService" />
 
         <receiver android:name=".AutoArranque">
             <intent-filter>

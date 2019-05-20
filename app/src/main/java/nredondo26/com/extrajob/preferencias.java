@@ -3,6 +3,7 @@ package nredondo26.com.extrajob;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+
 import static android.content.Context.MODE_PRIVATE;
 
 public class preferencias {
@@ -22,6 +23,7 @@ public class preferencias {
         }
         editor.apply();
         Log.e("preferencias","guardadas");
+
     }
 
     void guardar_preferenica_usuarios(Context context, String Email ,String Nombre,String Ocupacion,String Ciudad,String Fnacimiento,String Documento,String Telefono){

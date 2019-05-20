@@ -1,7 +1,6 @@
 package nredondo26.com.extrajob;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -37,6 +36,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -94,7 +95,7 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
 
     private void dialogo() {
         progressDoalog = new ProgressDialog(this);
-        progressDoalog.setMax(100);
+        progressDoalog.setMax(150);
         progressDoalog.setMessage("Enviando datos");
         progressDoalog.setTitle("Registando...");
         progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -161,10 +162,11 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
         if (!validateForm()) {
             return;
         }
+        dialogo();
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        dialogo();
+
                         if (task.isSuccessful()) {
                             Log.d("MENSAJE", "createUserWithEmail:success");
                             final FirebaseUser user = mAuth.getCurrentUser();
@@ -185,6 +187,7 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
         dialogo();
         if (imageUri != null &&  archivoUri !=null) {
             for (int i = 0; i<=1; i++) {
+
                 if (i == 0) {
                     final StorageReference storageRef = storage.getReference();
                     final StorageReference childRef = storageRef.child(nombre_foto + ".jpg");
@@ -217,7 +220,9 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                                                 }
                                             }
                                         });
+
                                 Map<String, Object> usuario = new HashMap<>();
+                                usuario.put("Token","");
                                 usuario.put("Nombre",editnombre.getText().toString());
                                 usuario.put("Documento",editdocumento.getText().toString() );
                                 usuario.put("Ocupacion", txtocupacion.getText().toString());
@@ -238,14 +243,14 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(getApplicationContext(), "Problemas con el Registro", Toast.LENGTH_SHORT).
-                                                show();
+                                        Toast.makeText(getApplicationContext(), "Problemas con el Registro", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
                         }
                     });
                 }
+
                 if(i==1){
                     final StorageReference storageRef = storage.getReference();
                     final StorageReference childRef = storageRef.child(nombre_foto + ".pdf");
@@ -264,13 +269,21 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                             if (task.isSuccessful()) {
                                 Uri downloadUri = task.getResult();
                                 user = FirebaseAuth.getInstance().getCurrentUser();
-                                DocumentReference washingtonRef =  BDraiz.collection("usuarios").document(user.getUid());
+                                final DocumentReference  washingtonRef =  BDraiz.collection("usuarios").document(user.getUid());
                                 assert downloadUri != null;
-                                washingtonRef
-                                        .update("Hoja_vida", downloadUri.toString() )
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                washingtonRef.update("Hoja_vida", downloadUri.toString());
+
+                                FirebaseInstanceId.getInstance().getInstanceId()
+                                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                                             @Override
-                                            public void onSuccess(Void aVoid) {
+                                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                                if (!task.isSuccessful()) {
+                                                    Log.w("token", "getInstanceId failed", task.getException());
+                                                    return;
+                                                }
+                                                String token = task.getResult().getToken();
+                                                washingtonRef.update("Token",token );
+
                                                 Toast.makeText(getApplicationContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
                                                 progressDoalog.dismiss();
                                                 Intent intent = new Intent(getApplicationContext(), MenueActivity.class);
@@ -278,12 +291,7 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                                                 intent.putExtra("user", user.getDisplayName());
                                                 startActivity(intent);
                                                 finish();
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Log.w("TAG", "Error updating document", e);
+
                                             }
                                         });
                             }

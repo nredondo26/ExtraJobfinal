@@ -61,7 +61,9 @@ public class MenueActivity extends AppCompatActivity implements NavigationView.O
         correo.setText(email);
         navigationView.setNavigationItemSelectedListener(this);
         gfoto= user.getPhotoUrl();
+
         Leerdocumentos();
+
     }
 
     public void Leerdocumentos(){
@@ -81,6 +83,7 @@ public class MenueActivity extends AppCompatActivity implements NavigationView.O
                         String fnac = (String)document.getData().get("Fnacimiento");
                         String docum = (String) document.getData().get("Documento");
                         String tele = (String) document.getData().get("Telefono");
+
                         preferencias = new preferencias();
                         preferencias.guardar_preferenica(ema,nom,ocup,1,getApplicationContext());
                         preferencias.guardar_preferenica_usuarios(getApplicationContext(),ema,nom,ocup,ciud,fnac,docum,tele);
@@ -94,6 +97,7 @@ public class MenueActivity extends AppCompatActivity implements NavigationView.O
             }
         });
     }
+
 
     @Override
     public void onBackPressed() {

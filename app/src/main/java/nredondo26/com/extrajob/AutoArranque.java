@@ -4,10 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-
-import nredondo26.com.extrajob.servicios.MyService;
-import nredondo26.com.extrajob.servicios.MyService2;
 
 public class AutoArranque extends BroadcastReceiver {
 
