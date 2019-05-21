@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -23,7 +26,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import java.util.ArrayList;
+import java.util.List;
+import nredondo26.com.extrajob.Adapters.Adapter_postulaciones_aceptadas;
+import nredondo26.com.extrajob.modelos.Atributos_postulaciones_aceptadas;
 import static android.support.constraint.Constraints.TAG;
 
 public class MenueActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -33,6 +44,9 @@ public class MenueActivity extends AppCompatActivity implements NavigationView.O
     FirebaseFirestore db;
     Uri gfoto;
     preferencias preferencias;
+    private RecyclerView rv;
+    public List<Atributos_postulaciones_aceptadas> atributosList;
+    public Adapter_postulaciones_aceptadas adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +76,89 @@ public class MenueActivity extends AppCompatActivity implements NavigationView.O
         navigationView.setNavigationItemSelectedListener(this);
         gfoto= user.getPhotoUrl();
 
-        Leerdocumentos();
+        atributosList = new ArrayList<>();
+        rv = findViewById(R.id.recyclerViewme);
+        LinearLayoutManager lm = new LinearLayoutManager(this);
+        rv.setLayoutManager(lm);
+        adapter = new Adapter_postulaciones_aceptadas(atributosList,this);
+        rv.setAdapter(adapter);
 
+        Leer_ofertas_aceptadas();
+        Leerdocumentos();
+    }
+
+    private void Leer_ofertas_aceptadas() {
+
+        db.collection("postulacionesaceptadas")
+                .whereEqualTo("Id_postulante", user.getUid())
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "Listen failed.", e);
+                            return;
+                        }
+
+                        for (QueryDocumentSnapshot doc : value) {
+                            if (doc.get("Id_oferta") != null) {
+                                String id_oferta=doc.getString("Id_oferta");
+
+                                DocumentReference docRef = db.collection("ofertas").document(id_oferta);
+                                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot document = task.getResult();
+                                            if (document.exists()) {
+                                               String id_empresa= document.getData().get("creador").toString();
+                                               final String titulo= document.getData().get("titulo").toString();
+                                               final String valor= document.getData().get("remuneracion").toString();
+                                               final String direccion= document.getData().get("direccion").toString();
+
+                                               DocumentReference docRef = db.collection("empresa").document(id_empresa);
+                                                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                        if (task.isSuccessful()) {
+                                                            DocumentSnapshot document = task.getResult();
+                                                            if (document.exists()) {
+                                                                String empresa= document.getData().get("Razon_social").toString();
+
+                                                                llenaruno(titulo,empresa,valor,direccion);
+
+                                                            } else {
+                                                                Log.d(TAG, "No such document");
+                                                            }
+                                                        } else {
+                                                            Log.d(TAG, "get failed with ", task.getException());
+                                                        }
+                                                    }
+                                                });
+                                            } else {
+                                                Log.d(TAG, "No such document");
+                                            }
+                                        } else {
+                                            Log.d(TAG, "get failed with ", task.getException());
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                       // Log.d(TAG, "Current cites in CA: " + cities);
+                    }
+                });
+
+    }
+
+    public void llenaruno(String titulo, String empresa,String valor,String direccion) {
+        Atributos_postulaciones_aceptadas ofertas = new Atributos_postulaciones_aceptadas(titulo, empresa,valor,direccion);
+        ofertas.setNombre_empresa(empresa);
+        ofertas.setTitulo_oferta("Titulo: "+titulo);
+        ofertas.setValor("Remuneracion: "+valor);
+        ofertas.setDireccion("Direccion: "+direccion);
+        atributosList.add(ofertas);
+        adapter.notifyDataSetChanged();
     }
 
     public void Leerdocumentos(){
@@ -83,11 +178,9 @@ public class MenueActivity extends AppCompatActivity implements NavigationView.O
                         String fnac = (String)document.getData().get("Fnacimiento");
                         String docum = (String) document.getData().get("Documento");
                         String tele = (String) document.getData().get("Telefono");
-
                         preferencias = new preferencias();
                         preferencias.guardar_preferenica(ema,nom,ocup,1,getApplicationContext());
                         preferencias.guardar_preferenica_usuarios(getApplicationContext(),ema,nom,ocup,ciud,fnac,docum,tele);
-
                     } else {
                         Log.d(TAG, "No such document");
                     }
@@ -97,7 +190,6 @@ public class MenueActivity extends AppCompatActivity implements NavigationView.O
             }
         });
     }
-
 
     @Override
     public void onBackPressed() {

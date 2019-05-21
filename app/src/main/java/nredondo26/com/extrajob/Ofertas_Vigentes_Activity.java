@@ -27,6 +27,7 @@ import nredondo26.com.extrajob.modelos.Atributos_publicaciones_ofertas;
 import static android.support.constraint.Constraints.TAG;
 
 public class Ofertas_Vigentes_Activity  extends AppCompatActivity {
+
     private RecyclerView rv;
     public List<Atributos_publicaciones_ofertas> atributosList;
     public Adapter_publicacion_ofertas adapter;

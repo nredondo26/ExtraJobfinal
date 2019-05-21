@@ -195,6 +195,7 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
                                         Log.e("url del archivo",""+downloadUri);
                                         Map<String, Object> usuario= new HashMap<>();
                                         usuario.put("Nit", nit.getText().toString());
+                                        usuario.put("Razon_social", rs.getText().toString() );
                                         usuario.put("Persona_contacto", pc.getText().toString());
                                         usuario.put("Actividad_economica", ae.getText().toString());
                                         usuario.put("Direccion", dir.getText().toString());

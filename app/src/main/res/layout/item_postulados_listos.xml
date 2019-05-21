@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/carV_listpostulados"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="2dp"
+    android:layout_marginRight="2dp"
+    android:layout_marginTop="8dp">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorgris"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/txttitulo"
+            android:layout_width="0dp"
+            android:layout_height="22dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:text="@string/titulo"
+            android:textColor="#030303"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtempresa"
+            android:layout_width="0dp"
+            android:layout_height="22dp"
+            android:layout_marginTop="2dp"
+            android:text="@string/empresa"
+            android:textColor="#4B6397"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/txttitulo"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/txttitulo"
+            app:layout_constraintTop_toBottomOf="@+id/txttitulo" />
+
+        <TextView
+            android:id="@+id/txtvalor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:text="Valor"
+            android:textColor="#632525"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/txtempresa"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/txtdireccion"
+            app:layout_constraintTop_toBottomOf="@+id/txtdireccion" />
+
+        <TextView
+            android:id="@+id/txtdireccion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
+            android:text="Direccion"
+            android:textColor="#222222"
+            app:layout_constraintEnd_toEndOf="@+id/txtempresa"
+            app:layout_constraintStart_toStartOf="@+id/txtempresa"
+            app:layout_constraintTop_toBottomOf="@+id/txtempresa" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.design.card.MaterialCardView>

@@ -46,7 +46,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-
 public class Registrou extends AppCompatActivity  implements View.OnClickListener {
 
     EditText editnombre, editdocumento, edittelefono, editemail, editciudad, editpassword;
@@ -92,96 +91,6 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
         ocupacion.setOnClickListener(this);
         sfoto.setOnClickListener(this);
     }
-
-    private void dialogo() {
-        progressDoalog = new ProgressDialog(this);
-        progressDoalog.setMax(150);
-        progressDoalog.setMessage("Enviando datos");
-        progressDoalog.setTitle("Registando...");
-        progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDoalog.show();
-    }
-
-    private boolean validateForm() {
-        boolean valid = true;
-
-        String email = editemail.getText().toString();
-        if (TextUtils.isEmpty(email)) {
-            editemail.setError("Requerido");
-            valid = false;
-        } else {
-            editemail.setError(null);
-        }
-        String password = editpassword.getText().toString();
-        if (TextUtils.isEmpty(password)) {
-            editpassword.setError("Requerido");
-            valid = false;
-        } else {
-            editpassword.setError(null);
-        }
-        String nombre = editnombre.getText().toString();
-        if (TextUtils.isEmpty(nombre)) {
-            editnombre.setError("Requerido");
-            valid = false;
-        } else {
-            editnombre.setError(null);
-        }
-        String documento = editdocumento.getText().toString();
-        if (TextUtils.isEmpty(documento)) {
-            editdocumento.setError("Requerido");
-            valid = false;
-        } else {
-            editdocumento.setError(null);
-        }
-        String telefono = edittelefono.getText().toString();
-        if (TextUtils.isEmpty(telefono)) {
-            edittelefono.setError("Requerido");
-            valid = false;
-        } else {
-            edittelefono.setError(null);
-        }
-        String ciudad = editciudad.getText().toString();
-        if (TextUtils.isEmpty(ciudad)) {
-            editciudad.setError("Requerido");
-            valid = false;
-        } else {
-            editciudad.setError(null);
-        }
-        String fecha = txtfecha.getText().toString();
-        if ("16-04-2019" .equals(fecha)) {
-            txtfecha.setError("Requerido");
-            valid = false;
-        } else {
-            txtfecha.setError(null);
-        }
-        return valid;
-    }
-
-    private void createAccount(String email, String password) {
-
-        if (!validateForm()) {
-            return;
-        }
-        dialogo();
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-
-                        if (task.isSuccessful()) {
-                            Log.d("MENSAJE", "createUserWithEmail:success");
-                            final FirebaseUser user = mAuth.getCurrentUser();
-                            assert user != null;
-
-                            subir_archivo(user.getUid());
-                        } else {
-                            Log.w("MENSAJE", "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(Registrou.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                        }
-                        progressDoalog.dismiss();
-                    }
-                });
-    }
-
 
     public void subir_archivo(final String nombre_foto) {
         dialogo();
@@ -267,11 +176,10 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                         @Override
                         public void onComplete(@NonNull Task<Uri> task) {
                             if (task.isSuccessful()) {
-                                Uri downloadUri = task.getResult();
+
                                 user = FirebaseAuth.getInstance().getCurrentUser();
                                 final DocumentReference  washingtonRef =  BDraiz.collection("usuarios").document(user.getUid());
-                                assert downloadUri != null;
-                                washingtonRef.update("Hoja_vida", downloadUri.toString());
+                                washingtonRef.update("Hoja_vida", Objects.requireNonNull(task.getResult()).toString());
 
                                 FirebaseInstanceId.getInstance().getInstanceId()
                                         .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -281,7 +189,7 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                                                     Log.w("token", "getInstanceId failed", task.getException());
                                                     return;
                                                 }
-                                                String token = task.getResult().getToken();
+                                                String token = Objects.requireNonNull(task.getResult()).getToken();
                                                 washingtonRef.update("Token",token );
 
                                                 Toast.makeText(getApplicationContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
@@ -291,13 +199,13 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                                                 intent.putExtra("user", user.getDisplayName());
                                                 startActivity(intent);
                                                 finish();
-
                                             }
                                         });
-                            }
+                                }
                         }
                     });
                 }
+
                 progressDoalog.dismiss();
             }
         } else {
@@ -323,7 +231,6 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                     }, mYear, mMonth, mDay);
             datePickerDialog.show();
         }
-
         if (v == bregistrou) {
             if (IMAGE_STATUS && ARCHIVO_STATUS){
                 createAccount(editemail.getText().toString(), editpassword.getText().toString());
@@ -355,16 +262,6 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
         }
     }
 
-    private void dialogodos() {
-        progressDoalog = new ProgressDialog(this);
-        progressDoalog.setMax(100);
-        progressDoalog.setMessage("Octeniendo Datos");
-        progressDoalog.setTitle("Ocupaciones Disponibles....");
-        progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDoalog.show();
-    }
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -389,7 +286,7 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
         }
     }
 
-    void Octener_ocupacion(final Context context) {
+    private void Octener_ocupacion(final Context context) {
         dialogodos();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference docRef = db.collection("categoriao");
@@ -420,6 +317,104 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                         });
                 android.app.AlertDialog dialogIcon = builder.create();
                 dialogIcon.show();
+                progressDoalog.dismiss();
+            }
+        });
+    }
+
+    private void dialogodos() {
+        progressDoalog = new ProgressDialog(this);
+        progressDoalog.setMax(100);
+        progressDoalog.setMessage("Octeniendo Datos");
+        progressDoalog.setTitle("Ocupaciones Disponibles....");
+        progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDoalog.show();
+    }
+
+    private void dialogo() {
+        progressDoalog = new ProgressDialog(this);
+        progressDoalog.setMax(150);
+        progressDoalog.setMessage("Enviando datos");
+        progressDoalog.setTitle("Registando...");
+        progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDoalog.show();
+    }
+
+    private boolean validateForm() {
+        boolean valid = true;
+
+        String email = editemail.getText().toString();
+        if (TextUtils.isEmpty(email)) {
+            editemail.setError("Requerido");
+            valid = false;
+        } else {
+            editemail.setError(null);
+        }
+        String password = editpassword.getText().toString();
+        if (TextUtils.isEmpty(password)) {
+            editpassword.setError("Requerido");
+            valid = false;
+        } else {
+            editpassword.setError(null);
+        }
+        String nombre = editnombre.getText().toString();
+        if (TextUtils.isEmpty(nombre)) {
+            editnombre.setError("Requerido");
+            valid = false;
+        } else {
+            editnombre.setError(null);
+        }
+        String documento = editdocumento.getText().toString();
+        if (TextUtils.isEmpty(documento)) {
+            editdocumento.setError("Requerido");
+            valid = false;
+        } else {
+            editdocumento.setError(null);
+        }
+        String telefono = edittelefono.getText().toString();
+        if (TextUtils.isEmpty(telefono)) {
+            edittelefono.setError("Requerido");
+            valid = false;
+        } else {
+            edittelefono.setError(null);
+        }
+        String ciudad = editciudad.getText().toString();
+        if (TextUtils.isEmpty(ciudad)) {
+            editciudad.setError("Requerido");
+            valid = false;
+        } else {
+            editciudad.setError(null);
+        }
+        String fecha = txtfecha.getText().toString();
+        if ("16-04-2019" .equals(fecha)) {
+            txtfecha.setError("Requerido");
+            valid = false;
+        } else {
+            txtfecha.setError(null);
+        }
+        return valid;
+    }
+
+    private void createAccount(String email, String password) {
+
+        if (!validateForm()) {
+            return;
+        }
+        dialogo();
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+
+                if (task.isSuccessful()) {
+                    Log.d("MENSAJE", "createUserWithEmail:success");
+                    final FirebaseUser user = mAuth.getCurrentUser();
+                    assert user != null;
+
+                    subir_archivo(user.getUid());
+                } else {
+                    Log.w("MENSAJE", "createUserWithEmail:failure", task.getException());
+                    Toast.makeText(Registrou.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                }
                 progressDoalog.dismiss();
             }
         });

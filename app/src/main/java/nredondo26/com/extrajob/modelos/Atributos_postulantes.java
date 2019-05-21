@@ -18,8 +18,6 @@ public class Atributos_postulantes {
         this.idofertas = idofertas;
     }
 
-
-
     public String getNombre() {
         return nombre;
     }

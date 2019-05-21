@@ -11,7 +11,7 @@ import android.widget.TextView;
 public class PerfilempresaActivity extends AppCompatActivity {
 
     SharedPreferences usertodo;
-    TextView persona_contacto,email,telefono,nit,actividad_economica,cargo_ocupacion,direccion;
+    TextView persona_contacto,email,telefono,nit,actividad_economica,cargo_ocupacion,direccion,nombre_empresa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +29,7 @@ public class PerfilempresaActivity extends AppCompatActivity {
         actividad_economica= findViewById(R.id.fnacimineto);
         cargo_ocupacion= findViewById(R.id.documento);
         direccion= findViewById(R.id.telefono);
+        nombre_empresa= findViewById(R.id.textView14);
 
         usertodo = this.getSharedPreferences("todoempresa", MODE_PRIVATE);
         String Persona_contacto = usertodo.getString("Persona_contacto", "");
@@ -38,6 +39,7 @@ public class PerfilempresaActivity extends AppCompatActivity {
         String Actividad_economica = usertodo.getString("Actividad_economica", "");
         String Cargo_ocupacion = usertodo.getString("Cargo_ocupacion", "");
         String Direccion = usertodo.getString("Direccion", "");
+        String nombreempresa = usertodo.getString("Razon_social", "");
 
         persona_contacto.setText(Persona_contacto);
         email.setText(Email);
@@ -46,6 +48,7 @@ public class PerfilempresaActivity extends AppCompatActivity {
         actividad_economica.setText(Actividad_economica);
         cargo_ocupacion.setText(Cargo_ocupacion);
         direccion.setText(Direccion);
+        nombre_empresa.setText(nombreempresa);
 
     }
 
