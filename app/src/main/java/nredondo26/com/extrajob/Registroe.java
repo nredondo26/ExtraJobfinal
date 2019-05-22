@@ -291,7 +291,6 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
             }
         });
 
-
         user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -353,10 +352,33 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        if(v==bregistroe){
-            if(ARCHIVO_STATUS){
-                createAccount(emai.getText().toString(),pass.getText().toString());
-            }else {
+        if(v==bregistroe) {
+
+            if (ARCHIVO_STATUS && ARCHIVO_STATUS1 && ARCHIVO_STATUS2) {
+                createAccount(emai.getText().toString(), pass.getText().toString());
+            }
+            if (!ARCHIVO_STATUS && ARCHIVO_STATUS1 && ARCHIVO_STATUS2) {
+                Toast.makeText(this, "Cargar camara de comercio en un PDF", Toast.LENGTH_LONG).show();
+            }
+            if (ARCHIVO_STATUS && !ARCHIVO_STATUS1 && ARCHIVO_STATUS2) {
+                Toast.makeText(this, "Cargar representante legal en un PDF", Toast.LENGTH_LONG).show();
+            }
+            if (ARCHIVO_STATUS && ARCHIVO_STATUS1 && !ARCHIVO_STATUS2) {
+                Toast.makeText(this, "Cargar rup", Toast.LENGTH_LONG).show();
+            }
+            if (ARCHIVO_STATUS && !ARCHIVO_STATUS1 && !ARCHIVO_STATUS2) {
+                Toast.makeText(this, "Cargar representante legal y rup en un PDF", Toast.LENGTH_LONG).show();
+            }
+            if (!ARCHIVO_STATUS && ARCHIVO_STATUS1 && !ARCHIVO_STATUS2) {
+                Toast.makeText(this, "Cargar camara de comercio y rup en un PDF", Toast.LENGTH_LONG).show();
+            }
+            if (!ARCHIVO_STATUS && !ARCHIVO_STATUS1 && ARCHIVO_STATUS2) {
+                Toast.makeText(this, "Cargar camara de comercio y representante legal en un PDF", Toast.LENGTH_LONG).show();
+            }
+            if(!ARCHIVO_STATUS && !ARCHIVO_STATUS1 && !ARCHIVO_STATUS2){
+                Toast.makeText(this,"Debe cargar los 3 archivos en un PDF",Toast.LENGTH_LONG).show();
+            }
+            else {
                 Toast.makeText(this,"Debe cargar camara de comercio y cedula del reprentante legal en un PDF",Toast.LENGTH_LONG).show();
             }
         }
