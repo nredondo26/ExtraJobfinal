@@ -28,7 +28,6 @@ import static android.support.constraint.Constraints.TAG;
 
 public class Ofertas_Vigentes_Activity  extends AppCompatActivity {
 
-    private RecyclerView rv;
     public List<Atributos_publicaciones_ofertas> atributosList;
     public Adapter_publicacion_ofertas adapter;
     FirebaseFirestore db;
@@ -44,7 +43,7 @@ public class Ofertas_Vigentes_Activity  extends AppCompatActivity {
         setSupportActionBar(toolbar);
         mAuth = FirebaseAuth.getInstance();
         atributosList = new ArrayList<>();
-        rv = findViewById(R.id.recyclerView1);
+        RecyclerView rv = findViewById(R.id.recyclerView1);
         LinearLayoutManager lm = new LinearLayoutManager(this);
         rv.setLayoutManager(lm);
         adapter = new Adapter_publicacion_ofertas(atributosList,this);

@@ -33,6 +33,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import nredondo26.com.extrajob.Adapters.Adapter_postulaciones_aceptadas;
 import nredondo26.com.extrajob.modelos.Atributos_postulaciones_aceptadas;
 import static android.support.constraint.Constraints.TAG;
@@ -44,7 +46,6 @@ public class MenueActivity extends AppCompatActivity implements NavigationView.O
     FirebaseFirestore db;
     Uri gfoto;
     preferencias preferencias;
-    private RecyclerView rv;
     public List<Atributos_postulaciones_aceptadas> atributosList;
     public Adapter_postulaciones_aceptadas adapter;
 
@@ -77,7 +78,7 @@ public class MenueActivity extends AppCompatActivity implements NavigationView.O
         gfoto= user.getPhotoUrl();
 
         atributosList = new ArrayList<>();
-        rv = findViewById(R.id.recyclerViewme);
+        RecyclerView rv = findViewById(R.id.recyclerViewme);
         LinearLayoutManager lm = new LinearLayoutManager(this);
         rv.setLayoutManager(lm);
         adapter = new Adapter_postulaciones_aceptadas(atributosList,this);
@@ -100,21 +101,24 @@ public class MenueActivity extends AppCompatActivity implements NavigationView.O
                             return;
                         }
 
+                        assert value != null;
                         for (QueryDocumentSnapshot doc : value) {
                             if (doc.get("Id_oferta") != null) {
                                 String id_oferta=doc.getString("Id_oferta");
 
+                                assert id_oferta != null;
                                 DocumentReference docRef = db.collection("ofertas").document(id_oferta);
                                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                         if (task.isSuccessful()) {
                                             DocumentSnapshot document = task.getResult();
+                                            assert document != null;
                                             if (document.exists()) {
-                                               String id_empresa= document.getData().get("creador").toString();
-                                               final String titulo= document.getData().get("titulo").toString();
-                                               final String valor= document.getData().get("remuneracion").toString();
-                                               final String direccion= document.getData().get("direccion").toString();
+                                                String id_empresa= Objects.requireNonNull(Objects.requireNonNull(document.getData()).get("creador")).toString();
+                                               final String titulo= Objects.requireNonNull(document.getData().get("titulo")).toString();
+                                               final String valor= Objects.requireNonNull(document.getData().get("remuneracion")).toString();
+                                               final String direccion= Objects.requireNonNull(document.getData().get("direccion")).toString();
 
                                                DocumentReference docRef = db.collection("empresa").document(id_empresa);
                                                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -122,8 +126,9 @@ public class MenueActivity extends AppCompatActivity implements NavigationView.O
                                                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                                         if (task.isSuccessful()) {
                                                             DocumentSnapshot document = task.getResult();
+                                                            assert document != null;
                                                             if (document.exists()) {
-                                                                String empresa= document.getData().get("Razon_social").toString();
+                                                                String empresa= Objects.requireNonNull(document.getData().get("Razon_social")).toString();
 
                                                                 llenaruno(titulo,empresa,valor,direccion);
 
@@ -171,7 +176,7 @@ public class MenueActivity extends AppCompatActivity implements NavigationView.O
                     DocumentSnapshot document = task.getResult();
                     assert document != null;
                     if (document.exists()) {
-                        String ema = (String) document.getData().get("Email");
+                        String ema = (String) Objects.requireNonNull(document.getData()).get("Email");
                         String nom = (String)document.getData().get("Nombre");
                         String ocup = (String) document.getData().get("Ocupacion");
                         String ciud = (String) document.getData().get("Ciudad");

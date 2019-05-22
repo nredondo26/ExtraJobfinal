@@ -21,6 +21,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -32,14 +33,19 @@ import java.util.Objects;
 
 
 public class Registroe extends AppCompatActivity implements View.OnClickListener{
+
     EditText rs,nit,pc,ae,dir,emai,tele,pass,car;
     private FirebaseAuth mAuth;
     FirebaseFirestore BDraiz;
     ProgressDialog progressDoalog;
-    Button bregistroe,bdocumentos;
+    Button bregistroe,bdocumentos,brepresentante,brut;
     int PICK_ARCHIVO_REQUEST = 110;
-    Uri archivoUri;
+    int PICK_ARCHIVO_REQUEST1 = 111;
+    int PICK_ARCHIVO_REQUEST2 = 112;
+    Uri archivoUri,archivoUri1,archivoUri2;
     boolean ARCHIVO_STATUS = false;
+    boolean ARCHIVO_STATUS1 = false;
+    boolean ARCHIVO_STATUS2 = false;
     FirebaseStorage storage;
 
     @Override
@@ -53,6 +59,11 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
         bregistroe.setOnClickListener(this);
         bdocumentos = findViewById(R.id.bdocumentos);
         bdocumentos.setOnClickListener(this);
+        brepresentante = findViewById(R.id.brepresentante);
+        brepresentante.setOnClickListener(this);
+        brut = findViewById(R.id.brut);
+        brut.setOnClickListener(this);
+        brut.setOnClickListener(this);
         rs = findViewById(R.id.rs);
         nit = findViewById(R.id.nit);
         pc = findViewById(R.id.pc);
@@ -62,6 +73,7 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
         tele = findViewById(R.id.tele);
         pass = findViewById(R.id.pass);
         car = findViewById(R.id.car);
+        rs.requestFocus();
     }
 
     private void dialogo(){
@@ -149,17 +161,14 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
         dialogo();
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-
                         if (task.isSuccessful()) {
                             actulizar_perfil(rs.getText().toString());
                         } else {
                             Log.w("MENSAJE", "createUserWithEmail:failure", task.getException());
                             Toast.makeText(getApplicationContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 });
     }
@@ -169,46 +178,155 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
 
         assert user != null;
-        user.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            final FirebaseUser user = mAuth.getCurrentUser();
-                            final StorageReference storageRef = storage.getReference();
-                            assert user != null;
-                            final StorageReference childRef = storageRef.child(user.getUid() + ".pdf");
-                            final UploadTask uploadTask = childRef.putFile(archivoUri);
-                            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                                @Override
-                                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                                    if (!task.isSuccessful()) {
-                                        throw Objects.requireNonNull(task.getException());
+
+        user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+
+                    final FirebaseUser user = mAuth.getCurrentUser();
+                    final StorageReference storageRef = storage.getReference();
+                    assert user != null;
+                    final StorageReference childRef = storageRef.child(user.getUid() + "-cc.pdf");
+                    final UploadTask uploadTask = childRef.putFile(archivoUri);
+
+                    Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                       @Override
+                       public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                          if (!task.isSuccessful()) {
+                            throw Objects.requireNonNull(task.getException());
+                             }
+                                return childRef.getDownloadUrl();
+                              }
+                           }
+                    ).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if (task.isSuccessful()) {
+                                Uri downloadUri = task.getResult();
+
+                                Log.e("url del archivo",""+downloadUri);
+                                Map<String, Object> usuario= new HashMap<>();
+                                usuario.put("Nit", nit.getText().toString());
+                                usuario.put("Razon_social", rs.getText().toString() );
+                                usuario.put("Persona_contacto", pc.getText().toString());
+                                usuario.put("Actividad_economica", ae.getText().toString());
+                                usuario.put("Direccion", dir.getText().toString());
+                                usuario.put("Telefono", tele.getText().toString());
+                                usuario.put("Cargo_ocupacion", car.getText().toString());
+                                usuario.put("Fecharegistro", FieldValue.serverTimestamp());
+                                usuario.put("Tipo", "empresa");
+                                usuario.put("Email", Objects.requireNonNull(user.getEmail()));
+                                assert downloadUri != null;
+                                usuario.put("Documento",downloadUri.toString());
+                                usuario.put("Representantelegal","");
+                                usuario.put("Rut","");
+
+                                BDraiz.collection("empresa").document(user.getUid()).set(usuario).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+
                                     }
-                                    return childRef.getDownloadUrl();
-                                }
-                            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Uri> task) {
-                                    if (task.isSuccessful()) {
-                                        Uri downloadUri = task.getResult();
-                                        Log.e("url del archivo",""+downloadUri);
-                                        Map<String, Object> usuario= new HashMap<>();
-                                        usuario.put("Nit", nit.getText().toString());
-                                        usuario.put("Razon_social", rs.getText().toString() );
-                                        usuario.put("Persona_contacto", pc.getText().toString());
-                                        usuario.put("Actividad_economica", ae.getText().toString());
-                                        usuario.put("Direccion", dir.getText().toString());
-                                        usuario.put("Telefono", tele.getText().toString());
-                                        usuario.put("Cargo_ocupacion", car.getText().toString());
-                                        usuario.put("Fecharegistro", FieldValue.serverTimestamp());
-                                        usuario.put("Tipo", "empresa");
-                                        usuario.put("Email", Objects.requireNonNull(user.getEmail()));
-                                        assert downloadUri != null;
-                                        usuario.put("Documento",downloadUri.toString());
-                                        BDraiz.collection("empresa").document(user.getUid()).set(usuario).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(getApplicationContext(),"Problemas con el Registro",Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+
+        user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+
+                    final FirebaseUser user = mAuth.getCurrentUser();
+                    final StorageReference storageRef = storage.getReference();
+                    assert user != null;
+                    final StorageReference childRef = storageRef.child(user.getUid() + "-frl.pdf");
+                    final UploadTask uploadTask = childRef.putFile(archivoUri1);
+
+                    Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                            @Override
+                             public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                if (!task.isSuccessful()) {
+                                     throw Objects.requireNonNull(task.getException());
+                                           }
+                                             return childRef.getDownloadUrl();
+                                           }
+                                    }
+                    ).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if (task.isSuccessful()) {
+                                Uri downloadUri = task.getResult();
+                                Log.e("url del archivo1",""+downloadUri);
+
+                                DocumentReference washingtonRef = BDraiz.collection("empresa").document(user.getUid());
+                                assert downloadUri != null;
+                                washingtonRef
+                                        .update("Representantelegal", downloadUri.toString())
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
+                                                Log.d("TAG", "DocumentSnapshot successfully updated!");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.w("TAG", "Error updating document", e);
+                                            }
+                                        });
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+
+        user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+
+                    final FirebaseUser user = mAuth.getCurrentUser();
+                    final StorageReference storageRef = storage.getReference();
+                    assert user != null;
+                    final StorageReference childRef = storageRef.child(user.getUid() + "-fdr.pdf");
+                    final UploadTask uploadTask = childRef.putFile(archivoUri1);
+
+                    Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                         @Override
+                         public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                          if (!task.isSuccessful()) {
+                              throw Objects.requireNonNull(task.getException());
+                                  }
+                                   return childRef.getDownloadUrl();
+                              }
+                                }
+                    ).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if (task.isSuccessful()) {
+                                Uri downloadUri = task.getResult();
+                                Log.e("url del archivo1",""+downloadUri);
+
+                                DocumentReference washingtonRef = BDraiz.collection("empresa").document(user.getUid());
+                                assert downloadUri != null;
+                                washingtonRef
+                                        .update("Rut", downloadUri.toString())
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d("TAG", "DocumentSnapshot successfully updated!");
                                                 Toast.makeText(getApplicationContext(),"Registro Exitoso",Toast.LENGTH_SHORT).show();
                                                 progressDoalog.dismiss();
                                                 Intent intent = new Intent(getApplicationContext(),MenuActivity.class);
@@ -217,19 +335,20 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
                                                 startActivity(intent);
                                                 finish();
                                             }
-                                        }).addOnFailureListener(new OnFailureListener() {
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(getApplicationContext(),"Problemas con el Registro",Toast.LENGTH_SHORT).show();
+                                                Log.w("TAG", "Error updating document", e);
                                             }
                                         });
-                                    }
-                                }
-                            });
+                            }
                         }
+                    });
+                }
+            }
+        });
 
-                    }
-                });
     }
 
     @Override
@@ -246,6 +365,16 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
             intent.setType("*/*");
             startActivityForResult(Intent.createChooser(intent, "Seleccionar un word o pdf"), PICK_ARCHIVO_REQUEST);
         }
+        if(v==brepresentante){
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("*/*");
+            startActivityForResult(Intent.createChooser(intent, "Seleccionar un word o pdf"), PICK_ARCHIVO_REQUEST1);
+        }
+        if(v==brut){
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("*/*");
+            startActivityForResult(Intent.createChooser(intent, "Seleccionar un word o pdf"), PICK_ARCHIVO_REQUEST2);
+        }
     }
 
     @Override
@@ -256,6 +385,24 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
             Log.e("archivourl:",""+archivoUri);
             try {
                 ARCHIVO_STATUS=true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (requestCode == PICK_ARCHIVO_REQUEST1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            archivoUri1 = data.getData();
+            Log.e("archivourl:",""+archivoUri1);
+            try {
+                ARCHIVO_STATUS1=true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (requestCode == PICK_ARCHIVO_REQUEST2 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            archivoUri2 = data.getData();
+            Log.e("archivourl:",""+archivoUri2);
+            try {
+                ARCHIVO_STATUS2=true;
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -90,6 +90,7 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
         bregistrou.setOnClickListener(this);
         ocupacion.setOnClickListener(this);
         sfoto.setOnClickListener(this);
+        editnombre.requestFocus();
     }
 
     public void subir_archivo(final String nombre_foto) {
@@ -205,7 +206,6 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                         }
                     });
                 }
-
                 progressDoalog.dismiss();
             }
         } else {
@@ -234,16 +234,14 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
         if (v == bregistrou) {
             if (IMAGE_STATUS && ARCHIVO_STATUS){
                 createAccount(editemail.getText().toString(), editpassword.getText().toString());
+            }
+            if(IMAGE_STATUS && !ARCHIVO_STATUS){
+                Toast.makeText(getApplicationContext(),"Por favor cargue su hoja de vida",Toast.LENGTH_LONG).show();
+            }
+            if(!IMAGE_STATUS && ARCHIVO_STATUS){
+                Toast.makeText(getApplicationContext(),"Por favor una imagen",Toast.LENGTH_LONG).show();
             }else{
-               if(IMAGE_STATUS && !ARCHIVO_STATUS){
-                   Toast.makeText(getApplicationContext(),"Por favor cargue su hoja de vida",Toast.LENGTH_LONG).show();
-               }else{
-                   if(!IMAGE_STATUS && ARCHIVO_STATUS){
-                       Toast.makeText(getApplicationContext(),"Por favor una imagen",Toast.LENGTH_LONG).show();
-                   }else{
-                       Toast.makeText(getApplicationContext(),"deber cargar una foto y su hoja de vida",Toast.LENGTH_LONG).show();
-                   }
-               }
+                Toast.makeText(getApplicationContext(),"deber cargar una foto y su hoja de vida",Toast.LENGTH_LONG).show();
             }
         }
         if (v == ocupacion) {
@@ -299,7 +297,6 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                 }
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
 
-
                 int itemSelected = 0;
                 builder.setTitle("Ocupaciones").setSingleChoiceItems(zona, itemSelected, new DialogInterface.OnClickListener() {
                             @Override
@@ -342,7 +339,6 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
 
     private boolean validateForm() {
         boolean valid = true;
-
         String email = editemail.getText().toString();
         if (TextUtils.isEmpty(email)) {
             editemail.setError("Requerido");
@@ -396,7 +392,6 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
     }
 
     private void createAccount(String email, String password) {
-
         if (!validateForm()) {
             return;
         }
@@ -404,12 +399,10 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-
                 if (task.isSuccessful()) {
                     Log.d("MENSAJE", "createUserWithEmail:success");
                     final FirebaseUser user = mAuth.getCurrentUser();
                     assert user != null;
-
                     subir_archivo(user.getUid());
                 } else {
                     Log.w("MENSAJE", "createUserWithEmail:failure", task.getException());

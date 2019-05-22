@@ -74,6 +74,7 @@ public class Ofertas_Activas_Activity extends AppCompatActivity{
                                             Log.w(TAG, "Listen failed.", e);
                                             return;
                                         }
+                                        assert value != null;
                                         for (QueryDocumentSnapshot doc : value) {
                                             if (doc.get("titulo") != null) {
                                                 String titulov= doc.getString("titulo");

@@ -85,7 +85,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void Leerdocumentos(){
-
        DocumentReference docRef = db.collection("empresa").document(user.getUid());
         Log.e("",docRef.toString());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -144,7 +143,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.nav_publicar) {
             Intent intent = new Intent(this,Publicar_Ofertas_Activity.class);

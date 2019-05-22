@@ -14,12 +14,11 @@ import static android.support.constraint.Constraints.TAG;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     FirebaseFirestore db;
-    private FirebaseAuth mAuth;
 
     @Override
     public void onNewToken(String token){
 
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         final FirebaseUser user = mAuth.getCurrentUser();
         assert user != null;

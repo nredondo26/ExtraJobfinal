@@ -18,6 +18,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import javax.annotation.Nullable;
 import nredondo26.com.extrajob.Adapters.Adapter_postulantes;
 import nredondo26.com.extrajob.modelos.Atributos_postulantes;
@@ -91,7 +93,7 @@ public class Usuarios_Postulados_Activity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     assert document != null;
                     if (document.exists()) {
-                        String nombre= (String) document.getData().get("Nombre");
+                        String nombre= (String) Objects.requireNonNull(document.getData()).get("Nombre");
                         String documento= (String) document.getData().get("Ocupacion");
                         String foto= (String) document.getData().get("Foto");
                         String informacion= (String) document.getData().get("Hoja_vida");

@@ -37,12 +37,6 @@
         <activity android:name=".PerfilActivity" />
 
 
-        <receiver android:name=".AutoArranque">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
         <activity android:name=".Ofertas_Activas_Activity" />
         <activity android:name=".Usuarios_Postulados_Activity" />
         <activity

@@ -35,14 +35,12 @@ public class Adapter_ofertas_activas extends RecyclerView.Adapter<Adapter_oferta
 
     private List<Atributos_publicaciones_ofertas> atributosList;
     private Context context;
-    FirebaseFirestore BDraiz;
-    private FirebaseAuth mAuth;
+    private FirebaseFirestore BDraiz;
 
     public Adapter_ofertas_activas(List<Atributos_publicaciones_ofertas> atributosList, Context context) {
         this.atributosList = atributosList;
         this.context = context;
         this.BDraiz= FirebaseFirestore.getInstance();
-        this.mAuth = FirebaseAuth.getInstance();
     }
 
     @NonNull
@@ -93,7 +91,6 @@ public class Adapter_ofertas_activas extends RecyclerView.Adapter<Adapter_oferta
                                                                 public void onSuccess(Void aVoid) {
                                                                     viewHolder.bpostularse.setText("Ya estas postulado");
                                                                     viewHolder.bpostularse.setBackgroundColor(0x00FF00);
-
                                                                 }
                                                             })
                                                             .addOnFailureListener(new OnFailureListener() {

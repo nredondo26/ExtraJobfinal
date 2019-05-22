@@ -49,7 +49,6 @@ public class Adapter_publicacion_ofertas extends RecyclerView.Adapter<Adapter_pu
         viewHolder.bcancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 new AlertDialog.Builder(context)
                         .setTitle("Confirmacion de Ofertas")
                         .setMessage("Estas seguro que deseas cancelar la oferta ?")

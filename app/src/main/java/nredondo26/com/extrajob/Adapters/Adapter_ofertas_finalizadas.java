@@ -22,6 +22,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
+import java.util.Objects;
+
 import nredondo26.com.extrajob.R;
 import nredondo26.com.extrajob.modelos.Atributos_publicaciones_ofertas;
 
@@ -29,8 +31,8 @@ import static android.support.constraint.Constraints.TAG;
 
 public class Adapter_ofertas_finalizadas extends RecyclerView.Adapter<Adapter_ofertas_finalizadas.ViewHolder>{
     private List<Atributos_publicaciones_ofertas> atributosList;
-    Context context;
-    FirebaseFirestore db;
+    private Context context;
+    private FirebaseFirestore db;
 
     public Adapter_ofertas_finalizadas(List<Atributos_publicaciones_ofertas> atributosList, Context context) {
         this.atributosList = atributosList;
@@ -56,9 +58,7 @@ public class Adapter_ofertas_finalizadas extends RecyclerView.Adapter<Adapter_of
         viewHolder.bpostularse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // Toast.makeText(context,"id : "+atributosList.get(i).getId(),Toast.LENGTH_LONG).show();
                 String id_oferta=atributosList.get(i).getId();
-
                 db.collection("postulacionesaceptadas")
                         .whereEqualTo("Id_oferta", id_oferta)
                         .get()
@@ -66,20 +66,16 @@ public class Adapter_ofertas_finalizadas extends RecyclerView.Adapter<Adapter_of
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                       // Log.d(TAG, document.getId() + " => " + document.getData());
-                                      //  Toast.makeText(context,"id : "+document.getData().get("Id_postulante"),Toast.LENGTH_LONG).show();
-
-                                        String documento=document.getData().get("Id_postulante").toString();
-
+                                    for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                                        String documento= Objects.requireNonNull(document.getData().get("Id_postulante")).toString();
                                         DocumentReference docRef = db.collection("usuarios").document(documento);
                                         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                             @Override
                                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                                 if (task.isSuccessful()) {
                                                     DocumentSnapshot document = task.getResult();
+                                                    assert document != null;
                                                     if (document.exists()) {
-                                                      //  Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                                         Toast.makeText(context,"Su empleado es :"+document.getData().get("Nombre"),Toast.LENGTH_LONG).show();
                                                     } else {
                                                         Log.d(TAG, "No such document");
@@ -89,17 +85,12 @@ public class Adapter_ofertas_finalizadas extends RecyclerView.Adapter<Adapter_of
                                                 }
                                             }
                                         });
-
-
                                     }
                                 } else {
                                     Log.d(TAG, "Error getting documents: ", task.getException());
                                 }
                             }
                         });
-
-
-
             }
         });
     }

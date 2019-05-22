@@ -35,14 +35,12 @@ public class Adapter_postulantes extends RecyclerView.Adapter<Adapter_postulante
 
     private List<Atributos_postulantes> atributosList;
     private Context context;
-    FirebaseFirestore BDraiz;
-    private FirebaseAuth mAuth;
+    private FirebaseFirestore BDraiz;
 
     public Adapter_postulantes(List<Atributos_postulantes> atributosList, Context context) {
         this.atributosList = atributosList;
         this.context = context;
         this.BDraiz= FirebaseFirestore.getInstance();
-        this.mAuth = FirebaseAuth.getInstance();
     }
 
     @NonNull
@@ -135,6 +133,7 @@ public class Adapter_postulantes extends RecyclerView.Adapter<Adapter_postulante
         Button informacion,seleccionar;
         CardView carV_usuarios_postu;
 
+        @SuppressLint("CutPasteId")
         ViewHolder(View item){
             super(item);
             txt_nomnre = item.findViewById(R.id.txtnombre);

@@ -55,7 +55,7 @@
     <string name="ofertas_activas">Ofertas Activas</string>
     <string name="cerrar_sesi_n">Cerrar Sesión</string>
     <string name="textview">TextView</string>
-    <string name="cargar_documentos">Cargar Documentos</string>
+    <string name="cargar_documentos">Camara de comercio</string>
     <string name="camara_de_comercio_y_reprentante_legal_en_un_pdf">camara de comercio y reprentante legal en un pdf</string>
     <string name="seleccione_categoria">Seleccione Categoria</string>
     <string name="categoria">Categoria</string>
@@ -69,6 +69,8 @@
     <string name="telefono1">Telefono:</string>
     <string name="documento1">Documento:</string>
     <string name="informacion_general_de_su_perfil1">Informacion general de su perfil</string>
+    <string name="fotocopia_representante_legal">Fotocopia Representante legal</string>
+    <string name="fotocopia_del_rut">Fotocopia del Rut</string>
 
 
 </resources>

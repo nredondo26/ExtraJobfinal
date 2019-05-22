@@ -6,13 +6,13 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
-
     </style>
 
-    <!--Etiqueta flotante-->
-    <style name="AppTheme.FloatingLabel" parent="@android:style/TextAppearance">
-        <item name="android:textColor">@color/colorblanco</item>
-        <item name="android:textColorHighlight">@color/colorblanco</item>
+    <style name="CampoTextoPurpura" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+        <item name="android:textColorHighlight">#E1BEE7</item>
+        <item name="android:textColorHint">@color/colorblanco</item>
     </style>
 
     <style name="AppThemesin" parent="Theme.AppCompat.Light.NoActionBar">
@@ -36,6 +36,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
 
 
 
