@@ -1,5 +1,6 @@
 package nredondo26.com.extrajob.servicios;
 
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -14,17 +15,29 @@ import static android.support.constraint.Constraints.TAG;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     FirebaseFirestore db;
+    SharedPreferences usertodo;
 
     @Override
     public void onNewToken(String token){
+
+        usertodo = this.getSharedPreferences("detallesusuario", MODE_PRIVATE);
+        int tipo = usertodo.getInt("tipousuario",0);
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         final FirebaseUser user = mAuth.getCurrentUser();
         assert user != null;
-        DocumentReference washingtonRef = db.collection("usuarios").document(user.getUid());
-        washingtonRef
-                .update("Token", token)
+
+        DocumentReference washingtonRef;
+
+        if(tipo==1){
+            washingtonRef = db.collection("usuarios").document(user.getUid());
+        }
+        else{
+            washingtonRef = db.collection("empresa").document(user.getUid());
+        }
+
+        washingtonRef.update("Token", token)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
