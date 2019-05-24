@@ -22,47 +22,29 @@
             </intent-filter>
         </service>
 
-        <meta-data
-            android:name="firebase_messaging_auto_init_enabled"
-            android:value="false" />
-        <meta-data
-            android:name="firebase_analytics_collection_enabled"
-            android:value="false" />
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_icono_noti" />
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/colorAccent" />
+        <meta-data android:name="firebase_messaging_auto_init_enabled" android:value="false" />
+        <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />
+        <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/ic_icono_noti" />
 
-        <activity android:name=".PerfilempresaActivity"></activity>
+        <activity android:name=".PerfilempresaActivity"/>
         <activity android:name=".PerfilActivity" />
-
-
         <activity android:name=".Ofertas_Activas_Activity" />
         <activity android:name=".Usuarios_Postulados_Activity" />
-        <activity
-            android:name=".Ofertas_Vigentes_Activity"
-            android:label="Ofertas Viegentes" />
+        <activity android:name=".Ofertas_Vigentes_Activity" android:label="Ofertas Viegentes" />
         <activity android:name=".Publicar_Ofertas_Activity" />
-        <activity
-            android:name=".MenueActivity"
-            android:label="@string/title_activity_menue"
-            android:theme="@style/AppThemesin.NoActionBar" />
-        <activity
-            android:name=".MenuActivity"
-            android:label="@string/title_activity_menu"
-            android:theme="@style/AppThemesin.NoActionBar" />
+        <activity android:name=".MenueActivity" android:label="@string/title_activity_menue" android:theme="@style/AppThemesin.NoActionBar" />
+        <activity android:name=".MenuActivity" android:label="@string/title_activity_menu" android:theme="@style/AppThemesin.NoActionBar" />
         <activity android:name=".MainActivity" />
         <activity android:name=".Registroe" />
         <activity android:name=".Registrou" />
+
         <activity android:name=".Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
