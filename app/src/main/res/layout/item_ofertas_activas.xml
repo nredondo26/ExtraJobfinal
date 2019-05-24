@@ -65,8 +65,8 @@
 
         <TextView
             android:id="@+id/fechacm"
-            android:layout_width="260dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginTop="2dp"
             android:layout_marginEnd="4dp"
@@ -80,7 +80,7 @@
 
         <TextView
             android:id="@+id/horariocm"
-            android:layout_width="260dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginTop="2dp"
@@ -92,8 +92,8 @@
 
         <TextView
             android:id="@+id/remuneracioncm"
-            android:layout_width="260dp"
-            android:layout_height="22dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"

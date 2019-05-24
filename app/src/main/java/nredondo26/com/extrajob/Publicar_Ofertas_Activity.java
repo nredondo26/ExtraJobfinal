@@ -86,7 +86,11 @@ public class Publicar_Ofertas_Activity extends AppCompatActivity {
         bcategoria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createSimpleDialog(Publicar_Ofertas_Activity.this);
+                if(EstadoInternet.isOnline(Publicar_Ofertas_Activity.this)){
+                    createSimpleDialog(Publicar_Ofertas_Activity.this);
+                }else{
+                    Toast.makeText(Publicar_Ofertas_Activity.this,"Necesita conectarse a internet",Toast.LENGTH_LONG).show();
+                }
             }
         });
 

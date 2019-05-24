@@ -63,6 +63,8 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
     Uri imageUri,archivoUri;
     ImageView imagenv;
     FirebaseUser user;
+    int valor =0;
+    String Token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,125 +93,109 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
         ocupacion.setOnClickListener(this);
         sfoto.setOnClickListener(this);
         editnombre.requestFocus();
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                Token = instanceIdResult.getToken();
+                Log.e("Token: ",Token);
+            }
+        });
+
+
     }
 
-    public void subir_archivo(final String nombre_foto) {
-        dialogo();
-        if (imageUri != null &&  archivoUri !=null) {
-            for (int i = 0; i<=1; i++) {
+    public  void recursivo_storage(Uri arch){
 
-                if (i == 0) {
-                    final StorageReference storageRef = storage.getReference();
-                    final StorageReference childRef = storageRef.child(nombre_foto + ".jpg");
-                    final UploadTask uploadTask = childRef.putFile(imageUri);
-                    Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                        @Override
-                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                            if (!task.isSuccessful()) {
-                                throw Objects.requireNonNull(task.getException());
-                            }
-                            return childRef.getDownloadUrl();
-                        }
-                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            if (task.isSuccessful()) {
-                                Uri downloadUri = task.getResult();
-                                user = FirebaseAuth.getInstance().getCurrentUser();
-                                assert user != null;
-                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                        .setDisplayName(editnombre.getText().toString())
-                                        .setPhotoUri(downloadUri)
-                                        .build();
-                                user.updateProfile(profileUpdates)
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()) {
-                                                    Log.d("TAG", "User profile updated.");
-                                                }
-                                            }
-                                        });
+        final StorageReference storageRef = storage.getReference();
+        final StorageReference childRef;
 
-                                Map<String, Object> usuario = new HashMap<>();
-                                usuario.put("Token","");
-                                usuario.put("Nombre",editnombre.getText().toString());
-                                usuario.put("Documento",editdocumento.getText().toString() );
-                                usuario.put("Ocupacion", txtocupacion.getText().toString());
-                                usuario.put("Telefono", edittelefono.getText().toString());
-                                usuario.put("Ciudad", editciudad.getText().toString());
-                                usuario.put("Fnacimiento", txtfecha.getText().toString());
-                                usuario.put("Estado", 0);
-                                usuario.put("Fecharegistro", FieldValue.serverTimestamp());
-                                assert downloadUri != null;
-                                usuario.put("Foto", downloadUri.toString());
-                                usuario.put("Hoja_vida","");
-                                usuario.put("Tipo", "empleado");
-                                usuario.put("Email", Objects.requireNonNull(user.getEmail()));
-                                BDraiz.collection("usuarios").document(user.getUid()).set(usuario).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(getApplicationContext(), "Problemas con el Registro", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-                        }
-                    });
+        if(valor==0){
+            childRef = storageRef.child(user.getUid()+"/fotosperfil");
+        }else{
+            childRef = storageRef.child(user.getUid()+"/hojadevida");
+        }
+
+        final UploadTask uploadTask = childRef.putFile(arch);
+
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw Objects.requireNonNull(task.getException());
                 }
-
-                if(i==1){
-                    final StorageReference storageRef = storage.getReference();
-                    final StorageReference childRef = storageRef.child(nombre_foto + ".pdf");
-                    final UploadTask uploadTask = childRef.putFile(archivoUri);
-                    Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                        @Override
-                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                            if (!task.isSuccessful()) {
-                                throw Objects.requireNonNull(task.getException());
-                            }
-                            return childRef.getDownloadUrl();
-                        }
-                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            if (task.isSuccessful()) {
-
-                                user = FirebaseAuth.getInstance().getCurrentUser();
-                                final DocumentReference  washingtonRef =  BDraiz.collection("usuarios").document(user.getUid());
-                                washingtonRef.update("Hoja_vida", Objects.requireNonNull(task.getResult()).toString());
-
-                                FirebaseInstanceId.getInstance().getInstanceId()
-                                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                                                if (!task.isSuccessful()) {
-                                                    Log.w("token", "getInstanceId failed", task.getException());
-                                                    return;
-                                                }
-                                                String token = Objects.requireNonNull(task.getResult()).getToken();
-                                                washingtonRef.update("Token",token );
-
-                                                Toast.makeText(getApplicationContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
-                                                progressDoalog.dismiss();
-                                                Intent intent = new Intent(getApplicationContext(), MenueActivity.class);
-                                                intent.putExtra("email", user.getEmail());
-                                                intent.putExtra("user", user.getDisplayName());
-                                                startActivity(intent);
-                                                finish();
-                                            }
-                                        });
-                                }
-                        }
-                    });
-                }
-                progressDoalog.dismiss();
+                return childRef.getDownloadUrl();
             }
-        } else {
-            Toast.makeText(Registrou.this, "Debe seleccionar una foto y un archivo respectivamente", Toast.LENGTH_SHORT).show();
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+
+                    Uri downloadUri = task.getResult();
+
+                    if(valor==0){
+                        user = FirebaseAuth.getInstance().getCurrentUser();
+                        assert user != null;
+                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(editnombre.getText().toString()).setPhotoUri(downloadUri).build();
+                        user.updateProfile(profileUpdates);
+
+                        DocumentReference washingtonRef = BDraiz.collection("usuarios").document(user.getUid());
+                        assert downloadUri != null;
+                        washingtonRef.update("Foto", downloadUri.toString());
+
+                        valor=1;
+                        recursivo_storage(archivoUri);
+
+                    }else{
+                        DocumentReference washingtonRef = BDraiz.collection("usuarios").document(user.getUid());
+                        assert downloadUri != null;
+                        washingtonRef.update("Hoja_vida", downloadUri.toString());
+
+                        Toast.makeText(getApplicationContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
+                        progressDoalog.dismiss();
+                        Intent intent = new Intent(getApplicationContext(), MenueActivity.class);
+                        intent.putExtra("email", user.getEmail());
+                        intent.putExtra("user", user.getDisplayName());
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+            }
+        });
+
+    }
+
+    public void subir_archivo() {
+
+        if(Token==null){
+            Toast.makeText(this,"problemas con el token",Toast.LENGTH_LONG).show();
+        }else{
+            user = FirebaseAutenticacion.Auth_user();
+            Map<String, Object> usuario = new HashMap<>();
+            usuario.put("Nombre",editnombre.getText().toString());
+            usuario.put("Documento",editdocumento.getText().toString() );
+            usuario.put("Ocupacion", txtocupacion.getText().toString());
+            usuario.put("Telefono", edittelefono.getText().toString());
+            usuario.put("Ciudad", editciudad.getText().toString());
+            usuario.put("Fnacimiento", txtfecha.getText().toString());
+            usuario.put("Estado", 0);
+            usuario.put("Fecharegistro", FieldValue.serverTimestamp());
+            usuario.put("Token",Token);
+            usuario.put("Foto", "");
+            usuario.put("Hoja_vida","");
+            usuario.put("Tipo", "empleado");
+            usuario.put("Email", Objects.requireNonNull(user.getEmail()));
+            BDraiz.collection("usuarios").document(user.getUid()).set(usuario).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    recursivo_storage(imageUri);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getApplicationContext(), "Problemas con el Registro", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 
@@ -232,21 +218,34 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
             datePickerDialog.show();
         }
         if (v == bregistrou) {
-            if (IMAGE_STATUS && ARCHIVO_STATUS){
-                createAccount(editemail.getText().toString(), editpassword.getText().toString());
-            }
-            if(IMAGE_STATUS && !ARCHIVO_STATUS){
-                Toast.makeText(getApplicationContext(),"Por favor cargue su hoja de vida",Toast.LENGTH_LONG).show();
-            }
-            if(!IMAGE_STATUS && ARCHIVO_STATUS){
-                Toast.makeText(getApplicationContext(),"Por favor una imagen",Toast.LENGTH_LONG).show();
+
+            if(EstadoInternet.isOnline(Registrou.this)){
+                if (IMAGE_STATUS && ARCHIVO_STATUS){
+                    createAccount(editemail.getText().toString(), editpassword.getText().toString());
+                }
+                if(IMAGE_STATUS && !ARCHIVO_STATUS){
+                    Toast.makeText(getApplicationContext(),"Por favor cargue su hoja de vida",Toast.LENGTH_LONG).show();
+                }
+                if(!IMAGE_STATUS && ARCHIVO_STATUS){
+                    Toast.makeText(getApplicationContext(),"Por favor una imagen",Toast.LENGTH_LONG).show();
+                }
+                if(!IMAGE_STATUS && !ARCHIVO_STATUS){
+                    Toast.makeText(getApplicationContext(),"Carge una foto y su hoja de vida",Toast.LENGTH_LONG).show();
+                }
             }else{
-                Toast.makeText(getApplicationContext(),"deber cargar una foto y su hoja de vida",Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Necesita conectarse a internet",Toast.LENGTH_LONG).show();
             }
+
         }
         if (v == ocupacion) {
-            resultado="";
-            Octener_ocupacion(this);
+
+            if(EstadoInternet.isOnline(Registrou.this)){
+                resultado="";
+                Octener_ocupacion(this);
+            }else{
+                Toast.makeText(this,"Necesita conectarse a internet",Toast.LENGTH_LONG).show();
+            }
+
         }
         if (v == sfoto) {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -255,7 +254,7 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
         }
         if(v == shvida){
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("*/*");
+            intent.setType("application/pdf");
             startActivityForResult(Intent.createChooser(intent, "Seleccionar un word o pdf"), PICK_ARCHIVO_REQUEST);
         }
     }
@@ -321,7 +320,7 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
 
     private void dialogodos() {
         progressDoalog = new ProgressDialog(this);
-        progressDoalog.setMax(100);
+        progressDoalog.setMax(150);
         progressDoalog.setMessage("Octeniendo Datos");
         progressDoalog.setTitle("Ocupaciones Disponibles....");
         progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -401,9 +400,7 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Log.d("MENSAJE", "createUserWithEmail:success");
-                    final FirebaseUser user = mAuth.getCurrentUser();
-                    assert user != null;
-                    subir_archivo(user.getUid());
+                    subir_archivo();
                 } else {
                     Log.w("MENSAJE", "createUserWithEmail:failure", task.getException());
                     Toast.makeText(Registrou.this, "Authentication failed.", Toast.LENGTH_SHORT).show();

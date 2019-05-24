@@ -24,6 +24,8 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -47,6 +49,9 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
     boolean ARCHIVO_STATUS1 = false;
     boolean ARCHIVO_STATUS2 = false;
     FirebaseStorage storage;
+    String Token;
+    FirebaseUser user;
+    int valor =0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +79,15 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
         pass = findViewById(R.id.pass);
         car = findViewById(R.id.car);
         rs.requestFocus();
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                Token = instanceIdResult.getToken();
+                Log.e("Token: ",Token);
+            }
+        });
+
     }
 
     private void dialogo(){
@@ -164,7 +178,7 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            actulizar_perfil(rs.getText().toString());
+                            subir_archivo();
                         } else {
                             Log.w("MENSAJE", "createUserWithEmail:failure", task.getException());
                             Toast.makeText(getApplicationContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
@@ -173,228 +187,163 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
                 });
     }
 
-    public void actulizar_perfil(String name){
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
+    public void subir_archivo() {
 
-        assert user != null;
+        if(Token==null){
+            Toast.makeText(this,"problemas con el token",Toast.LENGTH_LONG).show();
+        }else{
+            user = FirebaseAutenticacion.Auth_user();
+            Map<String, Object> usuario= new HashMap<>();
+            usuario.put("Nit", nit.getText().toString());
+            usuario.put("Razon_social", rs.getText().toString() );
+            usuario.put("Persona_contacto", pc.getText().toString());
+            usuario.put("Actividad_economica", ae.getText().toString());
+            usuario.put("Direccion", dir.getText().toString());
+            usuario.put("Telefono", tele.getText().toString());
+            usuario.put("Cargo_ocupacion", car.getText().toString());
+            usuario.put("Fecharegistro", FieldValue.serverTimestamp());
+            usuario.put("Tipo", "empresa");
+            usuario.put("Email", Objects.requireNonNull(user.getEmail()));
+            usuario.put("Token",Token);
+            usuario.put("Documento","");
+            usuario.put("Representantelegal","");
+            usuario.put("Rut","");
 
-        user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+            BDraiz.collection("empresa").document(user.getUid()).set(usuario).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    recursivo_storage(archivoUri);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getApplicationContext(), "Problemas con el Registro de la empresa", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    public  void recursivo_storage(Uri arch){
+
+        final StorageReference storageRef = storage.getReference();
+        final StorageReference childRef;
+        StorageReference childRef1 = null;
+
+        if(valor==0){
+            childRef1 = storageRef.child(user.getUid()+"/camaracomercio");
+        }
+        if(valor==1){
+            childRef1 = storageRef.child(user.getUid()+"/representantelegal");
+        }
+        if(valor==2){
+            childRef1 = storageRef.child(user.getUid()+"/rut");
+        }
+
+        childRef = childRef1;
+        assert childRef != null;
+        final UploadTask uploadTask = childRef.putFile(arch);
+
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw Objects.requireNonNull(task.getException());
+                }
+                return childRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {
 
-                    final FirebaseUser user = mAuth.getCurrentUser();
-                    final StorageReference storageRef = storage.getReference();
-                    assert user != null;
-                    final StorageReference childRef = storageRef.child(user.getUid() + "-cc.pdf");
-                    final UploadTask uploadTask = childRef.putFile(archivoUri);
+                    Uri downloadUri = task.getResult();
 
-                    Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                       @Override
-                       public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                          if (!task.isSuccessful()) {
-                            throw Objects.requireNonNull(task.getException());
-                             }
-                                return childRef.getDownloadUrl();
-                              }
-                           }
-                    ).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            if (task.isSuccessful()) {
-                                Uri downloadUri = task.getResult();
+                    if(valor==0){
+                        user = FirebaseAuth.getInstance().getCurrentUser();
+                        assert user != null;
+                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(rs.getText().toString()).build();
+                        user.updateProfile(profileUpdates);
+                        DocumentReference washingtonRef = BDraiz.collection("empresa").document(user.getUid());
+                        assert downloadUri != null;
+                        washingtonRef.update("Documento", downloadUri.toString());
+                        valor=1;
+                        recursivo_storage(archivoUri1);
+                    }
 
-                                Log.e("url del archivo",""+downloadUri);
-                                Map<String, Object> usuario= new HashMap<>();
-                                usuario.put("Nit", nit.getText().toString());
-                                usuario.put("Razon_social", rs.getText().toString() );
-                                usuario.put("Persona_contacto", pc.getText().toString());
-                                usuario.put("Actividad_economica", ae.getText().toString());
-                                usuario.put("Direccion", dir.getText().toString());
-                                usuario.put("Telefono", tele.getText().toString());
-                                usuario.put("Cargo_ocupacion", car.getText().toString());
-                                usuario.put("Fecharegistro", FieldValue.serverTimestamp());
-                                usuario.put("Tipo", "empresa");
-                                usuario.put("Email", Objects.requireNonNull(user.getEmail()));
-                                assert downloadUri != null;
-                                usuario.put("Documento",downloadUri.toString());
-                                usuario.put("Representantelegal","");
-                                usuario.put("Rut","");
+                    if(valor==1){
+                        DocumentReference washingtonRef = BDraiz.collection("empresa").document(user.getUid());
+                        assert downloadUri != null;
+                        washingtonRef.update("Representantelegal", downloadUri.toString());
+                        valor=2;
+                        recursivo_storage(archivoUri2);
+                    }
 
-                                BDraiz.collection("empresa").document(user.getUid()).set(usuario).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
+                    if(valor==2){
+                        DocumentReference washingtonRef = BDraiz.collection("empresa").document(user.getUid());
+                        assert downloadUri != null;
+                        washingtonRef.update("Rut", downloadUri.toString());
+                        Toast.makeText(getApplicationContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
+                        progressDoalog.dismiss();
+                        Intent intent = new Intent(getApplicationContext(), MenueActivity.class);
+                        intent.putExtra("email", user.getEmail());
+                        intent.putExtra("user", user.getDisplayName());
+                        startActivity(intent);
+                        finish();
 
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(getApplicationContext(),"Problemas con el Registro",Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-                        }
-                    });
+                    }
                 }
             }
         });
-
-
-        user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-
-                    final FirebaseUser user = mAuth.getCurrentUser();
-                    final StorageReference storageRef = storage.getReference();
-                    assert user != null;
-                    final StorageReference childRef = storageRef.child(user.getUid() + "-frl.pdf");
-                    final UploadTask uploadTask = childRef.putFile(archivoUri1);
-
-                    Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                            @Override
-                             public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                                if (!task.isSuccessful()) {
-                                     throw Objects.requireNonNull(task.getException());
-                                           }
-                                             return childRef.getDownloadUrl();
-                                           }
-                                    }
-                    ).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            if (task.isSuccessful()) {
-                                Uri downloadUri = task.getResult();
-                                Log.e("url del archivo1",""+downloadUri);
-
-                                DocumentReference washingtonRef = BDraiz.collection("empresa").document(user.getUid());
-                                assert downloadUri != null;
-                                washingtonRef
-                                        .update("Representantelegal", downloadUri.toString())
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Log.d("TAG", "DocumentSnapshot successfully updated!");
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Log.w("TAG", "Error updating document", e);
-                                            }
-                                        });
-                            }
-                        }
-                    });
-                }
-            }
-        });
-
-        user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-
-                    final FirebaseUser user = mAuth.getCurrentUser();
-                    final StorageReference storageRef = storage.getReference();
-                    assert user != null;
-                    final StorageReference childRef = storageRef.child(user.getUid() + "-fdr.pdf");
-                    final UploadTask uploadTask = childRef.putFile(archivoUri1);
-
-                    Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                         @Override
-                         public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                          if (!task.isSuccessful()) {
-                              throw Objects.requireNonNull(task.getException());
-                                  }
-                                   return childRef.getDownloadUrl();
-                              }
-                                }
-                    ).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            if (task.isSuccessful()) {
-                                Uri downloadUri = task.getResult();
-                                Log.e("url del archivo1",""+downloadUri);
-
-                                DocumentReference washingtonRef = BDraiz.collection("empresa").document(user.getUid());
-                                assert downloadUri != null;
-                                washingtonRef
-                                        .update("Rut", downloadUri.toString())
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Log.d("TAG", "DocumentSnapshot successfully updated!");
-                                                Toast.makeText(getApplicationContext(),"Registro Exitoso",Toast.LENGTH_SHORT).show();
-                                                progressDoalog.dismiss();
-                                                Intent intent = new Intent(getApplicationContext(),MenuActivity.class);
-                                                intent.putExtra("email", user.getEmail());
-                                                intent.putExtra("user", user.getDisplayName());
-                                                startActivity(intent);
-                                                finish();
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Log.w("TAG", "Error updating document", e);
-                                            }
-                                        });
-                            }
-                        }
-                    });
-                }
-            }
-        });
-
     }
 
     @Override
     public void onClick(View v) {
         if(v==bregistroe) {
 
-            if (ARCHIVO_STATUS && ARCHIVO_STATUS1 && ARCHIVO_STATUS2) {
-                createAccount(emai.getText().toString(), pass.getText().toString());
+            if(EstadoInternet.isOnline(Registroe.this)){
+                if (ARCHIVO_STATUS && ARCHIVO_STATUS1 && ARCHIVO_STATUS2) {
+                    createAccount(emai.getText().toString(), pass.getText().toString());
+                }
+                if (!ARCHIVO_STATUS && ARCHIVO_STATUS1 && ARCHIVO_STATUS2) {
+                    Toast.makeText(this, "Cargar camara de comercio en un PDF", Toast.LENGTH_LONG).show();
+                }
+                if (ARCHIVO_STATUS && !ARCHIVO_STATUS1 && ARCHIVO_STATUS2) {
+                    Toast.makeText(this, "Cargar representante legal en un PDF", Toast.LENGTH_LONG).show();
+                }
+                if (ARCHIVO_STATUS && ARCHIVO_STATUS1 && !ARCHIVO_STATUS2) {
+                    Toast.makeText(this, "Cargar rup", Toast.LENGTH_LONG).show();
+                }
+                if (ARCHIVO_STATUS && !ARCHIVO_STATUS1 && !ARCHIVO_STATUS2) {
+                    Toast.makeText(this, "Cargar representante legal y rup en un PDF", Toast.LENGTH_LONG).show();
+                }
+                if (!ARCHIVO_STATUS && ARCHIVO_STATUS1 && !ARCHIVO_STATUS2) {
+                    Toast.makeText(this, "Cargar camara de comercio y rup en un PDF", Toast.LENGTH_LONG).show();
+                }
+                if (!ARCHIVO_STATUS && !ARCHIVO_STATUS1 && ARCHIVO_STATUS2) {
+                    Toast.makeText(this, "Cargar camara de comercio y representante legal en un PDF", Toast.LENGTH_LONG).show();
+                }
+                if(!ARCHIVO_STATUS && !ARCHIVO_STATUS1 && !ARCHIVO_STATUS2){
+                    Toast.makeText(this,"Debe cargar los 3 archivos en un PDF",Toast.LENGTH_LONG).show();
+                }
             }
-            if (!ARCHIVO_STATUS && ARCHIVO_STATUS1 && ARCHIVO_STATUS2) {
-                Toast.makeText(this, "Cargar camara de comercio en un PDF", Toast.LENGTH_LONG).show();
+            else{
+                Toast.makeText(this,"Necesita conectarse a internet",Toast.LENGTH_LONG).show();
             }
-            if (ARCHIVO_STATUS && !ARCHIVO_STATUS1 && ARCHIVO_STATUS2) {
-                Toast.makeText(this, "Cargar representante legal en un PDF", Toast.LENGTH_LONG).show();
-            }
-            if (ARCHIVO_STATUS && ARCHIVO_STATUS1 && !ARCHIVO_STATUS2) {
-                Toast.makeText(this, "Cargar rup", Toast.LENGTH_LONG).show();
-            }
-            if (ARCHIVO_STATUS && !ARCHIVO_STATUS1 && !ARCHIVO_STATUS2) {
-                Toast.makeText(this, "Cargar representante legal y rup en un PDF", Toast.LENGTH_LONG).show();
-            }
-            if (!ARCHIVO_STATUS && ARCHIVO_STATUS1 && !ARCHIVO_STATUS2) {
-                Toast.makeText(this, "Cargar camara de comercio y rup en un PDF", Toast.LENGTH_LONG).show();
-            }
-            if (!ARCHIVO_STATUS && !ARCHIVO_STATUS1 && ARCHIVO_STATUS2) {
-                Toast.makeText(this, "Cargar camara de comercio y representante legal en un PDF", Toast.LENGTH_LONG).show();
-            }
-            if(!ARCHIVO_STATUS && !ARCHIVO_STATUS1 && !ARCHIVO_STATUS2){
-                Toast.makeText(this,"Debe cargar los 3 archivos en un PDF",Toast.LENGTH_LONG).show();
-            }
-            else {
-                Toast.makeText(this,"Debe cargar camara de comercio y cedula del reprentante legal en un PDF",Toast.LENGTH_LONG).show();
-            }
+
         }
         if(v==bdocumentos){
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("*/*");
+            intent.setType("application/pdf");
             startActivityForResult(Intent.createChooser(intent, "Seleccionar un word o pdf"), PICK_ARCHIVO_REQUEST);
         }
         if(v==brepresentante){
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("*/*");
+            intent.setType("application/pdf");
             startActivityForResult(Intent.createChooser(intent, "Seleccionar un word o pdf"), PICK_ARCHIVO_REQUEST1);
         }
         if(v==brut){
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("*/*");
+            intent.setType("application/pdf");
             startActivityForResult(Intent.createChooser(intent, "Seleccionar un word o pdf"), PICK_ARCHIVO_REQUEST2);
         }
     }

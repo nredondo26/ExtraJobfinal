@@ -56,7 +56,14 @@ public class MenueActivity extends AppCompatActivity implements NavigationView.O
         Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         db = FirebaseFirestore.getInstance();
-        user = FirebaseAuth.getInstance().getCurrentUser();
+
+        user = FirebaseAutenticacion.Auth_user();
+
+        if(user.getPhotoUrl()==null){
+            Log.e("Nohay foto","");
+        }
+     //   Log.e("foto",user.getPhotoUrl().toString());
+
         assert user != null;
         String email = getIntent().getStringExtra("email");
         String usuario = getIntent().getStringExtra("user");

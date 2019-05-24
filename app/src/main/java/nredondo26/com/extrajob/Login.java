@@ -2,6 +2,7 @@ package nredondo26.com.extrajob;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,17 +26,41 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     ProgressDialog progressDoalog;
     FirebaseFirestore BDraiz;
     String tipo;
+    SharedPreferences preferencia;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         vemail=findViewById(R.id.editemail);
         vpassword=findViewById(R.id.editpass);
         mAuth = FirebaseAuth.getInstance();
         findViewById(R.id.blogin).setOnClickListener(this);
         findViewById(R.id.bregistro).setOnClickListener(this);
         BDraiz = FirebaseFirestore.getInstance();
+
+        preferencia = this.getSharedPreferences("detallesusuario", MODE_PRIVATE);
+        int tipo = preferencia .getInt("tipousuario", 0);
+
+        if(FirebaseAutenticacion.Auth()){
+
+            user=FirebaseAutenticacion.Auth_user();
+
+            if(tipo==1){
+                Intent intent = new Intent(getApplicationContext(),MenueActivity.class);
+                intent.putExtra("email", user.getEmail());
+                intent.putExtra("user", user.getDisplayName());
+                startActivity(intent);
+            }else{
+                Intent intent = new Intent(getApplicationContext(),MenuActivity.class);
+                intent.putExtra("email", user.getEmail());
+                intent.putExtra("user", user.getDisplayName());
+                startActivity(intent);
+            }
+        }
+
     }
 
     private void signIn(String email, String password) {
