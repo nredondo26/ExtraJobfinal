@@ -8,6 +8,22 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class preferencias {
 
+    void Recordaruser_pass(String user, String pass, Context context) {
+        SharedPreferences prefs = context.getSharedPreferences("recordaruser_pass", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("email", user);
+        editor.putString("password", pass);
+        editor.apply();
+        Log.e("email y passwors", "guardadas");
+    }
+
+    void eliminar_preferencia(String nombre_preferencia, Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(nombre_preferencia, MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.clear().commit();
+        Log.e("email y passwors", "preferencia eliminada");
+    }
+
     void guardar_preferenica(String emaill, String userr, String categoriaa, int tipo, Context context){
         SharedPreferences userDetails = context.getSharedPreferences("detallesusuario", MODE_PRIVATE);
         SharedPreferences.Editor editor = userDetails.edit();

@@ -38,17 +38,18 @@
     <string name="icoj">icoj</string>
     <string name="iconofech">iconofech</string>
     <string name="ocupaciones">ocupaciones</string>
-    <string name="ocupacion_o_cargo">Ocupacion o Cargo</string>
+    <string name="ocupacion_o_cargo">Cargo</string>
     <string name="raz_n_social">Razón Social</string>
-    <string name="persona_de_contacto">Persona de Contacto</string>
+    <string name="persona_de_contacto">nombre completo responsable</string>
     <string name="nit">NIT</string>
     <string name="direcci_n_principal">Dirección Principal</string>
     <string name="ij">ij</string>
     <string name="actividad_econ_mica">Actividad Económica</string>
-    <string name="direcci_n_electr_nica">Dirección Electrónica</string>
+    <string name="direcci_n_electr_nica">Correo electrónico</string>
     <string name="iexra">iexra</string>
-    <string name="telefono">Telefono</string>
-    <string name="clave">Contraseña</string>
+    <string name="telefonoc">Teléfono celular</string>
+    <string name="telefonof">Teléfono fijo</string>
+    <string name="clave">Crear Contraseña</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

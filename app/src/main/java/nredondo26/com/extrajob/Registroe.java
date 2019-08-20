@@ -2,17 +2,18 @@ package nredondo26.com.extrajob;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -20,38 +21,27 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 
-public class Registroe extends AppCompatActivity implements View.OnClickListener{
+public class Registroe extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     EditText rs,nit,pc,ae,dir,emai,tele,pass,car;
     private FirebaseAuth mAuth;
     FirebaseFirestore BDraiz;
     ProgressDialog progressDoalog;
-    Button bregistroe,bdocumentos,brepresentante,brut;
-    int PICK_ARCHIVO_REQUEST = 110;
-    int PICK_ARCHIVO_REQUEST1 = 111;
-    int PICK_ARCHIVO_REQUEST2 = 112;
-    Uri archivoUri,archivoUri1,archivoUri2;
-    boolean ARCHIVO_STATUS = false;
-    boolean ARCHIVO_STATUS1 = false;
-    boolean ARCHIVO_STATUS2 = false;
-    FirebaseStorage storage;
+    Button bregistroe;
+    Spinner spinner_ciudades, spinner_sectores, spinner_profesiones;
+
     String Token;
     FirebaseUser user;
-    int valor =0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,20 +49,16 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
         setContentView(R.layout.activity_registroe);
         mAuth = FirebaseAuth.getInstance();
         BDraiz= FirebaseFirestore.getInstance();
-        storage = FirebaseStorage.getInstance("gs://extrajobapp-65826.appspot.com");
+
         bregistroe = findViewById(R.id.bregistroe);
-        bregistroe.setOnClickListener(this);
-        bdocumentos = findViewById(R.id.bdocumentos);
-        bdocumentos.setOnClickListener(this);
-        brepresentante = findViewById(R.id.brepresentante);
-        brepresentante.setOnClickListener(this);
-        brut = findViewById(R.id.brut);
-        brut.setOnClickListener(this);
-        brut.setOnClickListener(this);
+        spinner_ciudades = findViewById(R.id.spinner_ciudades);
+        spinner_sectores = findViewById(R.id.spinner_sectores);
+        spinner_profesiones = findViewById(R.id.spinner_profesiones);
+
         rs = findViewById(R.id.rs);
         nit = findViewById(R.id.nit);
         pc = findViewById(R.id.pc);
-        ae = findViewById(R.id.ae);
+
         dir = findViewById(R.id.dir);
         emai = findViewById(R.id.email);
         tele = findViewById(R.id.tele);
@@ -88,13 +74,23 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
             }
         });
 
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.ciudades_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_ciudades.setAdapter(adapter);
+
+        ArrayAdapter<CharSequence> adaptersectores = ArrayAdapter.createFromResource(this, R.array.sectores_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_sectores.setAdapter(adaptersectores);
+
+        spinner_sectores.setOnItemSelectedListener(this);
+
     }
 
     private void dialogo(){
         progressDoalog = new ProgressDialog(this);
         progressDoalog.setMax(100);
         progressDoalog.setMessage("Enviando datos");
-        progressDoalog.setTitle("Registando...");
+        progressDoalog.setTitle("Registrando...");
         progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDoalog.show();
     }
@@ -205,14 +201,17 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
             usuario.put("Tipo", "empresa");
             usuario.put("Email", Objects.requireNonNull(user.getEmail()));
             usuario.put("Token",Token);
-            usuario.put("Documento","");
-            usuario.put("Representantelegal","");
-            usuario.put("Rut","");
 
             BDraiz.collection("empresa").document(user.getUid()).set(usuario).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    recursivo_storage(archivoUri);
+                    Toast.makeText(getApplicationContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
+                    progressDoalog.dismiss();
+                    Intent intent = new Intent(getApplicationContext(), MenueActivity.class);
+                    intent.putExtra("email", user.getEmail());
+                    intent.putExtra("user", user.getDisplayName());
+                    startActivity(intent);
+                    finish();
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -223,163 +222,136 @@ public class Registroe extends AppCompatActivity implements View.OnClickListener
         }
     }
 
-    public  void recursivo_storage(Uri arch){
-
-        final StorageReference storageRef = storage.getReference();
-        final StorageReference childRef;
-        StorageReference childRef1 = null;
-
-        if(valor==0){
-            childRef1 = storageRef.child(user.getUid()+"/camaracomercio");
-        }
-        if(valor==1){
-            childRef1 = storageRef.child(user.getUid()+"/representantelegal");
-        }
-        if(valor==2){
-            childRef1 = storageRef.child(user.getUid()+"/rut");
-        }
-
-        childRef = childRef1;
-        assert childRef != null;
-        final UploadTask uploadTask = childRef.putFile(arch);
-
-        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-            @Override
-            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                if (!task.isSuccessful()) {
-                    throw Objects.requireNonNull(task.getException());
-                }
-                return childRef.getDownloadUrl();
-            }
-        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                if (task.isSuccessful()) {
-
-                    Uri downloadUri = task.getResult();
-
-                    if(valor==0){
-                        user = FirebaseAuth.getInstance().getCurrentUser();
-                        assert user != null;
-                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(rs.getText().toString()).build();
-                        user.updateProfile(profileUpdates);
-                        DocumentReference washingtonRef = BDraiz.collection("empresa").document(user.getUid());
-                        assert downloadUri != null;
-                        washingtonRef.update("Documento", downloadUri.toString());
-                        valor=1;
-                        recursivo_storage(archivoUri1);
-                    }
-
-                    if(valor==1){
-                        DocumentReference washingtonRef = BDraiz.collection("empresa").document(user.getUid());
-                        assert downloadUri != null;
-                        washingtonRef.update("Representantelegal", downloadUri.toString());
-                        valor=2;
-                        recursivo_storage(archivoUri2);
-                    }
-
-                    if(valor==2){
-                        DocumentReference washingtonRef = BDraiz.collection("empresa").document(user.getUid());
-                        assert downloadUri != null;
-                        washingtonRef.update("Rut", downloadUri.toString());
-                        Toast.makeText(getApplicationContext(), "Registro Exitoso", Toast.LENGTH_SHORT).show();
-                        progressDoalog.dismiss();
-                        Intent intent = new Intent(getApplicationContext(), MenueActivity.class);
-                        intent.putExtra("email", user.getEmail());
-                        intent.putExtra("user", user.getDisplayName());
-                        startActivity(intent);
-                        finish();
-
-                    }
-                }
-            }
-        });
-    }
-
     @Override
     public void onClick(View v) {
         if(v==bregistroe) {
 
             if(EstadoInternet.isOnline(Registroe.this)){
-                if (ARCHIVO_STATUS && ARCHIVO_STATUS1 && ARCHIVO_STATUS2) {
-                    createAccount(emai.getText().toString(), pass.getText().toString());
-                }
-                if (!ARCHIVO_STATUS && ARCHIVO_STATUS1 && ARCHIVO_STATUS2) {
-                    Toast.makeText(this, "Cargar camara de comercio en un PDF", Toast.LENGTH_LONG).show();
-                }
-                if (ARCHIVO_STATUS && !ARCHIVO_STATUS1 && ARCHIVO_STATUS2) {
-                    Toast.makeText(this, "Cargar representante legal en un PDF", Toast.LENGTH_LONG).show();
-                }
-                if (ARCHIVO_STATUS && ARCHIVO_STATUS1 && !ARCHIVO_STATUS2) {
-                    Toast.makeText(this, "Cargar rup", Toast.LENGTH_LONG).show();
-                }
-                if (ARCHIVO_STATUS && !ARCHIVO_STATUS1 && !ARCHIVO_STATUS2) {
-                    Toast.makeText(this, "Cargar representante legal y rup en un PDF", Toast.LENGTH_LONG).show();
-                }
-                if (!ARCHIVO_STATUS && ARCHIVO_STATUS1 && !ARCHIVO_STATUS2) {
-                    Toast.makeText(this, "Cargar camara de comercio y rup en un PDF", Toast.LENGTH_LONG).show();
-                }
-                if (!ARCHIVO_STATUS && !ARCHIVO_STATUS1 && ARCHIVO_STATUS2) {
-                    Toast.makeText(this, "Cargar camara de comercio y representante legal en un PDF", Toast.LENGTH_LONG).show();
-                }
-                if(!ARCHIVO_STATUS && !ARCHIVO_STATUS1 && !ARCHIVO_STATUS2){
-                    Toast.makeText(this,"Debe cargar los 3 archivos en un PDF",Toast.LENGTH_LONG).show();
-                }
+                createAccount(emai.getText().toString(), pass.getText().toString());
             }
             else{
                 Toast.makeText(this,"Necesita conectarse a internet",Toast.LENGTH_LONG).show();
             }
 
         }
-        if(v==bdocumentos){
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("application/pdf");
-            startActivityForResult(Intent.createChooser(intent, "Seleccionar un word o pdf"), PICK_ARCHIVO_REQUEST);
+
+    }
+
+    private void profesiones(int profesiones) {
+
+        if (profesiones == 0) {
+            ArrayAdapter<CharSequence> adapterprofesiones = ArrayAdapter.createFromResource
+                    (this, R.array.RESTAURANTES, android.R.layout.simple_spinner_item);
+            adapterprofesiones.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner_profesiones.setAdapter(adapterprofesiones);
         }
-        if(v==brepresentante){
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("application/pdf");
-            startActivityForResult(Intent.createChooser(intent, "Seleccionar un word o pdf"), PICK_ARCHIVO_REQUEST1);
+        if (profesiones == 1) {
+            ArrayAdapter<CharSequence> adapterprofesiones = ArrayAdapter.createFromResource
+                    (this, R.array.HOTELERIA, android.R.layout.simple_spinner_item);
+            adapterprofesiones.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner_profesiones.setAdapter(adapterprofesiones);
         }
-        if(v==brut){
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("application/pdf");
-            startActivityForResult(Intent.createChooser(intent, "Seleccionar un word o pdf"), PICK_ARCHIVO_REQUEST2);
+        if (profesiones == 2) {
+            ArrayAdapter<CharSequence> adapterprofesiones = ArrayAdapter.createFromResource
+                    (this, R.array.BARES, android.R.layout.simple_spinner_item);
+            adapterprofesiones.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner_profesiones.setAdapter(adapterprofesiones);
+        }
+        if (profesiones == 3) {
+            ArrayAdapter<CharSequence> adapterprofesiones = ArrayAdapter.createFromResource
+                    (this, R.array.EVENTOS, android.R.layout.simple_spinner_item);
+            adapterprofesiones.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner_profesiones.setAdapter(adapterprofesiones);
+        }
+        if (profesiones == 4) {
+            ArrayAdapter<CharSequence> adapterprofesiones = ArrayAdapter.createFromResource
+                    (this, R.array.RETAIL, android.R.layout.simple_spinner_item);
+            adapterprofesiones.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner_profesiones.setAdapter(adapterprofesiones);
+        }
+        if (profesiones == 5) {
+            ArrayAdapter<CharSequence> adapterprofesiones = ArrayAdapter.createFromResource
+                    (this, R.array.TRANSPORTE, android.R.layout.simple_spinner_item);
+            adapterprofesiones.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner_profesiones.setAdapter(adapterprofesiones);
+        }
+        if (profesiones == 6) {
+            ArrayAdapter<CharSequence> adapterprofesiones = ArrayAdapter.createFromResource
+                    (this, R.array.LIMPIEZA, android.R.layout.simple_spinner_item);
+            adapterprofesiones.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner_profesiones.setAdapter(adapterprofesiones);
+        }
+        if (profesiones == 7) {
+            ArrayAdapter<CharSequence> adapterprofesiones = ArrayAdapter.createFromResource
+                    (this, R.array.BELLEZA, android.R.layout.simple_spinner_item);
+            adapterprofesiones.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner_profesiones.setAdapter(adapterprofesiones);
+        }
+        if (profesiones == 8) {
+            ArrayAdapter<CharSequence> adapterprofesiones = ArrayAdapter.createFromResource
+                    (this, R.array.HOSPITALARIO, android.R.layout.simple_spinner_item);
+            adapterprofesiones.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner_profesiones.setAdapter(adapterprofesiones);
+        }
+        if (profesiones == 9) {
+            ArrayAdapter<CharSequence> adapterprofesiones = ArrayAdapter.createFromResource
+                    (this, R.array.MENSAJERIA, android.R.layout.simple_spinner_item);
+            adapterprofesiones.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner_profesiones.setAdapter(adapterprofesiones);
+        }
+        if (profesiones == 10) {
+            ArrayAdapter<CharSequence> adapterprofesiones = ArrayAdapter.createFromResource
+                    (this, R.array.CONSTRUCCION, android.R.layout.simple_spinner_item);
+            adapterprofesiones.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner_profesiones.setAdapter(adapterprofesiones);
+        }
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        //adapterView.getItemAtPosition(i)
+        switch (i) {
+            case 0:
+                profesiones(i);
+                break;
+            case 1:
+                profesiones(i);
+                break;
+            case 2:
+                profesiones(i);
+                break;
+            case 3:
+                profesiones(i);
+                break;
+            case 4:
+                profesiones(i);
+                break;
+            case 5:
+                profesiones(i);
+                break;
+            case 6:
+                profesiones(i);
+                break;
+            case 7:
+                profesiones(i);
+                break;
+            case 8:
+                profesiones(i);
+                break;
+            case 9:
+                profesiones(i);
+                break;
+            case 10:
+                profesiones(i);
+                break;
         }
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_ARCHIVO_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            archivoUri = data.getData();
-            Log.e("archivourl:",""+archivoUri);
-            try {
-                ARCHIVO_STATUS=true;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        if (requestCode == PICK_ARCHIVO_REQUEST1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            archivoUri1 = data.getData();
-            Log.e("archivourl:",""+archivoUri1);
-            try {
-                ARCHIVO_STATUS1=true;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        if (requestCode == PICK_ARCHIVO_REQUEST2 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            archivoUri2 = data.getData();
-            Log.e("archivourl:",""+archivoUri2);
-            try {
-                ARCHIVO_STATUS2=true;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
+    public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
 }
 
 
