@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,14 +27,17 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     ProgressDialog progressDoalog;
     FirebaseFirestore BDraiz;
     String tipo;
-    SharedPreferences preferencia;
+    SharedPreferences preferencia, preferencia_datos;
     FirebaseUser user;
+    CheckBox recordarpass;
+    preferencias preferencias;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        recordarpass = findViewById(R.id.checkpass);
         vemail=findViewById(R.id.editemail);
         vpassword=findViewById(R.id.editpass);
         mAuth = FirebaseAuth.getInstance();
@@ -41,8 +45,21 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         findViewById(R.id.bregistro).setOnClickListener(this);
         BDraiz = FirebaseFirestore.getInstance();
 
+        preferencia_datos = this.getSharedPreferences("recordaruser_pass", MODE_PRIVATE);
+        String datos = preferencia_datos.getString("email", "");
+
         preferencia = this.getSharedPreferences("detallesusuario", MODE_PRIVATE);
         int tipo = preferencia .getInt("tipousuario", 0);
+
+        if (!datos.equals("")) {
+            Log.e("ver", "si hay datos en la preferencia");
+            vemail.setText(preferencia_datos.getString("email", ""));
+            vpassword.setText(preferencia_datos.getString("password", ""));
+            recordarpass.setChecked(true);
+        } else {
+            recordarpass.setChecked(false);
+        }
+
 
         if(FirebaseAutenticacion.Auth()){
 
@@ -68,6 +85,15 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
             return;
         }
         dialogo();
+
+        if (recordarpass.isChecked()) {
+            preferencias = new preferencias();
+            preferencias.Recordaruser_pass(vemail.getText().toString(), vpassword.getText().toString(), getApplicationContext());
+        } else {
+            preferencias = new preferencias();
+            preferencias.eliminar_preferencia("recordaruser_pass", getApplicationContext());
+        }
+
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override

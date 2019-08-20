@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo"
     tools:context=".MainActivity">
 
     <TextView
@@ -13,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="@string/empresa"
-        android:textColor="@color/colorblanco"
+        android:textColor="@color/colorAccent"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/registroem"
@@ -35,7 +34,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/icono" />
+        app:srcCompat="@drawable/iconodos" />
 
     <ImageView
         android:id="@+id/imageView6"
@@ -85,7 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="@string/usuario"
-        android:textColor="@color/colorblanco"
+        android:textColor="@color/colorAccent"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/registrou"
