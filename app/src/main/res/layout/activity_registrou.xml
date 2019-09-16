@@ -25,28 +25,6 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp">
 
-                <EditText
-                    android:id="@+id/nombre2"
-                    android:layout_width="290dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:background="@drawable/backwithborder"
-                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                    android:ems="10"
-                    android:hint="@string/persona_de_contacto"
-                    android:inputType="number"
-                    android:padding="6dp"
-                    android:textColorHint="@color/colorAccent"
-                    android:textSize="18sp"
-                    android:theme="@style/CampoTextoPurpura"
-                    app:layout_constraintBottom_toBottomOf="@+id/spinner_documentos"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/spinner_documentos"
-                    app:layout_constraintTop_toTopOf="@+id/spinner_documentos"
-                    tools:ignore="Autofill,MissingConstraints,RtlSymmetry"
-                    tools:targetApi="o" />
-
                 <ImageView
                     android:id="@+id/imageView2"
                     android:layout_width="118dp"
@@ -72,7 +50,7 @@
                     android:background="@drawable/backwithborder"
                     android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                     android:ems="10"
-                    android:hint="@string/persona_de_contacto"
+                    android:hint="@string/nombrecompleto"
                     android:inputType="textPersonName"
                     android:padding="6dp"
                     android:textColorHint="@color/colorAccent"
@@ -101,20 +79,202 @@
                     app:layout_constraintTop_toBottomOf="@+id/nombre"
                     tools:ignore="Autofill,MissingConstraints,RtlSymmetry" />
 
+                <EditText
+                    android:id="@+id/identificacion"
+                    android:layout_width="290dp"
+                    android:layout_height="43dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/backwithborder"
+                    android:digits="0123456789"
+                    android:ems="10"
+                    android:hint="@string/identidad"
+                    android:inputType="number"
+                    android:padding="6dp"
+                    android:textColorHint="@color/colorAccent"
+                    android:textSize="18sp"
+                    android:theme="@style/CampoTextoPurpura"
+                    app:layout_constraintBottom_toBottomOf="@+id/spinner_documentos"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/spinner_documentos"
+                    app:layout_constraintTop_toTopOf="@+id/spinner_documentos"
+                    tools:ignore="Autofill,MissingConstraints,RtlSymmetry"
+                    tools:targetApi="o" />
+
+                <EditText
+                    android:id="@+id/celular"
+                    android:layout_width="164dp"
+                    android:layout_height="42dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/backwithborder"
+                    android:digits="1234567890"
+                    android:ems="10"
+                    android:hint="@string/ceular"
+                    android:inputType="phone"
+                    android:padding="6dp"
+                    android:textColorHint="@color/colorAccent"
+                    android:textSize="18sp"
+                    android:theme="@style/CampoTextoPurpura"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner_documentos"
+                    tools:ignore="Autofill,RtlSymmetry"
+                    tools:targetApi="o" />
+
+
+                <EditText
+                    android:id="@+id/email2"
+                    android:layout_width="match_parent"
+                    android:layout_height="43dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/backwithborder"
+                    android:ems="10"
+
+                    android:hint="@string/direcci_n_electr_nica"
+                    android:inputType="textEmailAddress"
+                    android:padding="6dp"
+                    android:textColorHint="@color/colorAccent"
+                    android:textSize="18sp"
+                    android:theme="@style/CampoTextoPurpura"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/celular"
+                    tools:ignore="Autofill,RtlSymmetry"
+                    tools:targetApi="o" />
+
+                <Spinner
+                    android:id="@+id/spinner_sect3"
+                    android:layout_width="match_parent"
+                    android:layout_height="43dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/spinner_style"
+                    android:ems="10"
+                    android:padding="6dp"
+                    android:textColorHint="@color/colorAccent"
+                    android:textSize="18sp"
+                    android:theme="@style/CampoTextoPurpura"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/email2"
+                    tools:ignore="Autofill,MissingConstraints,RtlSymmetry" />
+
+                <Spinner
+                    android:id="@+id/spinner_sect4"
+                    android:layout_width="match_parent"
+                    android:layout_height="43dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/spinner_style"
+                    android:ems="10"
+                    android:padding="6dp"
+                    android:textColorHint="@color/colorAccent"
+                    android:textSize="18sp"
+                    android:theme="@style/CampoTextoPurpura"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner_sect3"
+                    tools:ignore="Autofill,RtlSymmetry" />
+
+                <Spinner
+                    android:id="@+id/spinner_ciudades"
+                    android:layout_width="match_parent"
+                    android:layout_height="43dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/spinner_style"
+                    android:ems="10"
+                    android:padding="6dp"
+                    android:textColorHint="@color/colorAccent"
+                    android:textSize="18sp"
+                    android:theme="@style/CampoTextoPurpura"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner_sect4"
+                    tools:ignore="Autofill,RtlSymmetry" />
+
+                <EditText
+                    android:id="@+id/pass"
+                    android:layout_width="match_parent"
+                    android:layout_height="41dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/backwithborder"
+                    android:ems="10"
+                    android:hint="@string/clave"
+                    android:inputType="textPassword"
+                    android:padding="6dp"
+                    android:textColorHint="@color/colorAccent"
+                    android:textSize="18sp"
+                    android:theme="@style/CampoTextoPurpura"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner_ciudades"
+                    tools:ignore="Autofill,MissingConstraints,RtlSymmetry"
+                    tools:targetApi="o" />
+
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="8dp"
+                    android:orientation="horizontal"
+                    android:padding="6dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/pass">
+
+                    <CheckBox
+                        android:id="@+id/checkpass"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/aceptar_terminos"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.03"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/email_login_password_layout" />
+
+                    <TextView
+                        android:id="@+id/terminos"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:autoLink="web"
+                        android:text="@string/terminos_y_condiciones"
+                        android:textColor="@color/colorAccent" />
+
+                </LinearLayout>
 
                 <Button
                     android:id="@+id/bregistrou"
                     android:layout_width="160dp"
                     android:layout_height="35dp"
                     android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="25dp"
+                    android:layout_marginTop="24dp"
                     android:background="@color/colorPrimary"
-                    android:text="@string/reg_strate"
 
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:text="@string/reg_strate"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.482"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout"
                     tools:ignore="MissingConstraints" />
 
             </android.support.constraint.ConstraintLayout>
