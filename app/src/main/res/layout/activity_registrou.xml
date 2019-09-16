@@ -18,12 +18,34 @@
             tools:ignore="ScrollViewSize">
 
             <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="398dp"
+                android:layout_height="710dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp">
+
+                <EditText
+                    android:id="@+id/nombre2"
+                    android:layout_width="290dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/backwithborder"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    android:ems="10"
+                    android:hint="@string/persona_de_contacto"
+                    android:inputType="number"
+                    android:padding="6dp"
+                    android:textColorHint="@color/colorAccent"
+                    android:textSize="18sp"
+                    android:theme="@style/CampoTextoPurpura"
+                    app:layout_constraintBottom_toBottomOf="@+id/spinner_documentos"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/spinner_documentos"
+                    app:layout_constraintTop_toTopOf="@+id/spinner_documentos"
+                    tools:ignore="Autofill,MissingConstraints,RtlSymmetry"
+                    tools:targetApi="o" />
 
                 <ImageView
                     android:id="@+id/imageView2"
@@ -41,235 +63,50 @@
                     tools:ignore="MissingConstraints" />
 
                 <EditText
-                    android:id="@+id/editnombre"
-                    android:layout_width="0dp"
+                    android:id="@+id/nombre"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
-                    android:ems="10"
-                    android:hint="@string/nombre"
-                    android:inputType="textPersonName"
                     android:background="@drawable/backwithborder"
+                    android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    android:ems="10"
+                    android:hint="@string/persona_de_contacto"
+                    android:inputType="textPersonName"
                     android:padding="6dp"
                     android:textColorHint="@color/colorAccent"
                     android:textSize="18sp"
                     android:theme="@style/CampoTextoPurpura"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/imageView2"
-                    tools:ignore="Autofill,MissingConstraints,RtlSymmetry"
+                    tools:ignore="Autofill,RtlSymmetry"
                     tools:targetApi="o" />
 
-                <EditText
-                    android:id="@+id/editdocumento"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                <Spinner
+                    android:id="@+id/spinner_documentos"
+                    android:layout_width="83dp"
+                    android:layout_height="41dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/spinner_style"
                     android:ems="10"
-                    android:hint="@string/documento_de_identidad"
-                    android:inputType="textPersonName"
-                    android:background="@drawable/backwithborder"
                     android:padding="6dp"
                     android:textColorHint="@color/colorAccent"
                     android:textSize="18sp"
                     android:theme="@style/CampoTextoPurpura"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editnombre"
-                    tools:ignore="Autofill,MissingConstraints,RtlSymmetry"
-                    tools:targetApi="o" />
+                    app:layout_constraintTop_toBottomOf="@+id/nombre"
+                    tools:ignore="Autofill,MissingConstraints,RtlSymmetry" />
 
-                <TextView
-                    android:id="@+id/emailm"
-                    android:layout_width="142dp"
-                    android:layout_height="38dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/backwithborder"
-                    android:padding="6dp"
-                    android:text="@string/fecha_nacimiento"
-                    android:textColorHint="@color/colorAccent"
-                    android:textSize="18sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editdocumento"
-                    tools:ignore="MissingConstraints" />
-
-                <TextView
-                    android:id="@+id/txtfecha"
-                    android:layout_width="108dp"
-                    android:layout_height="35dp"
-                    android:layout_marginStart="15dp"
-                    android:background="@drawable/backwithborder"
-                    android:padding="6dp"
-                    android:text="@string/_16_04_2019"
-                    android:textColorHint="@color/colorAccent"
-                    android:textSize="18sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/emailm"
-                    app:layout_constraintStart_toEndOf="@+id/emailm"
-                    app:layout_constraintTop_toTopOf="@+id/emailm"
-                    tools:ignore="MissingConstraints" />
-
-                <ImageButton
-                    android:id="@+id/bcalendario"
-                    android:layout_width="53dp"
-                    android:layout_height="27dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="@null"
-                    android:contentDescription="@string/iconofech"
-                    app:layout_constraintBottom_toBottomOf="@+id/txtfecha"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/txtfecha"
-                    app:layout_constraintTop_toTopOf="@+id/txtfecha"
-                    app:srcCompat="@drawable/ic_calendario"
-                    tools:ignore="MissingConstraints" />
-
-                <Button
-                    android:id="@+id/bocupacion"
-                    android:layout_width="108dp"
-                    android:layout_height="37dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="15dp"
-                    android:background="@color/colorPrimary"
-                    android:text="@string/ocupaciones"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/emailm"
-                    tools:ignore="MissingConstraints" />
-
-                <TextView
-                    android:id="@+id/textocupacion"
-                    android:layout_width="208dp"
-                    android:layout_height="35dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="@drawable/backwithborder"
-                    android:padding="6dp"
-                    android:textColorHint="@color/colorAccent"
-                    android:textSize="18sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/bocupacion"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/bocupacion"
-                    app:layout_constraintTop_toTopOf="@+id/bocupacion"
-                    tools:ignore="MissingConstraints" />
-
-                <EditText
-                    android:id="@+id/edittelefono"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:ems="10"
-                    android:hint="@string/telefonoc"
-                    android:inputType="textPersonName"
-                    android:background="@drawable/backwithborder"
-                    android:padding="6dp"
-                    android:textColorHint="@color/colorAccent"
-                    android:textSize="18sp"
-                    android:theme="@style/CampoTextoPurpura"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/bocupacion"
-                    tools:ignore="Autofill,MissingConstraints,RtlSymmetry"
-                    tools:targetApi="o" />
-
-                <EditText
-                    android:id="@+id/editemail"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:ems="10"
-                    android:hint="@string/correo_electr_nico"
-                    android:inputType="textEmailAddress"
-                    android:background="@drawable/backwithborder"
-                    android:padding="6dp"
-                    android:textColorHint="@color/colorAccent"
-                    android:textSize="18sp"
-                    android:theme="@style/CampoTextoPurpura"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/edittelefono"
-                    tools:ignore="Autofill,MissingConstraints,RtlSymmetry"
-                    tools:targetApi="o" />
-
-                <EditText
-                    android:id="@+id/editciudad"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:ems="10"
-                    android:hint="@string/ciudad"
-                    android:importantForAutofill="no"
-                    android:inputType="textPersonName"
-                    android:background="@drawable/backwithborder"
-                    android:padding="6dp"
-                    android:textColorHint="@color/colorAccent"
-                    android:textSize="18sp"
-                    android:theme="@style/CampoTextoPurpura"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editemail"
-                    tools:ignore="MissingConstraints,RtlSymmetry"
-                    tools:targetApi="o" />
-
-                <EditText
-                    android:id="@+id/editpassword"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:ems="10"
-                    android:hint="@string/clave"
-                    android:inputType="textPassword"
-                    android:background="@drawable/backwithborder"
-                    android:padding="6dp"
-                    android:textColorHint="@color/colorAccent"
-                    android:textSize="18sp"
-                    android:theme="@style/CampoTextoPurpura"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editciudad"
-                    tools:ignore="Autofill,MissingConstraints,RtlSymmetry"
-                    tools:targetApi="o" />
-
-                <Button
-                    android:id="@+id/bsubirfoto"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:text="Subir Foto"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editpassword"
-                    tools:ignore="HardcodedText,MissingConstraints" />
-
-                <Button
-                    android:id="@+id/bsubirhojadevida"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="Subir Hoja de vida"
-                    app:layout_constraintBottom_toBottomOf="@+id/bsubirfoto"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/bsubirfoto"
-                    app:layout_constraintTop_toTopOf="@+id/bsubirfoto"
-                    tools:ignore="HardcodedText,MissingConstraints" />
 
                 <Button
                     android:id="@+id/bregistrou"
                     android:layout_width="160dp"
                     android:layout_height="35dp"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="25dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="25dp"
                     android:background="@color/colorPrimary"
@@ -278,7 +115,6 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/bsubirhojadevida"
                     tools:ignore="MissingConstraints" />
 
             </android.support.constraint.ConstraintLayout>

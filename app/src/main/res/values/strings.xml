@@ -16,7 +16,7 @@
     <string name="fecha_26_04_2019">Fecha 26/04/2019</string>
     <string name="horario">Horario</string>
     <string name="direccion">Direccion</string>
-    <string name="remuneracion">Remuneracion</string>
+    <string name="remuneracion">Tarifa</string>
     <string name="registar">Registar</string>
     <string name="empresa">Empresa</string>
     <string name="usuario">Usuario</string>
@@ -73,6 +73,7 @@
     <string name="fotocopia_representante_legal">Fotocopia Representante legal</string>
     <string name="fotocopia_del_rut">Fotocopia del Rut</string>
     <string name="ofertas_concluidas">Ofertas Concluidas</string>
+    <string name="url_empresa_opcional">Url empresa</string>
 
 
 </resources>

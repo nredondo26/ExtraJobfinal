@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="ciudades_array">
-        <item> Bogotá </item>
-        <item> Medellín </item>
-        <item> Cali </item>
-        <item> Barranquilla </item>
-        <item> Cartagena de Indias </item>
-        <item> Cúcuta </item>
-        <item> Soledad </item>
-        <item> Ibagué </item>
+        <item>Bogotá</item>
+        <item>Medellín</item>
+        <item>Cali</item>
+        <item>Barranquilla</item>
+        <item>Cartagena de Indias</item>
+        <item>Cúcuta</item>
+        <item>Soledad</item>
+        <item>Ibagué</item>
     </string-array>
 
     <string-array name="sectores_array">
-        <item> RESTAURANTES </item>
-        <item> HOTELERIA O CLUBES </item>
-        <item> BARES Y DISCOTECAS </item>
-        <item> EVENTOS </item>
-        <item> RETAIL </item>
-        <item> TRANSPORTE </item>
-        <item> LIMPIEZA </item>
-        <item> BELLEZA  /ESTÉTICA  </item>
-        <item> HOSPITALARIO / MEDICO / ODONTOLOGIA </item>
-        <item> MENSAJERIA </item>
-        <item> CONSTRUCCION  </item>
+        <item>RESTAURANTES</item>
+        <item>HOTELERIA O CLUBES</item>
+        <item>BARES Y DISCOTECAS</item>
+        <item>EVENTOS</item>
+        <item>RETAIL</item>
+        <item>TRANSPORTE</item>
+        <item>LIMPIEZA</item>
+        <item>BELLEZA,ESTÉTICA</item>
+        <item>HOSPITALARIO,MEDICO,ODONTOLOGIA</item>
+        <item>MENSAJERIA</item>
+        <item>CONSTRUCCION</item>
     </string-array>
 
     <string-array name="RESTAURANTES">
         <item>CHEF</item>
         <item>ANFITRIONES</item>
-        <item> COCINEROS</item>
+        <item>COCINEROS</item>
         <item>BARTENDER</item>
         <item>AUXILIARES</item>
         <item>MESEROS</item>
@@ -38,32 +38,32 @@
     </string-array>
 
     <string-array name="HOTELERIA">
-        <item> CHEFF</item>
-        <item> RECEPCIONISTAS</item>
-        <item> BARTENDER</item>
+        <item>CHEFF</item>
+        <item>RECEPCIONISTAS</item>
+        <item>BARTENDER</item>
         <item>CAMARERO</item>
         <item>LIMPIEZA</item>
         <item>MUSICA</item>
-        <item> NIÑERAS</item>
+        <item>NIÑERAS</item>
         <item>JARDINERO</item>
-        <item> MANTENIMIENTO</item>
+        <item>MANTENIMIENTO</item>
     </string-array>
 
     <string-array name="BARES">
-        <item> MESEROS</item>
+        <item>MESEROS</item>
         <item>DJ - MUSICOS</item>
         <item>BARMAN</item>
         <item>LIMPIEZA</item>
     </string-array>
 
     <string-array name="EVENTOS">
-        <item> MESEROS</item>
-        <item> AUXILIARES</item>
-        <item> LIMPIEZA</item>
+        <item>MESEROS</item>
+        <item>AUXILIARES</item>
+        <item>LIMPIEZA</item>
     </string-array>
 
     <string-array name="RETAIL">
-        <item> VENDEDORES</item>
+        <item>VENDEDORES</item>
         <item>PERSONAL DE APOYO</item>
         <item>LIMPIEZA</item>
         <item>ACOPIADORES</item>
@@ -82,32 +82,38 @@
     </string-array>
 
     <string-array name="BELLEZA">
-        <item> Peluquera</item>
+        <item>Peluquera</item>
         <item>Manicurista</item>
         <item>Trabajo con Cera</item>
         <item>Estética</item>
-        <item> Especialista en Tintura</item>
+        <item>Especialista en Tintura</item>
     </string-array>
 
     <string-array name="HOSPITALARIO">
         <item>Médico</item>
-        <item> Auxiliar</item>
-        <item> Enfermera</item>
-        <item> Enfermera Jefe</item>
+        <item>Auxiliar</item>
+        <item>Enfermera</item>
+        <item>Enfermera Jefe</item>
         <item>Terapeuta</item>
     </string-array>
 
     <string-array name="MENSAJERIA">
         <item>Conductor de Moto</item>
         <item>Conductor Vehiculo de carga</item>
-        <item> Conductor automovil</item>
+        <item>Conductor automovil</item>
         <item>Auxiliar</item>
     </string-array>
 
     <string-array name="CONSTRUCCION">
         <item>Constructor</item>
-        <item> Topografo</item>
+        <item>Topografo</item>
         <item>Auxiliar</item>
+    </string-array>
+
+    <string-array name="documento">
+        <item>C.C</item>
+        <item>C.E</item>
+        <item>PAS</item>
     </string-array>
 
 </resources>

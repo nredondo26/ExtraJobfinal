@@ -15,11 +15,14 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.tasks.Continuation;
@@ -46,7 +49,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class Registrou extends AppCompatActivity  implements View.OnClickListener {
+public class Registrou extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     EditText editnombre, editdocumento, edittelefono, editemail, editciudad, editpassword;
     TextView txtfecha, txtocupacion;
@@ -56,15 +59,13 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
     FirebaseFirestore BDraiz;
     FirebaseStorage storage;
     ProgressDialog progressDoalog;
-    String resultado = "";
     boolean IMAGE_STATUS,ARCHIVO_STATUS = false;
-    int PICK_IMAGE_REQUEST = 111;
-    int PICK_ARCHIVO_REQUEST = 110;
     Uri imageUri,archivoUri;
     ImageView imagenv;
     FirebaseUser user;
     int valor =0;
     String Token;
+    Spinner spinner_documentos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,27 +73,13 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
         setContentView(R.layout.activity_registrou);
         mAuth = FirebaseAuth.getInstance();
         BDraiz = FirebaseFirestore.getInstance();
-        storage = FirebaseStorage.getInstance("gs://extrajobapp-65826.appspot.com");
-        txtfecha = findViewById(R.id.txtfecha);
-        calendario = findViewById(R.id.bcalendario);
-        editemail = findViewById(R.id.editemail);
-        editpassword = findViewById(R.id.editpassword);
-        txtocupacion = findViewById(R.id.textocupacion);
-        editnombre = findViewById(R.id.editnombre);
-        editdocumento = findViewById(R.id.editdocumento);
-        ocupacion = findViewById(R.id.bocupacion);
-        sfoto = findViewById(R.id.bsubirfoto);
-        edittelefono = findViewById(R.id.edittelefono);
-        editciudad = findViewById(R.id.editciudad);
+
+        spinner_documentos = findViewById(R.id.spinner_documentos);
+
         bregistrou = findViewById(R.id.bregistrou);
         imagenv = findViewById(R.id.imageView2);
-        shvida = findViewById(R.id.bsubirhojadevida);
-        shvida.setOnClickListener(this);
-        calendario.setOnClickListener(this);
+
         bregistrou.setOnClickListener(this);
-        ocupacion.setOnClickListener(this);
-        sfoto.setOnClickListener(this);
-        editnombre.requestFocus();
 
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
             @Override
@@ -101,6 +88,10 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                 Log.e("Token: ",Token);
             }
         });
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.documento, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_documentos.setAdapter(adapter);
 
 
     }
@@ -201,7 +192,8 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        if (v == calendario) {
+
+       /* if (v == calendario) {
             final Calendar c = Calendar.getInstance();
             int mYear = c.get(Calendar.YEAR);
             int mMonth = c.get(Calendar.MONDAY);
@@ -216,116 +208,21 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
                         }
                     }, mYear, mMonth, mDay);
             datePickerDialog.show();
-        }
+        }*/
         if (v == bregistrou) {
 
             if(EstadoInternet.isOnline(Registrou.this)){
                 if (IMAGE_STATUS && ARCHIVO_STATUS){
                     createAccount(editemail.getText().toString(), editpassword.getText().toString());
                 }
-                if(IMAGE_STATUS && !ARCHIVO_STATUS){
-                    Toast.makeText(getApplicationContext(),"Por favor cargue su hoja de vida",Toast.LENGTH_LONG).show();
-                }
-                if(!IMAGE_STATUS && ARCHIVO_STATUS){
-                    Toast.makeText(getApplicationContext(),"Por favor una imagen",Toast.LENGTH_LONG).show();
-                }
-                if(!IMAGE_STATUS && !ARCHIVO_STATUS){
-                    Toast.makeText(getApplicationContext(),"Carge una foto y su hoja de vida",Toast.LENGTH_LONG).show();
-                }
             }else{
                 Toast.makeText(this,"Necesita conectarse a internet",Toast.LENGTH_LONG).show();
             }
 
         }
-        if (v == ocupacion) {
 
-            if(EstadoInternet.isOnline(Registrou.this)){
-                resultado="";
-                Octener_ocupacion(this);
-            }else{
-                Toast.makeText(this,"Necesita conectarse a internet",Toast.LENGTH_LONG).show();
-            }
-
-        }
-        if (v == sfoto) {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("image/*");
-            startActivityForResult(Intent.createChooser(intent, "Seleccionar Imagen"), PICK_IMAGE_REQUEST);
-        }
-        if(v == shvida){
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("application/pdf");
-            startActivityForResult(Intent.createChooser(intent, "Seleccionar un word o pdf"), PICK_ARCHIVO_REQUEST);
-        }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-                imagenv.setImageBitmap(bitmap);
-                IMAGE_STATUS=true;
-            } catch (Exception e) {
-                e.printStackTrace();
-             }
-        }
-        if (requestCode == PICK_ARCHIVO_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            archivoUri = data.getData();
-            Log.e("archivourl:",""+archivoUri);
-            try {
-                ARCHIVO_STATUS=true;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void Octener_ocupacion(final Context context) {
-        dialogodos();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference docRef = db.collection("categoriao");
-        docRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                final String[] zona = new String[queryDocumentSnapshots.getDocuments().size()];
-                for(int i=0; i<queryDocumentSnapshots.getDocuments().size(); i++){
-                    zona[i]=queryDocumentSnapshots.getDocuments().get(i).getString("Nombre");
-                }
-                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
-
-                int itemSelected = 0;
-                builder.setTitle("Ocupaciones").setSingleChoiceItems(zona, itemSelected, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int selectedIndex) {
-                                resultado+=zona[selectedIndex]+"-";
-                            }
-                        })
-                        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Log.e("tag","valor:"+resultado);
-                                String cadena = resultado.substring(0, resultado.length() - 1);
-                                txtocupacion.setText(cadena);
-                            }
-                        });
-                android.app.AlertDialog dialogIcon = builder.create();
-                dialogIcon.show();
-                progressDoalog.dismiss();
-            }
-        });
-    }
-
-    private void dialogodos() {
-        progressDoalog = new ProgressDialog(this);
-        progressDoalog.setMax(150);
-        progressDoalog.setMessage("Octeniendo Datos");
-        progressDoalog.setTitle("Ocupaciones Disponibles....");
-        progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDoalog.show();
-    }
 
     private void dialogo() {
         progressDoalog = new ProgressDialog(this);
@@ -410,4 +307,13 @@ public class Registrou extends AppCompatActivity  implements View.OnClickListene
         });
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
 }

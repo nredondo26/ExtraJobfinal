@@ -7,6 +7,175 @@
     tools:context=".Publicar_Ofertas_Activity">
 
     <!-- Toolbar -->
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="25dp"
+        android:text="Vigencia"
+        android:textColor="#673AB7"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+    <EditText
+        android:id="@+id/fechaini"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="16dp"
+        android:autofillHints=""
+        android:background="@drawable/backwithborder"
+        android:clickable="false"
+        android:ems="10"
+        android:focusable="auto"
+        android:hint="Hora de inicio"
+        android:inputType="number"
+        android:paddingLeft="10dp"
+        android:textColorHint="#673AB6"
+        app:layout_constraintBottom_toBottomOf="@+id/calendarioini"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/calendarioini"
+        app:layout_constraintTop_toTopOf="@+id/calendarioini"
+        tools:targetApi="o" />
+
+    <ImageButton
+        android:id="@+id/calendariofin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView7"
+        app:layout_constraintStart_toEndOf="@+id/textView7"
+        app:layout_constraintTop_toTopOf="@+id/textView7"
+        app:srcCompat="@drawable/ic_calendario" />
+
+    <ImageButton
+        android:id="@+id/calendariofin2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView8"
+        app:layout_constraintStart_toEndOf="@+id/textView8"
+        app:layout_constraintTop_toTopOf="@+id/textView8"
+        app:srcCompat="@drawable/ic_calendario" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="25dp"
+        android:text="Fecha Inicio"
+        android:textColor="#673AB7"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <EditText
+        android:id="@+id/fechafin"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="16dp"
+        android:autofillHints=""
+        android:background="@drawable/backwithborder"
+        android:clickable="false"
+        android:ems="10"
+        android:focusable="auto"
+        android:hint="Hora de fin"
+        android:inputType="number"
+        android:paddingLeft="10dp"
+        android:textColorHint="#673AB6"
+        app:layout_constraintBottom_toBottomOf="@+id/calendariofin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/calendariofin"
+        app:layout_constraintTop_toTopOf="@+id/calendariofin"
+        tools:targetApi="o" />
+
+    <EditText
+        android:id="@+id/fechafin2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="16dp"
+        android:autofillHints=""
+        android:background="@drawable/backwithborder"
+        android:clickable="false"
+        android:ems="10"
+        android:focusable="auto"
+        android:hint="Vigencia de oferta"
+        android:inputType="number"
+        android:paddingLeft="10dp"
+        android:textColorHint="#673AB6"
+        app:layout_constraintBottom_toBottomOf="@+id/calendariofin2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/calendariofin2"
+        app:layout_constraintTop_toTopOf="@+id/calendariofin2"
+        app:layout_constraintVertical_bias="0.0"
+        tools:targetApi="o" />
+
+    <ImageButton
+        android:id="@+id/calendarioini"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView6"
+        app:layout_constraintStart_toEndOf="@+id/textView6"
+        app:layout_constraintTop_toTopOf="@+id/textView6"
+        app:srcCompat="@drawable/ic_calendario" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Fecha Inicio"
+        android:textColor="#673AB7"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editdireccion" />
+
+    <Spinner
+        android:id="@+id/spinner_sect2"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/spinner_style"
+        android:ems="10"
+        android:padding="6dp"
+        android:textColorHint="@color/colorAccent"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar3"
+        tools:ignore="Autofill,RtlSymmetry" />
+
+    <Spinner
+        android:id="@+id/spinner_profesiones2"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:padding="6dp"
+        android:background="@drawable/spinner_style"
+        android:textColorHint="@color/colorAccent"
+        android:textSize="18sp"
+        android:theme="@style/CampoTextoPurpura"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_sect2"
+        tools:ignore="Autofill,RtlSymmetry" />
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar3"
         android:layout_width="match_parent"
@@ -16,82 +185,24 @@
         tools:ignore="MissingConstraints" />
 
     <EditText
-        android:id="@+id/edittitulo"
-        android:layout_width="0dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:focusable="auto"
-        android:focusableInTouchMode="true"
-        android:hint="@string/titulo"
-        android:inputType="textPersonName"
-        android:selectAllOnFocus="true"
-        android:textColorHint="#673AB6"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar3"
-        tools:targetApi="o" />
-
-    <EditText
         android:id="@+id/editdescripcion"
         android:layout_width="0dp"
         android:layout_height="99dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
+        android:autofillHints=""
         android:ems="10"
+        android:paddingLeft="10dp"
         android:focusable="auto"
         android:hint="@string/descripcion"
         android:inputType="textMultiLine"
+        android:background="@drawable/backwithborder"
         android:textColorHint="#673AB6"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.562"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edittitulo"
-        android:autofillHints="" tools:targetApi="o"/>
-
-    <TextView
-        android:id="@+id/editfecha"
-        android:layout_width="91dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:focusable="auto"
-        android:hint="@string/_26_04_2019"
-        android:inputType="date"
-        android:paddingTop="9dp"
-        android:textColor="#673AB6"
-        android:textSize="18sp"
-        android:textColorHint="#673AB6"
-        android:textColorHighlight="#673AB6"
-        app:layout_constraintStart_toEndOf="@+id/bcalendario2"
-        app:layout_constraintTop_toBottomOf="@+id/editdescripcion"
-        tools:targetApi="o"
-        tools:ignore="TextViewEdits" />
-
-    <EditText
-        android:id="@+id/edithorario"
-        android:layout_width="0dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="16dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:focusable="auto"
-        android:hint="@string/horario"
-        android:inputType="textPersonName"
-        android:textColorHint="#673AB6"
-        app:layout_constraintBottom_toBottomOf="@+id/editfecha"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/editfecha"
-        app:layout_constraintTop_toTopOf="@+id/editfecha"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_profesiones2"
         tools:targetApi="o" />
 
     <EditText
@@ -99,88 +210,55 @@
         android:layout_width="0dp"
         android:layout_height="42dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:autofillHints=""
         android:ems="10"
         android:focusable="auto"
         android:hint="@string/direccion"
+        android:paddingLeft="10dp"
+        android:background="@drawable/backwithborder"
         android:inputType="textPersonName"
-        android:textColorHint="#673AB6"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editfecha"
-        tools:targetApi="o" />
-
-    <EditText
-        android:id="@+id/editremuneracion"
-        android:layout_width="125dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:ems="10"
-        android:focusable="auto"
-        android:hint="@string/remuneracion"
-        android:inputType="number"
         android:textColorHint="#673AB6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editdireccion"
-        android:autofillHints="" tools:targetApi="o"/>
+        app:layout_constraintTop_toBottomOf="@+id/editdescripcion"
+        tools:targetApi="o" />
+
+
+    <EditText
+        android:id="@+id/editremuneracion"
+        android:layout_width="115dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:autofillHints=""
+        android:background="@drawable/backwithborder"
+        android:ems="10"
+        android:focusable="auto"
+        android:hint="@string/remuneracion"
+        android:inputType="number"
+        android:paddingLeft="10dp"
+        android:textColorHint="#673AB6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView8"
+        tools:targetApi="o" />
 
     <Button
         android:id="@+id/bregistrar_oferta"
         android:layout_width="147dp"
         android:layout_height="36dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="50dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="30dp"
         android:background="#009688"
         android:text="@string/registar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtcategoria"
-        app:layout_constraintVertical_bias="0.259" />
-
-    <Button
-        android:id="@+id/bbcategoria"
-        android:layout_width="124dp"
-        android:layout_height="47dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/categoria"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editremuneracion" />
-
-    <TextView
-        android:id="@+id/txtcategoria"
-        android:layout_width="200dp"
-        android:layout_height="29dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/seleccione_categoria"
-        android:textColor="@color/colormorado"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/bbcategoria"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.489"
-        app:layout_constraintStart_toEndOf="@+id/bbcategoria"
-        app:layout_constraintTop_toTopOf="@+id/bbcategoria" />
-
-    <ImageButton
-        android:id="@+id/bcalendario2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editfecha"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editfecha"
-        app:srcCompat="@drawable/ic_calendario"
-        tools:ignore="ContentDescription" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
